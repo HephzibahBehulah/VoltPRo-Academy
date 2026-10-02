@@ -1,0 +1,20 @@
+name: VoltPRo Quality Check
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate JavaScript syntax
+        run: node --check script.js
+      - name: Validate required frontend files
+        run: |
+          test -s index.html
+          test -s styles.css
+          test -s script.js
+          grep -q '<script src="script.js"></script>' index.html
+          grep -q 'rel="stylesheet"' index.html
