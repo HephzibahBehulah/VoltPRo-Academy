@@ -1,364 +1,69 @@
-const modules = [
-  {
-    icon: '⚡',
-    title: 'Electrical Safety Fundamentals',
-    level: 'Core',
-    duration: '35 min',
-    progress: 82,
-    summary: 'Lockout/tagout, PPE checks, hazard recognition, and working safely around energized systems.',
-  },
-  {
-    icon: '🧰',
-    title: 'Residential Wiring Practice',
-    level: 'Hands-on',
-    duration: '28 min',
-    progress: 64,
-    summary: 'Cable routing, socket circuits, switch loops, and compliant installation standards for domestic systems.',
-  },
-  {
-    icon: '🔌',
-    title: 'Circuit Protection & Fault Finding',
-    level: 'Practical',
-    duration: '40 min',
-    progress: 71,
-    summary: 'Reading trip curves, testing breakers, diagnosing overloads, short circuits, and earth faults.',
-  },
-  {
-    icon: '🛠️',
-    title: 'Panel Maintenance & Commissioning',
-    level: 'Advanced',
-    duration: '52 min',
-    progress: 49,
-    summary: 'Inspection of distribution boards, labeling, torque verification, and safe energization procedures.',
-  },
-  {
-    icon: '🔧',
-    title: 'Three-Phase Motor Controls',
-    level: 'Specialist',
-    duration: '46 min',
-    progress: 58,
-    summary: 'Starter circuits, overload relays, phase sequence testing, and troubleshooting abnormal motor behavior.',
-  },
+const KEY="voltpro-academy-v1";
+const state=JSON.parse(localStorage.getItem(KEY)||"null")||{view:"dashboard",completed:[],checks:[true,true,false,false,false],quiz:{},safety:false,language:"DE",labDone:[],student:"Student"};
+function save(){localStorage.setItem(KEY,JSON.stringify(state));updateProgress()}
+function toast(m){var e=document.getElementById("toast");e.textContent=m;e.classList.add("show");clearTimeout(window._t);window._t=setTimeout(function(){e.classList.remove("show")},2200)}
+function nav(v){state.view=v;save();render()}
+var modules=[
+{id:"basics",icon:"⚡",title:"Elektrische Grundlagen",level:"Level 1",time:"35 min",desc:"Spannung, Strom, Widerstand, Leistung und Ohmsches Gesetz von Grund auf.",lessons:["Was ist elektrische Spannung?","Strom und Stromkreis","Widerstand und Ohmsches Gesetz","Leistung und Energie"],body:"Elektrische Spannung U ist der Potentialunterschied, der Ladungen antreibt. Strom I beschreibt den Ladungsfluss. Widerstand R begrenzt diesen Fluss. Die Grundbeziehung lautet U = R × I. Für praktische Berechnungen gilt außerdem P = U × I."},
+{id:"germany",icon:"🇩🇪",title:"Elektroinstallation in Deutschland",level:"Level 2",time:"45 min",desc:"L1, N, PE, Schutzleiter, Farben, Schuko, Stromkreise und Installationsbegriffe.",lessons:["L1 / N / PE verstehen","Leiterfarben","Schuko-Steckdose","Stromkreis und Verteilung"],body:"In der deutschen Niederspannungsinstallation sind Außenleiter, Neutralleiter und Schutzleiter zentrale Begriffe. Leiterfarben und Installationsregeln müssen anhand der aktuellen und konkreten Normen bewertet werden. Die Academy vermittelt Prinzipien und ersetzt keine Fachplanung."},
+{id:"safety",icon:"🛡️",title:"Sicheres Arbeiten",level:"Safety",time:"30 min",desc:"Die fünf Sicherheitsregeln, Prüfmittel, PSA und sichere Arbeitsvorbereitung.",lessons:["Die fünf Sicherheitsregeln","Spannungsfreiheit feststellen","Messgerät sicher verwenden","PSA und Gefährdungsbeurteilung"],body:"Sicherheit kommt vor Geschwindigkeit. Vor Arbeiten an elektrischen Anlagen muss die konkrete Situation fachgerecht beurteilt werden. Die Academy simuliert sichere Abläufe und ist keine Freigabe für Arbeiten an realen Anlagen."},
+{id:"circuits",icon:"🔌",title:"Schaltungen & Fehlersuche",level:"Level 3",time:"50 min",desc:"Reihen- und Parallelschaltung, Schutzorgane und systematische Fehlersuche.",lessons:["Reihenschaltung","Parallelschaltung","LS-Schalter und RCD","Fehler systematisch eingrenzen"],body:"Gute Fehlersuche beginnt mit Sicherheit, Beobachtung und einer klaren Hypothese. Danach werden Messungen gezielt eingesetzt. Niemals planlos messen oder Schutzorgane überbrücken."},
+{id:"practical",icon:"🧰",title:"Praxiswerkstatt",level:"Hands-on",time:"60 min",desc:"Virtuelle Übungen zu Kabeln, Klemmen, Verteilung, Messung und Dokumentation.",lessons:["Leiter vorbereiten","Klemmen und Verbindungen","Verteilung aufbauen","Prüfen und dokumentieren"],body:"Die virtuelle Werkstatt trainiert Handlungsabläufe ohne reale elektrische Gefährdung. Sie ist ein Lernsimulator, kein Ersatz für praktische Ausbildung unter qualifizierter Aufsicht."},
+{id:"advanced",icon:"⚙️",title:"Aufbauwissen",level:"Advanced",time:"55 min",desc:"Drehstrom, Motorsteuerung, KNX, PV, Wärmepumpe und Elektromobilität.",lessons:["Drehstrom-Grundlagen","Motorsteuerung","Smart Home","PV und Wallbox"],body:"Fortgeschrittene Elektrotechnik verbindet Grundlagen mit konkreten Systemen. Planung, Auswahl, Prüfung und Inbetriebnahme realer Anlagen erfordern aktuelle Fachunterlagen und qualifizierte Fachkräfte."}
 ];
-
-const checklist = [
-  'Isolate the circuit and apply lockout/tagout',
-  'Verify absence of voltage with approved tester',
-  'Inspect insulation, gloves, and arc-rated PPE',
-  'Confirm instrument range and correct lead placement',
-  'Document fault findings and restoration steps',
+var safetyRules=[
+["Freischalten","Alle aktiven Leiter des betreffenden Anlagenteils freischalten."],
+["Gegen Wiedereinschalten sichern","Verhindern, dass während der Arbeit unbeabsichtigt wieder eingeschaltet wird."],
+["Spannungsfreiheit feststellen","Mit geeignetem und geprüftem Spannungsprüfer feststellen, dass keine gefährliche Spannung anliegt."],
+["Erden und kurzschließen","Soweit für die konkrete Anlage und Arbeit erforderlich, fachgerecht erden und kurzschließen."],
+["Benachbarte unter Spannung stehende Teile sichern","Benachbarte Gefahrenstellen abdecken oder abschranken."]
 ];
-
-const skillLevels = [
-  { name: 'Lockout verification', value: 93 },
-  { name: 'Fault finding', value: 81 },
-  { name: 'Panel wiring', value: 68 },
-  { name: 'Load calculations', value: 89 },
-  { name: 'Motor control', value: 57 },
+var quizzes=[
+{id:"q1",q:"Welche Formel beschreibt das Ohmsche Gesetz?",a:["P = U × I","U = R × I","I = P × R","R = P × U"],c:1},
+{id:"q2",q:"Was ist vor dem Beginn einer Arbeit an einem freigeschalteten Stromkreis zu prüfen?",a:["Nur die Sicherungsgröße","Die Spannungsfreiheit","Nur die Kabelfarbe","Nur die Raumtemperatur"],c:1},
+{id:"q3",q:"Welche Aufgabe hat der Schutzleiter PE?",a:["Er erhöht die Netzspannung","Er dient dem Schutz gegen elektrischen Schlag","Er ersetzt immer den Neutralleiter","Er misst den Strom"],c:1},
+{id:"q4",q:"Was ist bei einer systematischen Fehlersuche zuerst wichtig?",a:["Schutzorgane überbrücken","Sicherheit herstellen und Problem eingrenzen","Sofort alle Leitungen tauschen","Ohne Messplan messen"],c:1},
+{id:"q5",q:"Welche Einheit hat elektrische Leistung?",a:["Ohm","Ampere","Watt","Volt"],c:2},
+{id:"q6",q:"Welche Messung darf nicht einfach parallel über eine Spannungsquelle angeschlossen werden?",a:["Strommessung","Spannungsmessung","Durchgangsprüfung","Widerstandsmessung"],c:0}
 ];
-
-const quizItems = [
-  {
-    question: 'Before opening a live panel, what is the primary legal and practical control?',
-    options: ['Apply lockout/tagout and verify isolation', 'Remove the breaker first without checking', 'Work with one hand only in a dry room', 'Begin with the load side to test continuity'],
-    answer: 0,
-  },
-  {
-    question: 'What is the correct sequence when diagnosing a tripping circuit breaker?',
-    options: ['Inspect the load, isolate supply, verify cause, restore safely', 'Replace the breaker immediately', 'Increase load to confirm the issue', 'Re-energize without inspection'],
-    answer: 0,
-  },
-  {
-    question: 'Why is a voltage tester used after lockout before work begins?',
-    options: ['To confirm the circuit is truly dead and no stored energy remains', 'To measure the exact fault current', 'To test the fuse rating', 'To identify the cable color code'],
-    answer: 0,
-  },
-  {
-    question: 'A motor that hums but does not rotate is most likely showing:',
-    options: ['Stalled rotor or failed starting mechanism', 'Correct phase rotation', 'A healthy insulation resistance', 'An overvoltage supply issue only'],
-    answer: 0,
-  },
+var labs=[
+{id:"lab1",title:"Ohmsches Gesetz",tag:"Simulation",desc:"Berechne den fehlenden Wert aus zwei bekannten Größen.",action:"calculator"},
+{id:"lab2",title:"Sichere Isolation",tag:"Safety Lab",desc:"Wiederhole die fünf Sicherheitsregeln und ihren Zweck.",action:"safety"},
+{id:"lab3",title:"Fehlersuche: offener Leiter",tag:"Fault Lab",desc:"Arbeite dich vom Symptom über Sichtprüfung zur Messung vor.",action:"fault"},
+{id:"lab4",title:"Verteilung prüfen",tag:"Inspection",desc:"Kontrolliere Beschriftung, Schutzorgane, Klemmen und Dokumentation.",action:"inspection"}
 ];
-
-const labTasks = [
-  { title: 'Install a 3-way switch circuit', detail: 'Wire, verify, and document the control path with safe isolation checks', tag: 'Lab 01' },
-  { title: 'Breaker fault isolation drill', detail: 'Identify trip conditions, isolate affected circuits, and confirm safe restoration', tag: 'Lab 02' },
-  { title: 'Motor overload troubleshooting', detail: 'Analyze current draw, thermal conditions, and starter relay operation', tag: 'Lab 03' },
-  { title: 'Panel label and torque review', detail: 'Check breaker labeling, conductor terminations, and service readiness', tag: 'Lab 04' },
+var terms=[
+["L1 / L2 / L3","Außenleiter eines Drehstromsystems."],["N","Neutralleiter. Funktion und Situation müssen anhand des Systems bewertet werden."],["PE","Schutzleiter als Bestandteil der Schutzmaßnahme gegen elektrischen Schlag."],["LS-Schalter","Leitungsschutzschalter zum Schutz von Stromkreisen insbesondere vor Überlast und Kurzschluss."],["RCD / FI","Fehlerstrom-Schutzeinrichtung, die einen Differenzstrom erkennt und abschalten kann."],["Schuko","Umgangssprachliche Bezeichnung für ein Stecksystem mit Schutzkontakt."],["Durchgangsprüfung","Prüfung, ob zwischen zwei Messpunkten eine leitende Verbindung besteht."],["Inbetriebnahme","Kontrollierter Prozess zur Prüfung und Übergabe einer Anlage oder eines Anlagenteils."],["VDE","Fachverband und Bezeichnung für ein umfangreiches Normen- und Regelwerk im Elektrotechnikbereich."],["NYM-J","Typische Mantelleitung für feste Installationen; Auswahl und Verwendung müssen zur Anwendung passen."]
 ];
-
-const scheduleItems = [
-  { title: 'Introduction to lockout/tagout procedure', time: 'Tue • 9:00 AM', tag: 'Workshop' },
-  { title: 'Commercial wiring and cable routing review', time: 'Wed • 1:30 PM', tag: 'Practical' },
-  { title: 'Breaker testing and fault diagnosis lab', time: 'Thu • 10:15 AM', tag: 'Lab' },
-  { title: 'Field mentor evaluation and sign-off', time: 'Fri • 11:00 AM', tag: 'Assessment' },
-];
-
-const courseCatalog = [
-  { title: 'Install & terminate final circuits', detail: 'Cable selection, routing, insulation protection, and secure mounting for safe final circuits.', badge: 'Level 2' },
-  { title: 'Single and three-phase distribution', detail: 'Balance loads, identify phase arrangements, and understand current flow through protection devices.', badge: 'Level 3' },
-  { title: 'Testing and verification', detail: 'Use continuity, insulation resistance, and voltage checks to commission systems safely.', badge: 'Core' },
-];
-
-const safetyProtocols = [
-  { title: 'Permit to work', detail: 'Confirm job scope, isolate area, and obtain clearance before starting electrical work.', badge: 'Required' },
-  { title: 'Personal protective equipment', detail: 'Inspect gloves, eye protection, insulated tools, and arc-rated clothing before each task.', badge: 'Daily' },
-  { title: 'Emergency response', detail: 'Follow emergency stops, first aid access points, and reporting protocols for electrical incidents.', badge: 'Critical' },
-];
-
-const lessonPlans = [
-  { title: 'Safe isolation and verification', duration: '25 min', objective: 'Apply lockout and prove circuit de-energization before test or repair.' },
-  { title: 'Cable sizing and voltage drop', duration: '32 min', objective: 'Calculate acceptable loss across long cable runs and check current loading.' },
-  { title: 'Breakers, RCDs, and fault current', duration: '40 min', objective: 'Match protective devices to installation type and identify common failure modes.' },
-];
-
-const assessmentBreakdown = [
-  { name: 'Safety knowledge', score: '96%' },
-  { name: 'Practical installation', score: '88%' },
-  { name: 'Fault diagnosis', score: '91%' },
-  { name: 'Commissioning', score: '84%' },
-];
-
-const resources = [
-  { title: 'Electrical installation handbook', tag: 'PDF' },
-  { title: 'Lockout procedure checklist', tag: 'Checklist' },
-  { title: 'Three-phase motor troubleshooting guide', tag: 'Guide' },
-  { title: 'Insulation resistance testing notes', tag: 'Notes' },
-];
-
-const moduleList = document.getElementById('moduleList');
-const checklistList = document.getElementById('checklist');
-const skillList = document.getElementById('skillList');
-const quizList = document.getElementById('quizList');
-const labList = document.getElementById('labList');
-const scheduleList = document.getElementById('scheduleList');
-const courseCatalogList = document.getElementById('courseCatalog');
-const protocolList = document.getElementById('protocolList');
-const lessonList = document.getElementById('lessonList');
-const assessmentList = document.getElementById('assessmentList');
-const resourceList = document.getElementById('resourceList');
-const completionRate = document.getElementById('completionRate');
-
-function renderModules() {
-  moduleList.innerHTML = modules
-    .map(
-      (module) => `
-        <article class="module-item">
-          <div class="module-icon">${module.icon}</div>
-          <div>
-            <h4 class="module-title">${module.title}</h4>
-            <div class="module-meta">
-              <span>${module.level}</span>
-              <span>${module.duration}</span>
-            </div>
-            <p class="module-summary">${module.summary}</p>
-          </div>
-          <div class="module-progress">
-            <strong>${module.progress}%</strong>
-            <div class="progress-bar">
-              <span style="width:${module.progress}%"></span>
-            </div>
-          </div>
-        </article>
-      `
-    )
-    .join('');
-}
-
-function renderChecklist() {
-  checklistList.innerHTML = checklist
-    .map(
-      (item, index) => `
-        <li>
-          <input type="checkbox" ${index < 3 ? 'checked' : ''} />
-          <span>${item}</span>
-        </li>
-      `
-    )
-    .join('');
-}
-
-function renderSkills() {
-  skillList.innerHTML = skillLevels
-    .map(
-      (skill) => `
-        <div class="skill-row">
-          <label>${skill.name}</label>
-          <div class="bar"><span style="width: ${skill.value}%"></span></div>
-          <strong>${skill.value}%</strong>
-        </div>
-      `
-    )
-    .join('');
-}
-
-function renderQuiz() {
-  quizList.innerHTML = quizItems
-    .map(
-      (item, questionIndex) => `
-        <article class="quiz-item">
-          <p>${questionIndex + 1}. ${item.question}</p>
-          <div class="quiz-options">
-            ${item.options
-              .map(
-                (option, optionIndex) => `
-                  <button class="answer-btn" data-question="${questionIndex}" data-option="${optionIndex}">
-                    ${String.fromCharCode(65 + optionIndex)}. ${option}
-                  </button>
-                `
-              )
-              .join('')}
-          </div>
-        </article>
-      `
-    )
-    .join('');
-
-  quizList.querySelectorAll('.answer-btn').forEach((button) => {
-    button.addEventListener('click', () => {
-      const { question, option } = button.dataset;
-      const correctIndex = quizItems[Number(question)].answer;
-      const buttons = quizList.querySelectorAll(`[data-question="${question}"]`);
-
-      buttons.forEach((btn) => {
-        btn.disabled = true;
-        const isCorrect = Number(btn.dataset.option) === correctIndex;
-        if (isCorrect) btn.classList.add('correct');
-        if (Number(btn.dataset.option) === Number(option) && !isCorrect) {
-          btn.classList.add('incorrect');
-        }
-      });
-    });
-  });
-}
-
-function renderLabs() {
-  labList.innerHTML = labTasks
-    .map(
-      (task) => `
-        <div class="lab-item">
-          <div>
-            <strong>${task.title}</strong>
-            <small>${task.detail}</small>
-          </div>
-          <span class="lab-tag">${task.tag}</span>
-        </div>
-      `
-    )
-    .join('');
-}
-
-function renderSchedule() {
-  scheduleList.innerHTML = scheduleItems
-    .map(
-      (item) => `
-        <div class="schedule-item">
-          <div>
-            <strong>${item.title}</strong>
-            <small>${item.time}</small>
-          </div>
-          <span class="schedule-tag">${item.tag}</span>
-        </div>
-      `
-    )
-    .join('');
-}
-
-function renderCourseCatalog() {
-  courseCatalogList.innerHTML = courseCatalog
-    .map(
-      (course) => `
-        <div class="course-card">
-          <div>
-            <strong>${course.title}</strong>
-            <small>${course.detail}</small>
-          </div>
-          <span class="course-pill">${course.badge}</span>
-        </div>
-      `
-    )
-    .join('');
-}
-
-function renderProtocols() {
-  protocolList.innerHTML = safetyProtocols
-    .map(
-      (item) => `
-        <div class="protocol-card">
-          <div>
-            <strong>${item.title}</strong>
-            <small>${item.detail}</small>
-          </div>
-          <span class="protocol-pill">${item.badge}</span>
-        </div>
-      `
-    )
-    .join('');
-}
-
-function renderLessons() {
-  lessonList.innerHTML = lessonPlans
-    .map(
-      (lesson) => `
-        <div class="lesson-card">
-          <div>
-            <strong>${lesson.title}</strong>
-            <small>${lesson.objective}</small>
-          </div>
-          <span class="lesson-pill">${lesson.duration}</span>
-        </div>
-      `
-    )
-    .join('');
-}
-
-function renderAssessmentBreakdown() {
-  assessmentList.innerHTML = assessmentBreakdown
-    .map(
-      (item) => `
-        <div class="assessment-row">
-          <strong>${item.name}</strong>
-          <span class="score-pill">${item.score}</span>
-        </div>
-      `
-    )
-    .join('');
-}
-
-function renderResources() {
-  resourceList.innerHTML = resources
-    .map(
-      (item) => `
-        <div class="resource-row">
-          <strong>${item.title}</strong>
-          <span class="resource-tag">${item.tag}</span>
-        </div>
-      `
-    )
-    .join('');
-}
-
-const averageProgress = Math.round(
-  modules.reduce((total, module) => total + module.progress, 0) / modules.length
-);
-completionRate.textContent = `${averageProgress}%`;
-
-renderModules();
-renderChecklist();
-renderSkills();
-renderQuiz();
-renderLabs();
-renderSchedule();
-renderCourseCatalog();
-renderProtocols();
-renderLessons();
-renderAssessmentBreakdown();
-renderResources();
-
-const navButtons = document.querySelectorAll('.nav-item');
-navButtons.forEach((button) => {
-  button.addEventListener('click', () => {
-    navButtons.forEach((btn) => btn.classList.remove('active'));
-    button.classList.add('active');
-  });
-});
+function progress(){var total=modules.length+quizzes.length+safetyRules.length+labs.length;var done=state.completed.length+Object.keys(state.quiz).length+(state.safety?safetyRules.length:0)+state.labDone.length;return Math.min(100,Math.round(done/total*100))}
+function updateProgress(){var p=progress();document.getElementById("sideProgress").textContent=p+"%";document.getElementById("sideProgressBar").style.width=p+"%"}
+function head(t,s){return '<div class="section-head"><h3>'+t+'</h3><span>'+s+'</span></div>'}
+function moduleRow(m){var done=state.completed.indexOf(m.id)>=0;return '<div class="module"><div class="module-icon">'+m.icon+'</div><div><h4>'+m.title+' '+(done?'<span class="pill green">✓</span>':'')+'</h4><small>'+m.level+' · '+m.time+'<br>'+m.desc+'</small></div><div class="module-progress"><strong>'+(done?100:0)+'%</strong><div class="meter"><i style="width:'+(done?100:0)+'%"></i></div><button class="btn secondary" style="margin-top:7px;padding:7px 9px;font-size:10px" onclick="openModule(\''+m.id+'\')">Öffnen</button></div></div>'}
+function skills(){var a=[["Grundlagen",state.completed.indexOf("basics")>=0?100:25],["Installation",state.completed.indexOf("germany")>=0?100:10],["Sicherheit",state.safety?100:40],["Fehlersuche",state.completed.indexOf("circuits")>=0?100:15],["Praxis",state.completed.indexOf("practical")>=0?100:5]];return a.map(function(x){return '<div class="skill"><span>'+x[0]+'</span><div class="meter"><i style="width:'+x[1]+'%"></i></div><b>'+x[1]+'%</b></div>'}).join("")}
+function layout(t,h){document.getElementById("pageTitle").textContent=t;document.getElementById("view").innerHTML=h;updateProgress()}
+function dashboard(){var p=progress(),done=modules.filter(function(m){return state.completed.indexOf(m.id)>=0}).length;var checks=safetyRules.map(function(r,i){return '<label class="check"><input type="checkbox" data-check="'+i+'" '+(state.checks[i]?"checked":"")+'><span><b>'+r[0]+'</b><br><span class="muted">'+r[1]+'</span></span></label>'}).join("");layout("Dashboard",'<section class="hero"><div><span class="eyebrow">DEUTSCHE ELEKTRO-AUSBILDUNG</span><h2>Vom Anfänger zur sicheren Fachkraft.</h2><p>VoltPRo Academy verbindet verständliche Theorie, deutsche Fachbegriffe, Sicherheitsregeln, virtuelle Übungen und Prüfungen in einem Lernpfad. Arbeite in deinem Tempo und baue Kompetenz Schritt für Schritt auf.</p><div class="hero-actions"><button class="btn primary" onclick="nav(\'learn\')">Lernen starten</button><button class="btn secondary" onclick="nav(\'safety\')">Safety Gate</button></div></div><div class="ring" style="--p:'+p+'%"><strong>'+p+'%</strong></div></section><section class="stats"><div class="stat accent"><small>Gesamtfortschritt</small><strong>'+p+'%</strong><span class="muted">Academy-Pfad</span></div><div class="stat"><small>Module</small><strong>'+done+'/'+modules.length+'</strong><span class="muted">abgeschlossen</span></div><div class="stat"><small>Quiz</small><strong>'+Object.keys(state.quiz).length+'/'+quizzes.length+'</strong><span class="muted">beantwortet</span></div><div class="stat"><small>Safety</small><strong>'+(state.safety?"✓":"—")+'</strong><span class="muted">'+(state.safety?"zertifiziert":"noch offen")+'</span></div></section><div class="grid2"><section class="card">'+head("Dein Lernpfad","6 Kernmodule")+modules.map(moduleRow).join("")+'</section><section class="card">'+head("Safety Check","täglich wiederholen")+checks+'<button class="btn secondary" onclick="nav(\'safety\')">Safety Lab öffnen</button></section></div><div class="grid2"><section class="card">'+head("Skill Ladder","Kompetenzprofil")+skills()+'</section><section class="card">'+head("Nächste Schritte","empfohlen")+'<div class="catalog"><div class="catalog-item" onclick="nav(\''+(state.safety?"learn":"safety")+"\')"><div><strong>"+(state.safety?"Nächstes Modul":"Safety Gate abschließen")+'</strong><small>'+(state.safety?"Setze deinen Lernpfad fort.":"Sicherheitsgrundlagen sind Voraussetzung für Praxisübungen.")+'</small></div><span class="pill amber">START</span></div><div class="catalog-item" onclick="nav(\'quiz\')"><div><strong>Wissenscheck</strong><small>Teste Grundlagen und erkenne Wissenslücken.</small></div><span class="pill">QUIZ</span></div></div></section></div>');bindChecks()}
+function bindChecks(){document.querySelectorAll("[data-check]").forEach(function(e){e.addEventListener("change",function(){state.checks[Number(e.dataset.check)]=e.checked;save()})})}
+function learn(){layout("Learn",'<div class="hero" style="margin-bottom:18px"><div><span class="eyebrow">LEARNING PATH</span><h2>Curriculum</h2><p>Öffne ein Modul, lerne die Inhalte und markiere es erst danach als abgeschlossen. Die Academy führt vom Fundament über Sicherheit und Installation bis zu Fehlersuche und Aufbauwissen.</p></div></div><section class="grid2"><div class="card">'+head("Module","Fundament → Praxis")+modules.map(moduleRow).join("")+'</div><div class="card">'+head("Lernprinzip","Learn → See → Practise")+["Verstehen: einfache Erklärung ohne unnötigen Jargon.","Sehen: Begriffe mit realen Beispielen verbinden.","Üben: sichere Simulation statt blindes Auswendiglernen.","Prüfen: Quiz und praktische Aufgabe.","Wiederholen: Schwächen gezielt erneut bearbeiten."].map(function(x,i){var z=x.split(":");return '<div class="rule"><div class="rule-num">'+(i+1)+'</div><div><strong>'+z[0]+'</strong><p>'+z.slice(1).join(":")+'</p></div></div>'}).join("")+'</div></section>')}
+function safety(){layout("Safety",'<div class="safety-gate"><h3>⚠ Safety Gate</h3><p class="muted">Diese Academy ist ein Lernsystem. Arbeiten an realen elektrischen Anlagen dürfen nur im Rahmen der erforderlichen Qualifikation, Befugnis, Schutzmaßnahmen und fachlichen Aufsicht erfolgen.</p><button class="btn primary" onclick="startSafety()">Safety Certification starten</button></div><section class="card">'+head("Die fünf Sicherheitsregeln","Grundlage für sicheres Arbeiten")+safetyRules.map(function(r,i){return '<div class="rule"><div class="rule-num">'+(i+1)+'</div><div><strong>'+r[0]+'</strong><p>'+r[1]+'</p></div><span class="pill '+(state.safety?"green":"")+'">'+(state.safety?"✓ VERIFIED":"CORE")+'</span></div>'}).join("")+'</section>')}
+function startSafety(){if(confirm("Safety Certification: Hast du alle fünf Regeln gelesen und verstanden? Dies ist eine Lernbestätigung, keine berufliche Freigabe.")){state.safety=true;save();toast("Safety Gate abgeschlossen");render()}}
+function labsView(){layout("Virtual Labs",'<div class="hero" style="margin-bottom:18px"><div><span class="eyebrow">PRACTICE WITHOUT LIVE VOLTAGE</span><h2>Virtual Workshop</h2><p>Trainiere Denk- und Prüfabläufe in sicheren Simulationen. Keine reale Anlage wird angesteuert.</p></div></div><section class="lab-grid">'+labs.map(function(l){return '<article class="lab-card"><span class="pill">'+l.tag+'</span><h3>'+l.title+'</h3><p>'+l.desc+'</p><button class="btn primary" onclick="openLab(\''+l.action+'\',\''+l.id+'\')">Lab starten</button> '+(state.labDone.indexOf(l.id)>=0?'<span class="pill green">✓ erledigt</span>':'')+'</article>'}).join("")+'</section>')}
+function quiz(){layout("Assessments",'<div class="hero" style="margin-bottom:18px"><div><span class="eyebrow">KNOWLEDGE CHECK</span><h2>Prüfe dein Wissen.</h2><p>Jede Frage kann einmal beantwortet werden. Danach siehst du sofort die richtige Lösung.</p></div></div><section class="card">'+quizzes.map(function(q,i){var ans=state.quiz[q.id];return '<article class="quiz-card"><p>'+(i+1)+'. '+q.q+'</p><div class="answers">'+q.a.map(function(a,j){return '<button class="answer '+(ans!==undefined?(j===q.c?"correct":j===ans?"wrong":""):"")+'" '+(ans!==undefined?"disabled":"")+' onclick="answerQuiz(\''+q.id+'\','+j+')">'+String.fromCharCode(65+j)+'. '+a+'</button>'}).join("")+'</div>'+(ans!==undefined?'<small class="muted">'+(ans===q.c?"Richtig. Gute Grundlage.":"Nicht richtig. Wiederhole das passende Modul und versuche es später erneut.")+'</small>':"")+'</article>'}).join("")+'</section>')}
+function answerQuiz(id,n){if(state.quiz[id]!==undefined)return;state.quiz[id]=n;save();render();toast("Antwort gespeichert")}
+function calculatorHTML(){return '<div class="calc"><div class="field"><label>U Spannung (V)</label><input id="cu" type="number" placeholder="230"></div><div class="field"><label>R Widerstand (Ω)</label><input id="cr" type="number" placeholder="46"></div><div class="field"><label>I Strom (A)</label><input id="ci" type="number" placeholder="5"></div></div><button class="btn primary" style="margin-top:12px" onclick="calcOhm()">Berechnen</button><div id="calcResult" class="result">Gib zwei Werte ein. Der dritte wird berechnet.</div>'}
+function calcOhm(){var u=parseFloat(document.getElementById("cu").value),r=parseFloat(document.getElementById("cr").value),i=parseFloat(document.getElementById("ci").value),msg="Bitte genau zwei gültige Werte eingeben.";if([u,r,i].filter(Number.isFinite).length===2){if(!Number.isFinite(u))msg="U = "+(r*i).toFixed(2)+" V";else if(!Number.isFinite(r))msg="R = "+(u/i).toFixed(2)+" Ω";else msg="I = "+(u/r).toFixed(2)+" A"}document.getElementById("calcResult").textContent=msg}
+function reference(){layout("Reference",'<div class="grid2"><section class="card">'+head("Elektro-Lexikon","Schnellreferenz")+terms.map(function(t){return '<div class="term"><strong>'+t[0]+'</strong><p>'+t[1]+'</p></div>'}).join("")+'</section><section class="card">'+head("Ohm-Rechner","U = R × I")+calculatorHTML()+'</section></div><section class="card" style="margin-top:18px">'+head("Wichtige Lernquellen","für den weiteren Ausbau")+'<div class="grid3"><div class="catalog-item"><div><strong>DIN / VDE</strong><small>Aktuelle und für die konkrete Anwendung relevante Fassung prüfen.</small></div></div><div class="catalog-item"><div><strong>DGUV</strong><small>Arbeitsschutz und elektrische Gefährdungen beachten.</small></div></div><div class="catalog-item"><div><strong>Ausbildung</strong><small>Berichtsheft, Gesellenprüfung, Fachkunde und Praxis gehören zusammen.</small></div></div></div></section>')}
+function settings(){layout("Settings",'<section class="grid2"><div class="card">'+head("Student profile","lokal im Browser")+'<div class="field"><label>Name</label><input id="nameInput" value="'+state.student.replace(/"/g,"&quot;")+'" maxlength="40"></div><button class="btn primary" style="margin-top:10px" onclick="saveName()">Speichern</button></div><div class="card">'+head("Lernfortschritt","persistent")+'<p class="muted">Dein Fortschritt wird nur in diesem Browser per localStorage gespeichert. Es gibt derzeit kein Konto und keinen Server.</p><button class="btn secondary" onclick="resetProgress()">Fortschritt zurücksetzen</button></div></section>')}
+function saveName(){state.student=document.getElementById("nameInput").value.trim()||"Student";save();document.getElementById("studentName").textContent=state.student;toast("Profil gespeichert");render()}
+function resetProgress(){if(confirm("Wirklich den gesamten Lernfortschritt zurücksetzen?")){localStorage.removeItem(KEY);location.reload()}}
+function openModule(id){var m=modules.find(function(x){return x.id===id});var done=state.completed.indexOf(id)>=0;document.getElementById("lessonModal").innerHTML='<div class="modal"><button class="btn secondary modal-close" onclick="lessonDialog.close()">Schließen</button><span class="eyebrow">'+m.level+'</span><h2>'+m.icon+' '+m.title+'</h2><p>'+m.body+'</p><h3>Lernziele</h3><ul>'+m.lessons.map(function(x){return "<li>"+x+"</li>"}).join("")+'</ul><div class="terminal">VOLTPRO / '+m.id.toUpperCase()+'\nSTATUS: '+(done?"COMPLETED":"IN PROGRESS")+'\nNEXT: PRACTISE → ASSESS</div><button class="btn primary" onclick="completeModule(\''+m.id+'\')">'+(done?"Abgeschlossen ✓":"Als gelernt markieren")+'</button></div>';lessonDialog.showModal()}
+function completeModule(id){if(state.completed.indexOf(id)<0){state.completed.push(id);save();toast("Modul abgeschlossen")}lessonDialog.close();render()}
+function openLab(action,id){var h='<div class="modal"><button class="btn secondary modal-close" onclick="lessonDialog.close()">Schließen</button>';if(action==="calculator")h+='<span class="eyebrow">LAB 01</span><h2>Ohmsches Gesetz</h2><p>Berechne den fehlenden Wert aus zwei bekannten Größen.</p>'+calculatorHTML();else if(action==="safety")h+='<span class="eyebrow">LAB 02</span><h2>Sichere Isolation</h2><p>Wiederhole die fünf Sicherheitsregeln und ihren Zweck.</p><ol>'+safetyRules.map(function(r){return "<li><b>"+r[0]+"</b> — "+r[1]+"</li>"}).join("")+'</ol>';else if(action==="fault")h+='<span class="eyebrow">LAB 03</span><h2>Fehler: Offener Leiter</h2><p>Symptom: Ein Verbraucher bleibt dunkel. Arbeite vom sicheren Zustand über Sichtprüfung zur gezielten Messung.</p><div class="catalog"><div class="catalog-item"><div><strong>1. Sicherheit herstellen</strong><small>Situation sichern und keine unkontrollierten Messungen durchführen.</small></div></div><div class="catalog-item"><div><strong>2. Sichtprüfung</strong><small>Schalterstellung, Anschlüsse, Beschädigungen und Dokumentation prüfen.</small></div></div><div class="catalog-item"><div><strong>3. Systematisch messen</strong><small>Mit geeignetem Messgerät und korrekter Messmethode den Fehler eingrenzen.</small></div></div></div>';else h+='<span class="eyebrow">LAB 04</span><h2>Verteilung prüfen</h2><p>Prüfe gedanklich: Beschriftung vorhanden? Schutzorgane passend? Leiter sicher geklemmt? Dokumentation vollständig?</p>';h+='<button class="btn primary" style="margin-top:14px" onclick="finishLab(\''+id+'\')">Lab abschließen</button></div>';document.getElementById("lessonModal").innerHTML=h;lessonDialog.showModal()}
+function finishLab(id){if(state.labDone.indexOf(id)<0)state.labDone.push(id);save();lessonDialog.close();toast("Lab abgeschlossen");render()}
+function render(){document.querySelectorAll(".nav-item[data-view]").forEach(function(b){b.classList.toggle("active",b.dataset.view===state.view)});document.getElementById("studentName").textContent=state.student;var map={dashboard:dashboard,learn:learn,safety:safety,labs:labsView,quiz:quiz,reference:reference,settings:settings};(map[state.view]||dashboard)()}
+document.querySelectorAll(".nav-item[data-view]").forEach(function(b){b.addEventListener("click",function(){nav(b.dataset.view);document.getElementById("sidebar").classList.remove("open")})});
+document.getElementById("mobileMenu").addEventListener("click",function(){document.getElementById("sidebar").classList.toggle("open")});
+document.getElementById("resetBtn").addEventListener("click",resetProgress);
+document.getElementById("languageBtn").addEventListener("click",function(){state.language=state.language==="DE"?"EN":"DE";document.getElementById("languageBtn").textContent=state.language;toast(state.language==="DE"?"Deutsch aktiviert":"English mode selected")});
+document.addEventListener("click",function(e){if(!e.target.closest(".search")&&!e.target.closest(".search-results"))document.querySelector(".search-results")?.remove()});
+document.getElementById("globalSearch").addEventListener("input",function(e){var q=e.target.value.trim().toLowerCase();document.querySelector(".search-results")?.remove();if(!q)return;var hits=modules.map(function(m){return{t:m.title,d:m.desc,v:"learn"}}).concat(terms.map(function(t){return{t:t[0],d:t[1],v:"reference"}}),labs.map(function(l){return{t:l.title,d:l.desc,v:"labs"}})).filter(function(x){return(x.t+" "+x.d).toLowerCase().indexOf(q)>=0}).slice(0,7);var box=document.createElement("div");box.className="search-results";box.innerHTML=hits.length?hits.map(function(h){return '<button><b>'+h.t+'</b><br><small class="muted">'+h.d+'</small></button>'}).join(""):'<div class="empty">Keine Treffer</div>';document.querySelector(".topbar").appendChild(box);box.querySelectorAll("button").forEach(function(b,i){b.onclick=function(){nav(hits[i].v);box.remove();e.target.value=""}})});
+var lessonDialog=document.getElementById("lessonDialog");render();
