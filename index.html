@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VoltPro Academy</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-mark">V</div>
+          <div>
+            <p class="eyebrow">Training Lab</p>
+            <h1>VoltPro</h1>
+          </div>
+        </div>
+
+        <nav class="nav">
+          <button class="nav-item active">Dashboard</button>
+          <button class="nav-item">Modules</button>
+          <button class="nav-item">Assessments</button>
+          <button class="nav-item">Safety</button>
+          <button class="nav-item">Schedule</button>
+        </nav>
+
+        <div class="mentor-box">
+          <p class="eyebrow small">Mentor</p>
+          <div class="mentor-row">
+            <div class="avatar">MJ</div>
+            <div>
+              <strong>Michael James</strong>
+              <span>Senior field trainer</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="profile-card">
+          <div class="avatar alt">ET</div>
+          <div>
+            <p class="user-name">Ethan Torres</p>
+            <span>Apprentice Electrician</span>
+          </div>
+        </div>
+      </aside>
+
+      <main class="content">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow muted">Good morning</p>
+            <h2>Technician training overview</h2>
+          </div>
+          <div class="topbar-actions">
+            <button class="ghost-btn">View calendar</button>
+            <button class="primary-btn">+ New assessment</button>
+          </div>
+        </header>
+
+        <section class="hero-panel panel">
+          <div>
+            <p class="eyebrow muted">Course track</p>
+            <h3>Level 3 Electrical Installation & Safety</h3>
+            <p class="hero-copy">Focus on lockout/tagout, fault diagnosis, commercial wiring practice, and safe commissioning of control panels. You are 72% through the certification gate for live-site work readiness.</p>
+          </div>
+          <div class="hero-meter">
+            <div class="ring">
+              <span>72%</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="stats-grid">
+          <article class="stat-card accent">
+            <span class="stat-label">Completion</span>
+            <strong id="completionRate">67%</strong>
+            <small>Across 12 active modules</small>
+          </article>
+          <article class="stat-card">
+            <span class="stat-label">Safety score</span>
+            <strong>96%</strong>
+            <small>Best in current cohort</small>
+          </article>
+          <article class="stat-card">
+            <span class="stat-label">Field hours</span>
+            <strong>146</strong>
+            <small>+12 this week</small>
+          </article>
+          <article class="stat-card">
+            <span class="stat-label">Certifications</span>
+            <strong>6/8</strong>
+            <small>2 due this month</small>
+          </article>
+        </section>
+
+        <section class="two-column">
+          <div class="panel">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow muted">Learning path</p>
+                <h3>Current modules</h3>
+              </div>
+              <a href="#">View all</a>
+            </div>
+            <div id="moduleList" class="module-list"></div>
+          </div>
+
+          <div class="panel checklist-panel">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow muted">Daily drill</p>
+                <h3>Safety checklist</h3>
+              </div>
+              <span class="status-badge ok">On track</span>
+            </div>
+            <ul id="checklist" class="checklist"></ul>
+          </div>
+        </section>
+
+        <section class="bottom-grid">
+          <div class="panel">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow muted">Progress</p>
+                <h3>Skill ladder</h3>
+              </div>
+            </div>
+            <div id="skillList" class="skill-list"></div>
+          </div>
+
+          <div class="panel quiz-panel">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow muted">Knowledge check</p>
+                <h3>Quick quiz</h3>
+              </div>
+            </div>
+            <div id="quizList" class="quiz-list"></div>
+          </div>
+        </section>
+
+        <section class="course-grid">
+          <div class="panel">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow muted">Course catalog</p>
+                <h3>Training modules</h3>
+              </div>
+            </div>
+            <div id="courseCatalog" class="course-catalog"></div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow muted">Field procedures</p>
+                <h3>Safety protocols</h3>
+              </div>
+            </div>
+            <div id="protocolList" class="protocol-list"></div>
+          </div>
+        </section>
+
+        <section class="lower-grid">
+          <div class="panel">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow muted">Hands-on</p>
+                <h3>Live lab tasks</h3>
+              </div>
+            </div>
+            <div id="labList" class="lab-list"></div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow muted">Training plan</p>
+                <h3>Upcoming sessions</h3>
+              </div>
+            </div>
+            <div id="scheduleList" class="schedule-list"></div>
+          </div>
+        </section>
+
+        <section class="panel lesson-panel">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow muted">Lesson library</p>
+              <h3>Current lesson plan</h3>
+            </div>
+          </div>
+          <div id="lessonList" class="lesson-list"></div>
+        </section>
+
+        <section class="analytics-grid">
+          <div class="panel">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow muted">Assessment</p>
+                <h3>Performance snapshot</h3>
+              </div>
+            </div>
+            <div id="assessmentList" class="assessment-list"></div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow muted">Resources</p>
+                <h3>Study library</h3>
+              </div>
+            </div>
+            <div id="resourceList" class="resource-list"></div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
