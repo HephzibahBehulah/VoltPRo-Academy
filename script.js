@@ -218,3 +218,11 @@ function nav(v){state.view=v;save();expandedRender()}
 installExpansionNav();
 render=expandedRender;
 expandedRender();
+
+/* Final renderer compatibility for bilingual module records */
+function moduleRow(m){
+ const done=state.completed.indexOf(m.id)>=0;
+ const title=typeof m.title==="object"?(m.title[state.language==="EN"?"EN":"DE"]||m.title.DE):m.title;
+ const desc=typeof m.desc==="object"?(m.desc[state.language==="EN"?"EN":"DE"]||m.desc.DE):m.desc;
+ return '<div class="module"><div class="module-icon">'+m.icon+'</div><div><h4>'+title+' '+(done?'<span class="pill green">✓</span>':'')+'</h4><small>'+m.level+' · '+m.time+'<br>'+desc+'</small></div><div class="module-progress"><strong>'+(done?100:0)+'%</strong><div class="meter"><i style="width:'+(done?100:0)+'%"></i></div><button class="btn secondary" style="margin-top:7px;padding:7px 9px;font-size:10px" onclick="openModule(\''+m.id+'\')">Open</button></div></div>';
+}
