@@ -128,13 +128,13 @@ const standardsLibrary=[
 ["VDE / DKE","Use official current standards and technical rules for real design, testing and installation."],
 ["IHK / HWK","Use the responsible chamber's current examination information; this app does not reproduce official papers."]
 ];
-const expandedLabs=[
+const expansionLabs=[
 {id:"meter",tag:"METER LAB",title:"Multimeter Setup",desc:"Select a measurement mode and learn the connection concept."},
 {id:"diagram",tag:"DIAGRAM LAB",title:"Diagram → Reality",desc:"Bridge schematic symbols and physical components."},
 {id:"inspection",tag:"INSPECTION",title:"Distribution Review",desc:"Review labeling, protection, conductors and documentation."},
 {id:"fault2",tag:"FAULT LAB",title:"RCD Trip Investigation",desc:"Practise a safe diagnostic decision tree without a live circuit."}
 ];
-labs.push(...expandedLabs);
+labs.push(...expansionLabs);
 function localModuleName(m){return m.title[state.language==="EN"?"EN":"DE"]||m.title.DE}
 function localModuleDesc(m){return m.desc[state.language==="EN"?"EN":"DE"]||m.desc.DE}
 function expandedReference(){
@@ -180,7 +180,7 @@ function expandedAR(){
  layout("Apprentice AR Mode",'<section class="card"><span class="eyebrow">COMPONENT IDENTIFICATION</span><h2>Camera learning exercise</h2><p class="muted">On supported devices you can select a camera image. This interface does not claim automated safety identification.</p><label class="upload-box"><input type="file" accept="image/*" capture="environment" onchange="inspectComponentImage(event)"><span>📷 Open camera / choose photo</span><small>Training candidates: MCB, RCD/FI, socket, terminal, contactor.</small></label><div id="imageResult" class="result">No image selected.</div></section>');
 }
 function inspectComponentImage(e){const f=e.target.files[0];if(!f)return;document.getElementById("imageResult").innerHTML="<b>Image received.</b><br>Use labels, shape, markings and manufacturer data to identify the component. Do not infer electrical rating, wiring or safety from an image alone."}
-function expandedLabs(){
+function renderExpandedLabs(){
  layout("Virtual Labs",'<div class="hero" style="margin-bottom:18px"><div><span class="eyebrow">SAFE-FAIL ENVIRONMENT</span><h2>Virtual Workshop</h2><p>These exercises are simulations. No real electrical circuit is energized or controlled.</p></div></div><section class="lab-grid">'+labs.map(function(l){return '<article class="lab-card"><span class="pill">'+l.tag+'</span><h3>'+l.title+'</h3><p>'+l.desc+'</p><button class="btn primary" onclick="expandedLab(\''+l.id+'\')">Start Lab</button> '+((state.labDone||[]).includes(l.id)?'<span class="pill green">✓ done</span>':'')+'</article>'}).join("")+'</section>');
 }
 function expandedLab(id){
@@ -196,7 +196,7 @@ function expandedLab(id){
  document.getElementById("lessonModal").innerHTML=h;lessonDialog.showModal();
 }
 function meterChoice(btn,mode){document.querySelectorAll(".meter-sim button").forEach(function(b){b.classList.remove("selected")});btn.classList.add("selected");document.getElementById("meterResult").textContent=mode==="A"?"Current measurement requires the correct circuit method. Never connect a current input directly across a voltage source.":"Mode "+mode+" selected. Confirm terminals, CAT rating, range and method before measuring."}
-function finishExpandedLab(id){state.labDone=state.labDone||[];if(!state.labDone.includes(id))state.labDone.push(id);save();lessonDialog.close();expandedLabs();toast("Lab completed")}
+function finishExpandedLab(id){state.labDone=state.labDone||[];if(!state.labDone.includes(id))state.labDone.push(id);save();lessonDialog.close();renderExpandedLabs();toast("Lab completed")}
 function expandedSettings(){
  layout("Settings",'<section class="grid2"><div class="card">'+head("Student profile","local browser")+'<div class="field"><label>Name</label><input id="nameInput2" value="'+esc(state.student)+'" maxlength="40"></div><button class="btn primary" style="margin-top:10px" onclick="saveExpandedName()">Save</button></div><div class="card">'+head("Language","DE / EN")+'<button class="btn primary" onclick="switchLanguage()">Switch to '+(state.language==="DE"?"English":"Deutsch")+'</button></div><div class="card">'+head("Progress","local storage")+'<p class="muted">Learning data remains in this browser. No account or server is currently used.</p><button class="btn secondary" onclick="resetProgress()">Reset progress</button></div><div class="card">'+head("Legal learning notice","Germany")+'<p class="muted">Training only. Real electrical installation, inspection and commissioning must follow applicable law, standards, qualifications, authorization and responsible-person requirements.</p></div></section>');
 }
@@ -205,7 +205,7 @@ function switchLanguage(){state.language=state.language==="DE"?"EN":"DE";save();
 function expandedRender(){
  document.querySelectorAll(".nav-item[data-view]").forEach(function(b){b.classList.toggle("active",b.dataset.view===state.view)});
  document.getElementById("studentName").textContent=state.student;
- const map={dashboard:dashboard,learn:learn,safety:safety,labs:expandedLabs,quiz:quiz,exam:expandedExam,reference:expandedReference,tools:expandedTools,tutor:expandedTutor,ar:expandedAR,settings:expandedSettings};
+ const map={dashboard:dashboard,learn:learn,safety:safety,labs:renderExpandedLabs,quiz:quiz,exam:expandedExam,reference:expandedReference,tools:expandedTools,tutor:expandedTutor,ar:expandedAR,settings:expandedSettings};
  (map[state.view]||dashboard)();updateProgress();
 }
 function installExpansionNav(){
