@@ -67,3 +67,154 @@ document.getElementById("languageBtn").addEventListener("click",function(){state
 document.addEventListener("click",function(e){if(!e.target.closest(".search")&&!e.target.closest(".search-results"))document.querySelector(".search-results")?.remove()});
 document.getElementById("globalSearch").addEventListener("input",function(e){var q=e.target.value.trim().toLowerCase();document.querySelector(".search-results")?.remove();if(!q)return;var hits=modules.map(function(m){return{t:m.title,d:m.desc,v:"learn"}}).concat(terms.map(function(t){return{t:t[0],d:t[1],v:"reference"}}),labs.map(function(l){return{t:l.title,d:l.desc,v:"labs"}})).filter(function(x){return(x.t+" "+x.d).toLowerCase().indexOf(q)>=0}).slice(0,7);var box=document.createElement("div");box.className="search-results";box.innerHTML=hits.length?hits.map(function(h){return '<button><b>'+h.t+'</b><br><small class="muted">'+h.d+'</small></button>'}).join(""):'<div class="empty">Keine Treffer</div>';document.querySelector(".topbar").appendChild(box);box.querySelectorAll("button").forEach(function(b,i){b.onclick=function(){nav(hits[i].v);box.remove();e.target.value=""}})});
 var lessonDialog=document.getElementById("lessonDialog");render();
+/* ===== VoltPRo Academy 2026 Expansion ===== */
+modules.push(
+{id:"exam",icon:"🎓",level:"Certification",time:"45 min",title:{DE:"Gesellenprüfung Training",EN:"Journeyman Exam Training"},desc:{DE:"Originale Prüfungssimulation zu Theorie, Sicherheit, Berechnung und Fehlersuche.",EN:"Original practice across theory, safety, calculations and troubleshooting."},lessons:["Theory","Safety","Calculations","Troubleshooting"],body:"This is an original training simulation. It is not an official IHK or HWK exam paper."},
+{id:"advanced2",icon:"☀️",level:"Advanced",time:"50 min",title:{DE:"Energie & Zukunft",EN:"Energy & Future"},desc:{DE:"PV, Wärmepumpe, Speicher, E-Mobilität und Energieeffizienz.",EN:"PV, heat pumps, storage, e-mobility and energy efficiency."},lessons:["PV basics","Heat pumps","Battery storage","EV charging"],body:"Advanced energy systems require system-specific design, protection, commissioning and current technical documentation."}
+);
+const examQuestions=[
+{id:"e1",q:"A 230 V load draws 5 A. What is its approximate resistance?",a:["46 Ω","1150 Ω","0.023 Ω","235 Ω"],c:0},
+{id:"e2",q:"Which safety rule verifies that the circuit is actually de-energized?",a:["Secure against reconnection","Verify absence of voltage","Cover adjacent parts","Earth and short-circuit"],c:1},
+{id:"e3",q:"A protective device repeatedly trips. What is the correct training response?",a:["Fit a larger device immediately","Bypass it","Investigate the cause safely and systematically","Hold it on"],c:2},
+{id:"e4",q:"What does PE identify?",a:["Protective conductor","Power electronics","Primary energy","Phase equalizer"],c:0},
+{id:"e5",q:"At 230 V and 2 A, electrical power is:",a:["115 W","232 W","460 W","23 W"],c:2},
+{id:"e6",q:"Before measuring an unfamiliar circuit you should:",a:["Use any setting","Confirm instrument rating, leads, terminals and method","Bridge terminals","Disable protection"],c:1}
+];
+const toolCatalog=[
+["Multimeter","Voltage, current, resistance and continuity measurement.","Confirm CAT rating, leads, terminals, range and measurement method."],
+["Two-pole voltage tester / Duspol","Proving absence of voltage where the procedure requires it.","Use a suitable tested instrument and follow the applicable procedure."],
+["Insulation tester","Insulation resistance testing.","Use on de-energized equipment and follow equipment requirements."],
+["Torque screwdriver","Tightening terminals to a specified torque.","Use the manufacturer's specified torque and correct bit."],
+["VDE screwdriver","Insulated screwdriver for suitable electrical work.","Inspect insulation and use only within its rating."],
+["Wire stripper","Removing insulation from conductors.","Use the correct conductor range and avoid nicking copper."],
+["Crimping tool","Making suitable ferrule/crimp connections.","Use the correct terminal, die and conductor size."],
+["Side cutter","Cutting conductors.","Control cut-off pieces and use appropriate eye protection."],
+["Cable knife","Preparing cable sheaths.","Control blade direction and protect conductor insulation."],
+["Clamp meter","Measuring current without opening the circuit.","Verify rating and clamp only the intended conductor(s)."],
+["Phase sequence tester","Checking phase sequence.","Follow instrument instructions and the applicable safety procedure."],
+["Terminal block","Organised conductor connections.","Verify product rating, conductor type and tightening requirements."]
+];
+const componentCatalog=[
+["LS-Schalter / MCB","Overcurrent protective device for a circuit."],
+["RCD / FI","Residual-current protective device."],
+["Schuko-Steckdose","Common German socket system with protective contact."],
+["WAGO-Klemme","Spring terminal system; exact product/application determines suitability."],
+["NYM-J","Common fixed-installation cable family; selection depends on application."],
+["Verteilerkasten","Distribution enclosure for protective and switching equipment."],
+["Aderendhülse","Ferrule for suitable stranded conductor terminations."],
+["Schütz / Contactor","Electromagnetically operated switching device."],
+["Kabelkanal","Cable routing/protection system."],
+["Klemmenblock","Organised terminal system."]
+];
+const formulaLibrary=[
+["Ohm","U = R × I","Voltage = resistance × current"],
+["Current","I = U / R","Current from voltage and resistance"],
+["Resistance","R = U / I","Resistance from voltage and current"],
+["Power","P = U × I","Electrical power"],
+["Power","P = I² × R","Power from current and resistance"],
+["Power","P = U² / R","Power from voltage and resistance"],
+["Energy","E = P × t","Energy from power and time"],
+["Series resistance","Rₜ = R₁ + R₂ + …","Resistances add in series"],
+["Parallel resistance","1/Rₜ = 1/R₁ + 1/R₂ + …","Reciprocal sum for parallel resistors"],
+["Three-phase power","P ≈ √3 × U × I × cosφ","Use with correct line values and assumptions"]
+];
+const standardsLibrary=[
+["DIN VDE 0100","Low-voltage electrical installations; verify the current applicable part and edition."],
+["DIN VDE 0100-410","Protection against electric shock; verify current edition."],
+["DIN VDE 0100-520","Selection and erection of wiring systems; verify current edition."],
+["DIN VDE 0100-600","Initial verification of low-voltage electrical installations."],
+["DIN EN 60617","Graphical symbols for diagrams; use current applicable symbols."],
+["DGUV","German occupational safety guidance; always use the current publication."],
+["VDE / DKE","Use official current standards and technical rules for real design, testing and installation."],
+["IHK / HWK","Use the responsible chamber's current examination information; this app does not reproduce official papers."]
+];
+const expandedLabs=[
+{id:"meter",tag:"METER LAB",title:"Multimeter Setup",desc:"Select a measurement mode and learn the connection concept."},
+{id:"diagram",tag:"DIAGRAM LAB",title:"Diagram → Reality",desc:"Bridge schematic symbols and physical components."},
+{id:"inspection",tag:"INSPECTION",title:"Distribution Review",desc:"Review labeling, protection, conductors and documentation."},
+{id:"fault2",tag:"FAULT LAB",title:"RCD Trip Investigation",desc:"Practise a safe diagnostic decision tree without a live circuit."}
+];
+labs.push(...expandedLabs);
+function localModuleName(m){return m.title[state.language==="EN"?"EN":"DE"]||m.title.DE}
+function localModuleDesc(m){return m.desc[state.language==="EN"?"EN":"DE"]||m.desc.DE}
+function expandedReference(){
+ layout("Reference",'<div class="grid2"><section class="card">'+head("Formula Library","calculations")+formulaLibrary.map(function(f){return '<div class="term"><strong>'+f[0]+'</strong><p><b>'+f[1]+'</b><br>'+f[2]+'</p></div>'}).join("")+'</section><section class="card">'+head("Ohm Calculator","U = R × I")+calculatorHTML()+'</section></div><section class="card" style="margin-top:18px">'+head("German Standards & Guidance","verify current editions")+standardsLibrary.map(function(s){return '<div class="term"><strong>'+s[0]+'</strong><p>'+s[1]+'</p></div>'}).join("")+'</section>');
+}
+function expandedTools(){
+ layout("Tools & Equipment",'<div class="hero" style="margin-bottom:18px"><div><span class="eyebrow">TOOL CATALOG</span><h2>Professional tools and devices</h2><p>Purpose, safe-use principles and limitations. Always follow manufacturer instructions and applicable requirements.</p></div></div><section class="grid2"><div class="card">'+head("Tool Catalog",toolCatalog.length+" tools")+toolCatalog.map(function(t,i){return '<div class="catalog-item"><div><strong>'+t[0]+'</strong><small>'+t[1]+'</small><small><b>Safety:</b> '+t[2]+'</small></div><button class="btn secondary" onclick="showTool('+i+')">Learn</button></div>'}).join("")+'</div><div class="card">'+head("Component Lexicon",componentCatalog.length+" components")+componentCatalog.map(function(c){return '<div class="term"><strong>'+c[0]+'</strong><p>'+c[1]+'</p></div>'}).join("")+'</div></section>');
+}
+function showTool(i){
+ const t=toolCatalog[i];
+ state.toolSeen=state.toolSeen||[];
+ if(!state.toolSeen.includes(i))state.toolSeen.push(i);
+ save();
+ document.getElementById("lessonModal").innerHTML='<div class="modal"><button class="btn secondary modal-close" onclick="lessonDialog.close()">Close</button><span class="eyebrow">TOOL TRAINING</span><h2>🧰 '+t[0]+'</h2><p>'+t[1]+'</p><div class="safety-gate"><b>Safety warning</b><p>'+t[2]+'</p></div><div class="animation-card"><div class="pulse-icon">⚡</div><div><b>Instruction animation</b><small>Inspect → select → verify → use → document.</small></div></div><button class="btn primary" onclick="lessonDialog.close()">Complete</button></div>';
+ lessonDialog.showModal();
+}
+function expandedTutor(){
+ layout("AI Tutor",'<section class="grid2"><div class="card"><span class="eyebrow">LEARNING ASSISTANT</span><h2>Ask VoltPRo Tutor</h2><p class="muted">A local rule-based tutor for the Academy knowledge base. It explains concepts and safety principles but does not authorize real work.</p><div id="chatLog" class="chat-log"><div class="chat tutor">Ask about voltage, Ohm’s law, RCD, MCB, PE, multimeters, troubleshooting or the five safety rules.</div></div><div class="chat-input"><input id="tutorInput" placeholder="Ask a question..."><button class="btn primary" onclick="askTutorExpanded()">Ask</button></div></div><div class="card">'+head("Suggested topics","beginner → advanced")+["Explain voltage simply","Calculate with Ohm's law","What does PE mean?","How does an RCD work?","How should I approach a fault?","What should I check before measuring?"].map(function(x){return '<div class="catalog-item"><strong>'+x+'</strong><span class="pill">ASK</span></div>'}).join("")+'</div></section>');
+}
+function tutorReply(q){
+ const s=q.toLowerCase();
+ if(s.includes("voltage")||s.includes("spannung"))return "Voltage is electrical potential difference, measured in volts. It can drive current when a suitable circuit exists.";
+ if(s.includes("ohm")||s.includes("resistance")||s.includes("widerstand"))return "Ohm's law is U = R × I. Example: 230 V ÷ 46 Ω = 5 A.";
+ if(s.includes("rdc")||s.includes("fi"))return "An RCD/FI detects a residual or differential current condition and can disconnect the circuit. It does not replace correct design, inspection or other protective measures.";
+ if(s.includes("mcb")||s.includes("ls"))return "An MCB/LS protects a circuit against overcurrent conditions within its intended characteristics. Repeated tripping must be investigated, not defeated.";
+ if(s.includes("pe")||s.includes("schutzleiter"))return "PE identifies the protective conductor. Its role is part of the protective measure against electric shock.";
+ if(s.includes("multimeter")||s.includes("meter"))return "Before measurement, confirm the quantity, instrument category/rating, leads, terminals, range and connection method. Never guess on an unfamiliar circuit.";
+ if(s.includes("safety")||s.includes("sicherheit"))return "Five safety rules: isolate, secure against reconnection, verify absence of voltage, earth and short-circuit where required, and secure adjacent live parts.";
+ if(s.includes("fault")||s.includes("fehler"))return "Use a safe diagnostic sequence: establish safe state → observe → inspect documentation and visible connections → form a hypothesis → choose an appropriate test → verify the result.";
+ return "I can explain electrical foundations, formulas, tools, safety and troubleshooting. Try a more specific question.";
+}
+function askTutorExpanded(){
+ const e=document.getElementById("tutorInput"),q=e.value.trim();if(!q)return;
+ state.tutorLog=state.tutorLog||[];state.tutorLog.push({role:"user",text:q});state.tutorLog.push({role:"tutor",text:tutorReply(q)});state.tutorLog=state.tutorLog.slice(-10);save();
+ const log=document.getElementById("chatLog");log.innerHTML=state.tutorLog.map(function(x){return '<div class="chat '+x.role+'">'+esc(x.text)+'</div>'}).join("");e.value="";
+}
+function expandedExam(){
+ const answered=Object.keys(state.exam||{}).length;
+ layout("Exam Simulation",'<div class="hero" style="margin-bottom:18px"><div><span class="eyebrow">GESellenprüfung TRAINING</span><h2>Original practice exam</h2><p>Practice questions covering calculation, safety, protective devices and troubleshooting. This is not an official IHK/HWK exam bank.</p></div><div class="stat"><small>Answered</small><strong>'+answered+'/'+examQuestions.length+'</strong></div></div><section class="card">'+examQuestions.map(function(q,i){const a=(state.exam||{})[q.id];return '<article class="quiz-card"><p>'+(i+1)+'. '+q.q+'</p><div class="answers">'+q.a.map(function(x,j){return '<button class="answer '+(a!==undefined?(j===q.c?"correct":j===a?"wrong":""):"")+'" '+(a!==undefined?"disabled":"")+' onclick="answerExamExpanded(\''+q.id+'\','+j+')">'+String.fromCharCode(65+j)+'. '+x+'</button>'}).join("")+'</div></article>'}).join("")+'</section>');
+}
+function answerExamExpanded(id,n){state.exam=state.exam||{};if(state.exam[id]!==undefined)return;state.exam[id]=n;save();expandedExam()}
+function expandedAR(){
+ layout("Apprentice AR Mode",'<section class="card"><span class="eyebrow">COMPONENT IDENTIFICATION</span><h2>Camera learning exercise</h2><p class="muted">On supported devices you can select a camera image. This interface does not claim automated safety identification.</p><label class="upload-box"><input type="file" accept="image/*" capture="environment" onchange="inspectComponentImage(event)"><span>📷 Open camera / choose photo</span><small>Training candidates: MCB, RCD/FI, socket, terminal, contactor.</small></label><div id="imageResult" class="result">No image selected.</div></section>');
+}
+function inspectComponentImage(e){const f=e.target.files[0];if(!f)return;document.getElementById("imageResult").innerHTML="<b>Image received.</b><br>Use labels, shape, markings and manufacturer data to identify the component. Do not infer electrical rating, wiring or safety from an image alone."}
+function expandedLabs(){
+ layout("Virtual Labs",'<div class="hero" style="margin-bottom:18px"><div><span class="eyebrow">SAFE-FAIL ENVIRONMENT</span><h2>Virtual Workshop</h2><p>These exercises are simulations. No real electrical circuit is energized or controlled.</p></div></div><section class="lab-grid">'+labs.map(function(l){return '<article class="lab-card"><span class="pill">'+l.tag+'</span><h3>'+l.title+'</h3><p>'+l.desc+'</p><button class="btn primary" onclick="expandedLab(\''+l.id+'\')">Start Lab</button> '+((state.labDone||[]).includes(l.id)?'<span class="pill green">✓ done</span>':'')+'</article>'}).join("")+'</section>');
+}
+function expandedLab(id){
+ let h='<div class="modal"><button class="btn secondary modal-close" onclick="lessonDialog.close()">Close</button>';
+ if(id==="meter")h+='<span class="eyebrow">METER LAB</span><h2>Multimeter setup</h2><div class="meter-sim"><button onclick="meterChoice(this,\'V\')">V</button><button onclick="meterChoice(this,\'A\')">A</button><button onclick="meterChoice(this,\'Ω\')">Ω</button><button onclick="meterChoice(this,\'CONT\')">Continuity</button></div><div id="meterResult" class="result">Select a mode.</div>';
+ else if(id==="diagram")h+='<span class="eyebrow">DIAGRAM LAB</span><h2>Diagram → Reality</h2><div class="diagram-bridge"><div>○ ──[ LS ]── (Socket)</div><div class="arrow">↓</div><div>Supply → protective device → conductor → load</div></div><p>Translate schematic symbols into physical components. A diagram alone does not prove a real installation is safe.</p>';
+ else if(id==="inspection")h+='<span class="eyebrow">INSPECTION LAB</span><h2>Distribution review</h2><div class="catalog">'+["Circuit identification","Protective devices","Conductor routing","Terminal integrity","Labeling","Documentation"].map(function(x){return '<div class="catalog-item"><strong>'+x+'</strong><span class="pill">CHECK</span></div>'}).join("")+'</div>';
+ else if(id==="fault2")h+='<span class="eyebrow">FAULT LAB</span><h2>RCD trip investigation</h2><div class="catalog">'+["Establish safe state","Record the symptom","Inspect visible/documented conditions","Consider possible leakage paths","Choose an appropriate test","Verify before restoring service"].map(function(x,i){return '<div class="catalog-item"><strong>'+(i+1)+'. '+x+'</strong></div>'}).join("")+'</div>';
+ else if(id==="ohm")h+='<span class="eyebrow">CALCULATOR</span><h2>Ohm’s Law</h2>'+calculatorHTML();
+ else if(id==="safety")h+='<span class="eyebrow">SAFETY</span><h2>Five Safety Rules</h2><ol>'+safetyRules.map(function(r){return "<li><b>"+r[0]+"</b> — "+r[1]+"</li>"}).join("")+'</ol>';
+ else h+='<h2>Practice</h2><p>Follow the safe sequence and document your reasoning.</p>';
+ h+='<button class="btn primary" style="margin-top:14px" onclick="finishExpandedLab(\''+id+'\')">Finish lab</button></div>';
+ document.getElementById("lessonModal").innerHTML=h;lessonDialog.showModal();
+}
+function meterChoice(btn,mode){document.querySelectorAll(".meter-sim button").forEach(function(b){b.classList.remove("selected")});btn.classList.add("selected");document.getElementById("meterResult").textContent=mode==="A"?"Current measurement requires the correct circuit method. Never connect a current input directly across a voltage source.":"Mode "+mode+" selected. Confirm terminals, CAT rating, range and method before measuring."}
+function finishExpandedLab(id){state.labDone=state.labDone||[];if(!state.labDone.includes(id))state.labDone.push(id);save();lessonDialog.close();expandedLabs();toast("Lab completed")}
+function expandedSettings(){
+ layout("Settings",'<section class="grid2"><div class="card">'+head("Student profile","local browser")+'<div class="field"><label>Name</label><input id="nameInput2" value="'+esc(state.student)+'" maxlength="40"></div><button class="btn primary" style="margin-top:10px" onclick="saveExpandedName()">Save</button></div><div class="card">'+head("Language","DE / EN")+'<button class="btn primary" onclick="switchLanguage()">Switch to '+(state.language==="DE"?"English":"Deutsch")+'</button></div><div class="card">'+head("Progress","local storage")+'<p class="muted">Learning data remains in this browser. No account or server is currently used.</p><button class="btn secondary" onclick="resetProgress()">Reset progress</button></div><div class="card">'+head("Legal learning notice","Germany")+'<p class="muted">Training only. Real electrical installation, inspection and commissioning must follow applicable law, standards, qualifications, authorization and responsible-person requirements.</p></div></section>');
+}
+function saveExpandedName(){state.student=document.getElementById("nameInput2").value.trim()||"Student";save();render();toast("Profile saved")}
+function switchLanguage(){state.language=state.language==="DE"?"EN":"DE";save();render()}
+function expandedRender(){
+ document.querySelectorAll(".nav-item[data-view]").forEach(function(b){b.classList.toggle("active",b.dataset.view===state.view)});
+ document.getElementById("studentName").textContent=state.student;
+ const map={dashboard:dashboard,learn:learn,safety:safety,labs:expandedLabs,quiz:quiz,exam:expandedExam,reference:expandedReference,tools:expandedTools,tutor:expandedTutor,ar:expandedAR,settings:expandedSettings};
+ (map[state.view]||dashboard)();updateProgress();
+}
+function installExpansionNav(){
+ const navs=[["exam","🎓","Assessments"],["tools","🧰","Tools"],["tutor","🤖","AI Tutor"],["ar","📷","Apprentice AR"]];
+ const n=document.querySelector(".nav");
+ if(n&&!document.querySelector('[data-view="exam"]'))navs.forEach(function(x){const b=document.createElement("button");b.className="nav-item";b.dataset.view=x[0];b.innerHTML="<span>"+x[1]+"</span>"+x[2];b.addEventListener("click",function(){nav(x[0]);document.getElementById("sidebar").classList.remove("open")});n.appendChild(b)});
+}
+const originalNav=nav;
+function nav(v){state.view=v;save();expandedRender()}
+installExpansionNav();
+render=expandedRender;
+expandedRender();
