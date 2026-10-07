@@ -123,5 +123,5 @@ $$(".mode").forEach(b=>b.onclick=()=>{$$(".mode").forEach(x=>x.classList.remove(
 $("#themeBtn").onclick=()=>{document.body.classList.toggle("light");localStorage.setItem("voltpro-theme",document.body.classList.contains("light")?"light":"dark")};
 function toast(m){const t=document.createElement("div");t.textContent=m;t.style="position:fixed;right:18px;bottom:45px;background:#12314a;border:1px solid #39647f;color:white;padding:9px 13px;border-radius:8px;z-index:99;font-size:11px";document.body.append(t);setTimeout(()=>t.remove(),1600)}
 window.addEventListener("keydown",e=>{if((e.ctrlKey||e.metaKey)&&e.key==="z"){e.preventDefault();$("#undoBtn").click()}if((e.ctrlKey||e.metaKey)&&e.key==="s"){e.preventDefault();$("#saveBtn").click()}if(e.key==="Delete")$("#deleteBtn").click();});
-render();bindExtraControls();log("Component registry: "+Object.keys(defs).length+" active simulation components.");
+window.addEventListener("voltpro-registry-ready",()=>render());if(window.VoltProRegistry?.ready)window.VoltProRegistry.ready.then(()=>render());render();bindExtraControls();log("Component registry: "+Object.keys(defs).length+" active simulation components.");
 })();
