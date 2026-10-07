@@ -117,3 +117,4 @@ function toast(m){const t=document.createElement("div");t.textContent=m;t.style=
 window.addEventListener("keydown",e=>{if((e.ctrlKey||e.metaKey)&&e.key==="z"){e.preventDefault();$("#undoBtn").click()}if((e.ctrlKey||e.metaKey)&&e.key==="s"){e.preventDefault();$("#saveBtn").click()}if(e.key==="Delete")$("#deleteBtn").click();});
 render();log("Component registry: "+Object.keys(defs).length+" active simulation components.");
 })();
+window.VoltProWorkspace={getProject:()=>({components:S.components.map(c=>({...c,pins:Array.from({length:compDef(c.type).pins},(_,i)=>c.id+':'+i)})),wires:S.wires,mode:S.mode}),getDefinitions:()=>defs};
