@@ -73,8 +73,8 @@ function linearSolve(b,options,history={}){
  for(const q of b.branches){
   if(q.kind==="resistor")stampG(A,q.a,q.b,C(1/q.R));
   else if(q.kind==="open"){}
-  else if(q.kind==="capacitor"){const g=options.dt? q.C/options.dt:0; if(g)stampG(A,q.a,q.b,C(g));}
-  else if(q.kind==="inductor"){const g=options.dt?options.dt/q.L:1e12;stampG(A,q.a,q.b,C(g));if(options.dt){const old=history[q.comp.id]||0;stampI(z,q.a,q.b,C(-old))}}
+  else if(q.kind==="capacitor"){const g=options.ac?C(0,q.C*options.omega):C(options.dt?q.C/options.dt:0); if(mag(g)>0)stampG(A,q.a,q.b,g);}
+  else if(q.kind==="inductor"){const g=options.ac?div(C(0,-1),C(0,options.omega*q.L)):C(options.dt?options.dt/q.L:1e12);stampG(A,q.a,q.b,g);if(options.dt){const old=history[q.comp.id]||0;stampI(z,q.a,q.b,C(-old))}}
   else if(q.kind==="diode"){const vd=v(q.a).re-v(q.b).re;const on=vd>=q.vf;const g=on?1/q.rd:q.reverse;const iEq=on?(vd-q.vf)/q.rd-g*vd:0;stampG(A,q.a,q.b,C(g));stampI(z,q.a,q.b,C(iEq))}
   else if(q.kind==="bjt"){const vd=v(q.a).re-v(q.b).re;const g=vd>q.vt?1/q.beta:1e-9;stampG(A,q.a,q.b,C(g))}
   else if(q.kind==="mosfet"){const vd=v(q.a).re-v(q.b).re;stampG(A,q.a,q.b,C(vd>q.threshold?1/q.onResistance:1e-9))}
@@ -100,7 +100,7 @@ function operatingPoint(project,options={}){
 function dc(project,options={}){return operatingPoint(project,options)}
 function ac(project,{start=1,stop=1e5,points=50,frequency=50,groundRef}={}){
  const b=build(project,{groundRef}), freqs=points<=1?[frequency]:Array.from({length:points},(_,i)=>start*Math.pow(stop/start,i/(points-1))),rows=[];
- for(const f of freqs){const scale=2*Math.PI*f;const result=linearSolve(b,{frequency:f,ac:true,xPrev:Array.from({length:b.N},()=>C())},{}) ;if(!result.ok)return {ok:false,analysis:"AC sweep",error:result.error};const x=result.x;const vs=b.voltageSources[0];const vout=vs?sub(x[(vs.a||1)-1]||C(),x[(vs.b||1)-1]||C()):C();const z=vs&&x[b.N]?div(vout,x[b.N]):C(Infinity,0);rows.push({frequency:f,magnitude:mag(vout),phaseDeg:deg(vout),impedanceMagnitude:mag(z),impedancePhaseDeg:deg(z)})}
+ for(const f of freqs){const scale=2*Math.PI*f;const result=linearSolve(b,{frequency:f,omega:scale,ac:true,xPrev:Array.from({length:b.N},()=>C())},{}) ;if(!result.ok)return {ok:false,analysis:"AC sweep",error:result.error};const x=result.x;const vs=b.voltageSources[0];const vout=vs?sub(x[(vs.a||1)-1]||C(),x[(vs.b||1)-1]||C()):C();const z=vs&&x[b.N]?div(vout,x[b.N]):C(Infinity,0);rows.push({frequency:f,magnitude:mag(vout),phaseDeg:deg(vout),impedanceMagnitude:mag(z),impedancePhaseDeg:deg(z)})}
  return {ok:true,analysis:"AC sweep (MNA)",frequency,points:freqs.length,start,stop,sweep:rows};
 }
 function transient(project,{duration=.1,steps=100,groundRef}={}){
