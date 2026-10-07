@@ -91,7 +91,7 @@ function linearSolve(b,options,history={}){
 }
 function operatingPoint(project,options={}){
  const b=build(project,options);let xPrev=Array.from({length:b.N},()=>C()),result;
- for(let it=0;it<12;it++){result=linearSolve(b,{...options,xPrev});if(!result.ok)return {ok:false,analysis:"DC operating point",error:result.error};xPrev=result.x.slice(0,b.N);if(result.x.slice(0,b.N).every((v,i)=>mag(sub(v,xPrev[i]||C()))<1e-9))break}
+ for(let it=0;it<12;it++){const previous=xPrev.slice();result=linearSolve(b,{...options,xPrev});if(!result.ok)return {ok:false,analysis:"DC operating point",error:result.error};xPrev=result.x.slice(0,b.N);if(xPrev.every((v,i)=>mag(sub(v,previous[i]||C()))<1e-9))break}
  const x=result.x, nodeVoltage=n=>n===0?0:(x[n-1]?.re||0), branches=b.branches.map(q=>{const u=nodeVoltage(q.a)-nodeVoltage(q.b);let i=0;if(q.kind==="resistor")i=u/q.R;else if(q.kind==="diode")i=u>=q.vf?(u-q.vf)/q.rd:u*q.reverse;else if(q.kind==="bjt")i=u>q.vt?(u-q.vt)/q.beta/Math.max(q.vt,EPS):u*1e-9;else if(q.kind==="mosfet")i=u>q.threshold?u/q.onResistance:u*1e-9;return {id:q.comp.id,type:q.comp.type,voltage:u,current:i,power:u*i}});
  const sourceCurrents=b.voltageSources.map((q,k)=>({id:q.comp.id,type:q.comp.type,current:x[b.N+k]?.re||0}));
  const totalCurrent=sourceCurrents.filter(q=>q.current>0).reduce((s,q)=>s+q.current,0);
