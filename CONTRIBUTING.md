@@ -1,13 +1,7 @@
-# Contributing to VoltPRo
+# Contributing to VoltPRo Academy
 
-## Add a component
-1. Add a stable JSON definition under `data/`.
-2. Provide IEC and/or ANSI SVG symbols with provenance.
-3. Define pins and engineering units.
-4. Implement a simulation adapter or explicitly mark the component educational-only.
-5. Add documentation, safety notes and a datasheet/source URL.
-6. Add deterministic tests.
-7. Keep all dependencies license-compatible with the project license.
+Add components through versioned data, symbols, assets, simulation models, documentation and tests. Run repository validation and add regression coverage before opening a PR.
 
-## Definition of done
-A component is not counted as a functional library component merely because it appears in a catalog. It needs rendering, interaction, valid pin topology, documented parameters and a tested simulation/educational behavior.
+Do not claim SPICE compatibility unless a compatible licensed engine is actually integrated. Do not copy WireONa assets.
+
+See docs/COMPONENT_DEVELOPMENT.md, docs/SYMBOL_GUIDE.md and docs/SIMULATION_MODEL_GUIDE.md.
