@@ -83,8 +83,8 @@ function transient(project,{duration=0.1,steps=100}={}){
  const base=dc(project,arguments[1]||{});if(!base.ok)return base;
  const dt=duration/Math.max(1,steps);return {ok:true,analysis:"Transient educational envelope",duration,steps,dt,samples:Array.from({length:steps+1},(_,i)=>({t:i*dt,current:base.totalCurrent,power:base.totalPower})),note:"R-only DC baseline; dynamic C/L/semiconductor models are isolated for the next solver tier."};
 }
-function ac(project,{frequency=50}={}){
- const base=dc(project);if(!base.ok)return base;
+function ac(project,{frequency=50,groundRef}={}){
+ const base=dc(project,{groundRef});if(!base.ok)return base;
  return {ok:true,analysis:"AC impedance preview",frequency,impedance:base.totalCurrent?base.sourceVoltage/base.totalCurrent:Infinity,phaseDeg:0,note:"Frequency-domain UI contract is active; reactive component models require the next model pack."};
 }
 function analyze(project,options={}){
