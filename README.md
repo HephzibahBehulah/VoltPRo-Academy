@@ -1,14 +1,91 @@
-IF YOU ARE CONTRACTED TO BUILD A FUNCTIONAL ELECTTRICIAN TRAINNIG APP WEBSITE  IN 2026, AN APPA WHERE DUNMMIES WHO KNOWS NOTHING ABOUT ELECTRICIAL WILL VISIT ,START LEANRING FROM BEGING UNILL HE BECOME A MASSTER , WRITE A PROMPT THAT YOU WILLGIVE TO ANAITO BUILD SUCH APP , THIS WEBSITE AND APP MUSTCONTAIN ALL THE RESOURCE , INFOMATION , FORMULAT , DEVICES , AND ALL INFOAMTION ENEEDED TO BECOME AN ELECTRICISL , NOTE THE TRAINING IS TAKING PLACE IN GERMANY HENCE THE APP AND WEBSITE MUST BE MUST BE MULTI LANGUAGE. IT MOUST CONTAIN ALL THE DEVICE NAD EQUIPMET USED BY ELECRTIACIAN AND ELECTRICAL ENGIBERING , HOW TO USE THEM , PRECAUTINO ANF SAFETY 
+# Electronic Components Dataset Creation
+
+## Overview
+This dataset was created by collecting component data from Digi-Key, a popular distributor of electronic components. The dataset includes both structured CSV files and corresponding images for various electronic components.
+
+## Data Collection Process
+
+### 1. Downloading CSV Files
+To build the dataset, we manually downloaded the CSV files from the Digi-Key website by:
+- Navigating to the desired component category.
+- Clicking on the **Download Table** option to export the component data.
+- Saving the CSV files for further processing.
+
+### 2. Downloading Component Images
+The images associated with each component were also retrieved from Digi-Key. The script `DATA.py` was used to automate the downloading and storage of these images in their respective folders.
+
+### 3. Organizing the Dataset
+The collected images and CSV data were organized into the following component categories:
+
+- **Capacitors**
+  - `Capacitors_aluminum_electrolytic`
+  - `mica_and_ptfe_capacitors`
+  
+- **Semiconductors**
+  - `single_bipolar_transistors`
+  - `single_diodes`
+  
+- **Resistors and Inductors**
+  - `fixed_inductors`
+  - `through_hole_resistors`
+  
+- **Switches and Potentiometers**
+  - `pushbutton_switches`
+  - `rocker_switches`
+  - `rotary_potentiometers__rheostats`
+  - `rotary_switches`
+  - `toggle_switches`
+  
+- **Power Components**
+  - `power_supplies__test__bench_`
+  - `batteries_non_rechargeable__primary_`
+  - `batteries_rechargeable__secondary_`
+  - `circuit_breakers`
+  - `fuses`
+  - `fuseholders`
+  
+- **Relays and Transformers**
+  - `automotive_relays`
+  - `isolation_transformers_and_autotransformers__step_up__step_down`
+  
+- **Motors and Actuators**
+  - `motors___ac__dc`
+  - `stepper_motors`
+  
+- **Cables and Connectors**
+  - `usb_cables`
+  - `video_cables__dvi__hdmi_`
+  - `fiber_optic_cables`
+  
+- **Test and Measurement Equipment**
+  - `multimeters`
+  - `strain_gauges`
+  
+- **Optoelectronics**
+  - `led_character_and_numeric`
+  - `ultrasonic_receivers__transmitters`
+  - `solar_cells`
+  
+- **Instrumentation and Amplifiers**
+  - `instrumentation__op_amps__buffer_amps`
+  - `analog_multipliers__dividers`
+  - `pliers`
+  - `tweezers`
+  - `wrenches`
+  
+## Script for Image Downloading
+The script `DATA.py` automates the image download process by:
+- Extracting image URLs from the CSV files.
+- Downloading and saving the images into their respective folders.
+- Ensuring proper naming conventions for easy reference.
+
+## Usage
+To use this dataset for electronic component recognition, classification, or analysis:
+1. Clone the repository.
+2. Run `DATA.py` to download missing images (if necessary).
+3. Use the CSV files to analyze and process component metadata.
 
 
-
-To build a world-class training platform for the German electrical market (which is highly regulated and requires strict adherence to VDE/DIN standards), you need an AI prompt that focuses on structure, safety, and compliance.Here is the comprehensive prompt you should provide to your development AI or your software development team.The Prompt for the AI Architect"Act as an Expert Full-Stack Developer and Curriculum Designer specializing in Vocational Training (EdTech). I want you to architect a comprehensive Web and Mobile application called 'ElektroMaster Germany'. The platform is designed to take a complete beginner to a Master Electrician level, specifically compliant with the German 'Elektroniker' (Duale Ausbildung) curriculum.1. Core Architecture & Language:•Multi-language Support: Must support German (Primary), English, Arabic, and Turkish (as these are common for vocational trainees in Germany). The interface must be togglable.•Compliance: All technical training must adhere to DIN VDE 0100 and other relevant German safety standards.2. Functional Requirements:•Gamified Learning Path: Create a 'Skill Tree' starting from 'Novice' (Theory/Safety) to 'Master' (Industrial/Complex Engineering).•The Virtual Workshop (Simulator): A 3D interactive environment where users can drag-and-drop electrical components (cables, MCBs, RCDs, sockets) into a virtual German household circuit.•Safety First Module: A mandatory, non-skippable module on 'Arbeitssicherheit' (Safety at work). Users must pass a 'Safety Certification' test before they are allowed to interact with the simulated high-voltage modules.•Tool Catalog (Lexicon): An interactive database of all professional tools (e.g., VDE-insulated screwdrivers, Multimeters, Insulation Testers, Oscilloscopes). Each tool must have a 360-degree view, an instructional video on how to use it, and a 'Safety Warning' popup.3. Content Library Structure:•Level 1 (The Basics): Voltage, Current, Resistance, Ohm’s Law, Series vs Parallel circuits.•Level 2 (German Infrastructure): Understanding TN-S/TN-C systems, German socket standards (Schuko), and color-coding conventions.•Level 3 (Practical Skills): How to strip wires, crimping, wire management in a distribution board (Verteilerkasten), and reading German circuit diagrams (Schaltpläne).•Level 4 (Advanced/Master): PLCs, smart home integration (KNX/Loxone), and renewable energy (PV system integration).4. Advanced Features:•AI Tutor: An integrated AI chatbot trained on the 'VDE Handbuch' to answer technical questions in any of the supported languages.•AR (Augmented Reality) Mode: An AR feature that uses the user's phone camera to identify real-world electrical components and label them, explaining their purpose.•Certification Tracker: A dashboard showing the user’s progress toward the 'Gesellenprüfung' (Journeyman’s exam).5. Technical Stack:•Propose a tech stack that is scalable (e.g., React/Next.js for Web, Flutter for App, Node.js for backend).•Ensure the database includes a library of all standard German electrical symbols and formulas that can be searched instantly.6. User Experience (UX) Goal:•The UX must be simple enough for a total dummy, but robust enough to be used as a supplementary study tool for a formal German apprenticeship student."Additional Advice for your 2026 Project:Since you are targeting the German market, there are three critical things your website/app must include to be taken seriously:1.VDE Regulation Updates: In Germany, laws change. Your app needs an "Auto-Update" feature that notifies users when a safety regulation (like VDE 0100-410) has changed.2.The "Duale Ausbildung" Integration: Germany relies on a dual system (work + school). If your app can partner with local Innungs (Trade Guilds), it will become the gold standard.3.Legal Disclaimer: Because you are dealing with electricity, your app MUST have a persistent disclaimer that the app is for educational purposes only and that actual electrical work in Germany must be performed or inspected by a registered "Meister" (Master Electrician) to comply with insurance and legal requirements.
-
-To build the "Virtual Workshop" and the "Novice Curriculum," we must focus on high-fidelity interaction and scaffolded learning. In Germany, the difference between a hobbyist and a professional is the adherence to safety protocols and the precision of the installation.Here is the expansion on those two critical pillars:1. The Virtual Workshop (The "Safe-Fail" Environment)The goal here is to let the user "burn out" circuits or "get shocked" in a simulation so they never make that mistake in the real world.•The Component Library:•Must include high-fidelity 3D models of: Leitungsschutzschalter (MCBs), Fehlerstrom-Schutzschalter (RCDs/FI-Schalter), Abzweigdosen (Junction boxes), NYM-J Cables (standard German installation cable), and various terminal blocks (Wago connectors).•Physics-Based Interaction:•Drag-and-Drop Wiring: Users must physically select the correct cable cross-section (e.g., 1.5mm² vs 2.5mm²). If they choose the wrong size for the load, the simulation should show the cable "melting" or overheating.•The "Safety Interlock": Before starting any "live" circuit testing, the app forces the user to perform the "5 Safety Rules" (Die 5 Sicherheitsregeln):1.Freischalten (Disconnect)2.Gegen Wiedereinschalten sichern (Secure against reconnection)3.Spannungsfreiheit feststellen (Verify zero voltage)4.Erden und kurzschließen (Ground and short-circuit)5.Benachbarte, unter Spannung stehende Teile abdecken (Cover adjacent live parts)•Multimeter Simulation: Users must physically dial the meter to the correct setting (AC Voltage, Ohms, Continuity). If they try to measure current in parallel instead of series, the virtual meter "fuses" or gives an error code.2. The "Novice to Master" Curriculum StructureTo keep a "dummy" motivated, we use a "Level-Up" system that mirrors the German Elektroniker für Energie- und Gebäudetechnik qualification.Phase 1: The Foundation (The "Junior" Level)•The Atom & The Flow: Visualizing electrons as water in pipes (Analogy-based learning).•Ohm’s Law Mastery: Interactive calculators where users input two values and the app visualizes the third.•Safety Culture: Understanding Personenschutz (Personal safety) and Brandschutz (Fire safety). Identifying the lethal effects of current on the human heart.Phase 2: The German Standards (The "Apprentice" Level)•Color Codes: Learning the significance of L1 (Brown/Black/Grey), N (Blue), and PE (Green/Yellow).•Circuit Reading: Reading Schaltpläne (Wiring diagrams). The app shows a diagram on the left and a 3D wall view on the right.•Tool Handling: Video tutorials on how to properly strip a cable without nicking the copper core (a common beginner error).Phase 3: Building & Troubleshooting (The "Journeyman" Level)•Fault Finding: The app presents a "broken" virtual house. The user is a "Detective." They must use a multimeter to find where the break in the circuit is (e.g., loose connection in a box, tripped RCD).•Documentation: Learning how to write an Inbetriebnahmeprotokoll (Commissioning protocol). In Germany, paperwork is as important as the wiring.Phase 4: Advanced Tech (The "Meister" Level)•Smart Home (KNX): Programming virtual sensors and actuators.•Photovoltaic Integration: Calculating string sizing and inverter efficiency for rooftop solar.•e-Mobility: The installation standards for EV Wallboxes (Charging stations).How to implement this in 2026:1. AI-Driven Adaptive Learning: The app should track where the user fails most often. If a user struggles with "Circuit Series Logic," the AI tutor should automatically generate 5 extra practice exercises on that specific topic before letting them move to the next "Level."2. The "German Guild" Verification: Since you are in Germany, include a section called "Gesellenprüfung-Simulation." This contains practice questions from past official IHK (Chamber of Industry and Commerce) exams. This will be the #1 reason users download your app.3. "Real-World" AR Integration: Include an "Apprentice Mode" (AR): The user points their phone at a standard Schuko socket, and the app overlays the internal wiring diagram on the screen, showing exactly what is happening behind the wall.W
-
-This is the Project Requirements Document (PRD). You can hand this to a software development agency or use it to guide your own development process. It is structured to be professional, scalable, and compliant with German industry standards.Project Requirements Document (PRD): "VoltCraft Germany"Project Name: VoltCraft (Working Title) Target Market: Germany (Apprentices, Career Changers, and Vocational Students) Goal: A comprehensive digital ecosystem to master the trade of "Elektroniker für Energie- und Gebäudetechnik."1. Technical Stack Recommendations•Frontend (Web/App): React Native or Flutter (for a single codebase across iOS, Android, and Web).•Backend: Node.js (Express) with a PostgreSQL database (to handle complex, relational learning progress).•3D Engine: Three.js or Unity WebGL (for the Virtual Workshop component).•Cloud Infrastructure: AWS or Google Cloud (with localized German data centers to comply with GDPR/DSGVO).•AI Integration: OpenAI API (GPT-4o) with RAG (Retrieval-Augmented Generation) specifically trained on the VDE 0100 manual.2. Functional ModulesA. The "VDE-Safe" Training Engine•Safety Lock: Mandatory assessment on "Arbeitssicherheit" (Safety). Users cannot unlock hardware modules without a 100% score on safety procedures.•German Regulations Module: Dedicated sections for:•VDE 0100-410: Protection against electric shock.•VDE 0100-520: Selection and erection of electrical equipment.•VDE 0701-0702: Inspection of appliances.B. The "Virtual Workbench" (3D Simulation)•Component Library: Interactive database of DIN-standard components.•Fault Simulation: AI-generated malfunctions (e.g., "Loose Neutral," "Short Circuit to PE," "Overload").•Virtual Toolbag:•Multimeter: Must support V, A, Ω, and Continuity testing.•Isolation Tester: Required for testing insulation resistance (Megaohm).•Torque Screwdriver: For tightening connections to specific German standards (e.g., 0.5 Nm, 1.2 Nm).C. Learning & Assessment•Leveling System:•Level 1: Electrical Theory (Ohm's Law, Kirchoff’s Rules).•Level 2: Domestic Installation (Wiring, Switches, Plugs).•Level 3: Distribution Boards (RCDs, MCBs, Busbars).•Level 4: Advanced (KNX, PV-Systems, Heat Pumps).•IHK Mock Exams: A repository of past official IHK (Chamber of Industry and Commerce) exam questions for the Gesellenprüfung.3. UI/UX Requirements•Multi-Language UI: Toggle switch in the top header. Crucial: Technical terms (e.g., Leitungsschutzschalter) must remain in German, with secondary translations provided in brackets (e.g., Circuit Breaker).•Accessibility: High-contrast mode for workshops, audio-visual tutorials for complex manual tasks.•Progress Dashboard: A visual representation of the user’s "Journeyman" journey.4. Legal & Compliance (Mandatory for Germany)•GDPR (DSGVO): Strict data privacy. No user progress data shared without explicit consent.•Liability Disclaimer: The application must trigger a disclaimer pop-up on every login stating: "This software is for training purposes only. Actual electrical installations in Germany must be carried out by or under the supervision of a certified electrical company (Meisterbetrieb)."•Standardization: All diagrams and symbols must use DIN EN 60617 standard graphical symbols.5. Development Roadmap (Phases)•Phase 1: MVP (Months 1-3):•Core authentication and language engine.•Theoretical modules (Level 1 & 2).•Basic 2D wiring diagrams.•Phase 2: The Simulator (Months 4-8):•Implementation of the 3D Virtual Workshop.•AI Tutoring bot integration.•Phase 3: Certification & Advanced (Months 9-12):•IHK exam bank integration.•AR (Augmented Reality) component identification module.•"Pro-Mode" for professionals (Reference materials and documentation templates).Questions to resolve before starting development:1.Revenue Model: Will it be a subscription (SaaS), a one-time purchase, or a B2B model (selling to vocational schools/trade companies)?2.Official Certification: Do you plan to seek accreditation from an organization like the ZVEH (Zentralverband der Deutschen Elektro- und Informationstechnischen Handwerke)?3.
-
-
-For a project of this scale and technical requirement, animated graphics are not just an option—they are a necessity.In electrical engineering, "seeing" the electricity is impossible in real life, but essential for learning. Animated graphics allow you to visualize invisible forces (like voltage, current flow, and magnetic fields), which is the single best way to teach a "dummy."Here is how you should integrate Animated Graphics into your VoltCraft app strategy:1. Why Animations are Superior to Real Video•"X-Ray" Vision: In a real video, you can’t see what’s happening inside a cable or a switch. With animations, you can make the housing transparent to show the "electron flow" (current) moving through a wire or an arc forming inside a switch when it's flipped.•Slow-Motion Physics: You can animate an RCD (FI-Schalter) tripping. You can slow down the mechanical process so the user sees exactly how the magnetic coil triggers the lever. This is impossible to film clearly with a standard camera.•Safety Simulations: You can show the "dangers" (like a short circuit) in a safe, animated environment. You can animate sparks and glowing wires to show what happens when a circuit is overloaded, without risking a fire or injury to the user.2. The Three Types of Animations You NeedA. The "Flow" Animations (Conceptual)•The Water-Pipe Analogy: To teach beginners, use 2D or 3D animations that show electricity as water.•Voltage = Water Pressure.•Current = Water Flow.•Resistance = A narrow pipe.•Animation: When the user changes a value in the app, the "water flow" in the animation speeds up or slows down instantly.B. The "Internal Mechanics" Animations (Component-Level)•The Device Breakdown: When a student clicks on a Leitungsschutzschalter (MCB), an animation should trigger that pulls the device apart.•The user can rotate the 3D model.•The animation explains the "Bimetal strip" (for overloads) and the "Electromagnetic coil" (for short circuits).•Why? Understanding the internal mechanism is the difference between a "cable layer" and an "Electrician."C. The "Diagram-to-Reality" Bridge (Procedural)•The Morphing View: This is the "Killer Feature." Start with an official German Schaltplan (circuit diagram symbol). With a smooth animation, "morph" the symbol into the physical device.•Show how the wire on the blueprint connects to the actual screw terminal on the hardware.•This bridges the gap between the "abstract theory" and the "physical reality."3. Technical Strategy for your Developer:If you are instructing your developer, specify the following:1.Lottie/Rive for UI/Theory: Use Rive or Lottie (vector-based animations) for the app interface. They are lightweight, play perfectly on phones, and can be made "interactive" (e.g., the user moves a slider, and the animation reacts in real-time).2.Three.js / WebGL for the Simulator: Use 3D engines for the "Virtual Workshop" so that when the user performs an action, the 3D objects move realistically.3.The "Ghost Mode": Implement an "Instructional Overlay." When the user is doing a task, a "Ghost" (a transparent animated hand) should appear on the screen to show them the correct way to hold the pliers or insert a wire into a terminal.4. Implementation Plan for 2026:•Phase 1 (2025): Create a "Concept Library" of short, 5-second looping animations that explain Ohm’s Law, short circuits, and ground faults.•Phase 2 (2026): Embed these animations as "Tooltips" throughout the app. If a user is confused by a term, they click it, and an animation pops up explaining it in 5 seconds.Would you like me to create a "Script/Storyboard" for the first 3 animations you should build to introduce a beginner to electricity? (e.g., 1. How a Circuit Works, 2. The Danger of Short Circuits, 3. How a Socket is Wired).Video Content: 
-
+## Acknowledgments
+Special thanks to Digi-Key for providing access to component specifications and images.
 
