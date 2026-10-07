@@ -2,7 +2,7 @@
 const $=s=>document.querySelector(s);
 function panel(title,body){
   let x=document.getElementById("vpPlatformPanel");
-  if(!x){x=document.createElement("section");x.id="vpPlatformPanel";x.style.cssText="position:fixed;right:18px;top:78px;width:min(420px,calc(100vw - 36px));max-height:70vh;overflow:auto;background:#081522;color:#dcecff;border:1px solid #28506d;border-radius:12px;padding:16px;z-index:9999;box-shadow:0 20px 60px #0008;font:14px system-ui";document.body.appendChild(x)}
+  if(!x){x=document.createElement("section");x.id="vpPlatformPanel";x.style.cssText="position:fixed;right:18px;top:78px;width:min(420px,calc(100vw - 24px));max-width:calc(100vw - 24px);max-height:min(70vh,calc(100dvh - 96px));overflow:auto;background:#081522;color:#dcecff;border:1px solid #28506d;border-radius:12px;padding:16px;z-index:9999;box-shadow:0 20px 60px #0008;font:14px system-ui";document.body.appendChild(x)}
   x.innerHTML="<b>"+title+"</b><button id=vpClose style='float:right'>×</button><div style='margin-top:12px'>"+body+"</div>";
   $("#vpClose").onclick=()=>x.remove();
 }
