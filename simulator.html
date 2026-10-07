@@ -13,10 +13,10 @@
   <div class="mode-tabs">
     <button class="mode active" data-mode="schematic">Schematic</button><button class="mode" data-mode="panel">Panel</button><button class="mode" data-mode="micro">Microcontroller</button>
   </div>
-  <div class="top-actions"><button id="newBtn">New</button><button id="saveBtn">Save</button><button id="loadBtn">Load</button><button id="exportBtn">Export</button><a href="index.html">Academy</a><button id="themeBtn">Theme</button></div>
+  <div class="top-actions"><button id="newBtn">New</button><button id="saveBtn">Save</button><button id="loadBtn">Load</button><button id="exportBtn">Export</button><button id="pngBtn">SVG</button><a href="index.html">Academy</a><button id="themeBtn">Theme</button></div>
 </header>
 <div class="toolbar">
- <button id="runBtn" class="primary">▶ Run</button><button id="demoBtn">Demo Circuit</button><button id="paletteBtn">Library</button><button id="stopBtn">■ Stop</button><button id="wireBtn">Wire</button><button id="deleteBtn">Delete</button><button id="undoBtn">Undo</button><button id="redoBtn">Redo</button>
+ <button id="runBtn" class="primary">▶ Run</button><button id="demoBtn">Demo Circuit</button><button id="demoMotorBtn">Motor Starter</button><button id="demoLogicBtn">Logic Lab</button><button id="paletteBtn">Library</button><button id="stopBtn">■ Stop</button><button id="wireBtn">Wire</button><button id="deleteBtn">Delete</button><button id="undoBtn">Undo</button><button id="redoBtn">Redo</button>
  <span class="sep"></span><label>Grid <input id="gridSize" type="number" value="20" min="5" max="80"></label><button id="fitBtn">Fit</button><span class="status" id="simStatus">READY</span>
 </div>
 <main class="workspace">
@@ -41,7 +41,7 @@
    <div class="panel-title instruments-title">INSTRUMENTS</div>
    <div class="instrument-grid"><button data-meter="voltage">V</button><button data-meter="current">A</button><button data-meter="resistance">Ω</button><button data-meter="continuity">🔔</button></div>
    <div id="meterReadout" class="meter">--</div>
-   <div class="panel-title">NETLIST / EVENTS</div><pre id="console" class="console">VoltPRo engine ready.
+   <div class="panel-title">CALCULATIONS</div><div id="calcPanel" class="calc-panel">Select Run to calculate circuit values.</div><div class="panel-title">NETLIST / EVENTS</div><pre id="console" class="console">VoltPRo engine ready.
 Educational simulation only.</pre>
  </aside>
 </main>
