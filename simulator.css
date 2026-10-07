@@ -7,3 +7,33 @@ button{min-height:36px}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
 .vpHighContrast{filter:contrast(1.18)}
 @media (max-width:768px){.toolbar{overflow-x:auto;white-space:nowrap}.workspace{grid-template-columns:1fr}.palette{max-height:34vh;overflow:auto}.inspector{max-height:42vh;overflow:auto}.canvas-wrap{min-height:48vh}}
+
+
+/* Menu overflow fix: keep every control reachable instead of clipping the right side. */
+.sim-top{
+  min-width:0;
+  overflow-x:auto;
+  overflow-y:hidden;
+  scrollbar-width:thin;
+  scrollbar-color:#31516d #07111d;
+}
+.sim-top::-webkit-scrollbar,.toolbar::-webkit-scrollbar{height:6px}
+.sim-top::-webkit-scrollbar-track,.toolbar::-webkit-scrollbar-track{background:#07111d}
+.sim-top::-webkit-scrollbar-thumb,.toolbar::-webkit-scrollbar-thumb{background:#31516d;border-radius:8px}
+.brand,.mode-tabs,.top-actions{flex-shrink:0}
+.top-actions{margin-left:auto}
+.toolbar{
+  min-width:0;
+  overflow-x:auto;
+  overflow-y:hidden;
+  white-space:nowrap;
+  scrollbar-width:thin;
+  scrollbar-color:#31516d #091522;
+}
+.toolbar > *{flex-shrink:0}
+@media(max-width:650px){
+  .top-actions button:nth-child(-n+3){display:inline-flex}
+  .top-actions,.mode-tabs{flex-shrink:0}
+  .sim-top{padding-right:14px}
+  .toolbar{padding-bottom:5px}
+}
