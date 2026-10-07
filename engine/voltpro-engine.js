@@ -67,7 +67,7 @@ function dc(project,options={}){
  }
  const V=Number(source.props?.voltage)||12, sp=componentPins(project,source);
  if(sp.length<2)return {ok:false,error:"Source requires two pins"};
- const plus=nodeFor(sp[0]),minus=nodeFor(sp[1]);
+ const reference=options.groundRef||sp[1]; const plus=nodeFor(sp[0]),minus=nodeFor(reference);
  const N=ni, A=Array.from({length:N},()=>Array.from({length:N},()=>c())), z=Array.from({length:N},()=>c());
  const stampG=(a,b,g)=>{if(a>0)A[a-1][a-1]=add(A[a-1][a-1],c(g));if(b>0)A[b-1][b-1]=add(A[b-1][b-1],c(g));if(a>0&&b>0){A[a-1][b-1]=sub(A[a-1][b-1],c(g));A[b-1][a-1]=sub(A[b-1][a-1],c(g))}};
  branches.forEach(q=>stampG(q.a,q.b,q.g));
