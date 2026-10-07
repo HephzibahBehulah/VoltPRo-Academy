@@ -16,6 +16,7 @@ jobs:
           node --check script.js
           node --check simulator.js
           node --check engineering.js
+          node -e "const x=JSON.parse(require(\"fs\").readFileSync(\"pwa.webmanifest\",\"utf8\")); if(!x.name||!x.start_url) process.exit(1)"
       - name: Validate required frontend files
         run: |
           test -s index.html
@@ -27,6 +28,8 @@ jobs:
           test -s engineering.html
           test -s engineering.css
           test -s engineering.js
+          test -s pwa.webmanifest
+          test -s service-worker.js
           grep -q 'simulator.js' simulator.html
           grep -q 'simulator.css' simulator.html
       - name: Validate component registry
