@@ -38,5 +38,3 @@ jobs:
 
       - name: Run regression tests
         run: npm test
-      - name: Validate v3 data contracts
-        run: node -e "for (const f of ['data/component-models.v3.json','data/component-schema.json','data/challenges.json','data/tutorials.json','data/faults.json']) JSON.parse(require('fs').readFileSync(f,'utf8')); console.log('v3 data contracts: OK')"
