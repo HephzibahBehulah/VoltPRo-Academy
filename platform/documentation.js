@@ -1,0 +1,5 @@
+(()=>{"use strict";
+function markdown(project,results={}){const lines=["# VoltPRo Engineering Report","","## Project",project.metadata?.name||"Untitled Circuit","","## Components","| ID | Type | Parameters |","|---|---|---|"];for(const c of project.components||[])lines.push("| "+c.id+" | "+c.type+" | "+JSON.stringify(c.props||{}).replaceAll("|","\\|")+" |");lines.push("","## Wiring","Wires: "+(project.wires||[]).length,"","## Analysis");for(const [k,v] of Object.entries(results))lines.push("### "+k,"```json",JSON.stringify(v,null,2),"```");lines.push("","> Educational output. Verify real installations against current standards and manufacturer documentation.");return lines.join("\n")}
+function json(project,results={}){return JSON.stringify({format:"voltpro-engineering-report",version:1,project,results,generatedAt:new Date().toISOString()},null,2)}
+window.VoltProDocs={markdown,json};
+})();
