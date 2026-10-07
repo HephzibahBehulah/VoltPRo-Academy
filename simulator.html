@@ -13,21 +13,21 @@
   <div class="mode-tabs">
     <button class="mode active" data-mode="schematic">Schematic</button><button class="mode" data-mode="panel">Panel</button><button class="mode" data-mode="micro">Microcontroller</button>
   </div>
-  <div class="top-actions"><button id="newBtn">New</button><button id="saveBtn">Save</button><button id="loadBtn">Load</button><button id="exportBtn">Export</button><button id="pngBtn">SVG</button><a href="index.html">Academy</a><button id="themeBtn">Theme</button></div>
+  <div class="top-actions"><button id="newBtn">New</button><button id="saveBtn" aria-label="Save project">Save</button><button id="loadBtn" aria-label="Load project">Load</button><button id="exportBtn" aria-label="Export project">Export</button><button id="pngBtn">SVG</button><a href="index.html">Academy</a><button id="themeBtn">Theme</button></div>
 </header>
 <div class="toolbar">
- <button id="runBtn" class="primary">▶ Run</button><button id="demoBtn">Demo Circuit</button><button id="demoMotorBtn">Motor Starter</button><button id="demoLogicBtn">Logic Lab</button><button id="paletteBtn">Library</button><button id="stopBtn">■ Stop</button><button id="wireBtn">Wire</button><button id="deleteBtn">Delete</button><button id="undoBtn">Undo</button><button id="redoBtn">Redo</button>
+ <button id="runBtn" class="primary" aria-label="Run simulation">▶ Run</button><button id="demoBtn">Demo Circuit</button><button id="demoMotorBtn">Motor Starter</button><button id="demoLogicBtn">Logic Lab</button><button id="paletteBtn">Library</button><button id="stopBtn">■ Stop</button><button id="wireBtn">Wire</button><button id="deleteBtn">Delete</button><button id="undoBtn">Undo</button><button id="redoBtn">Redo</button>
  <span class="sep"></span><label>Grid <input id="gridSize" type="number" value="20" min="5" max="80"></label><button id="fitBtn">Fit</button><span class="status" id="simStatus">READY</span>
 </div>
 <main class="workspace">
  <aside class="palette" id="palette">
   <div class="panel-title">COMPONENT LIBRARY <span id="componentCount">0</span></div>
-  <input id="componentSearch" placeholder="Search components...">
+  <input id="componentSearch" aria-label="Search components" placeholder="Search components...">
   <div class="cat-tabs" id="catTabs"></div><div id="paletteList"></div>
   <div class="palette-note">Drag components onto the canvas. Click a pin, then another pin to wire. Double-click a component for properties.</div>
  </aside>
  <section class="canvas-wrap" id="canvasWrap">
-   <svg id="canvas" aria-label="Circuit schematic canvas">
+   <svg id="canvas" role="img" aria-label="Circuit schematic canvas">
      <defs><pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M20 0H0V20" fill="none" stroke="#19304a" stroke-width=".7"/></pattern>
      <filter id="glow"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
      <rect id="gridRect" width="100%" height="100%" fill="url(#grid)"/>
@@ -48,5 +48,5 @@ Educational simulation only.</pre>
 <footer class="sim-footer"><span>VoltPRo Academy · Open Source</span><span id="engineInfo">DC educational engine · local-only</span><span>Educational use — verify real installations against current standards and manufacturer data.</span></footer>
 </div>
 <input type="file" id="fileInput" accept=".voltpro,.json" hidden>
-<script src="engine/voltpro-engine.js"></script><script src="simulator.js"></script><script>if("serviceWorker" in navigator){navigator.serviceWorker.register("service-worker.js").catch(()=>{})}</script>
+<script src="engine/voltpro-engine.js"></script><script src="platform/project-format.js"></script><script src="platform/challenge-engine.js"></script><script src="platform/tutorial-engine.js"></script><script src="platform/fault-engine.js"></script><script src="platform/digital-engine.js"></script><script src="platform/mcu-engine.js"></script><script src="platform/engineering.js"></script><script src="platform/bom.js"></script><script src="platform/plugin-loader.js"></script><script src="platform/i18n.js"></script><script src="platform/panel.js"></script><script src="platform/component-info.js"></script><script src="platform/ui.js"></script><script src="simulator.js"></script><script>if("serviceWorker" in navigator){navigator.serviceWorker.register("service-worker.js").catch(()=>{})}</script>
 </body></html>

@@ -7,6 +7,6 @@ const models=read("data/component-models.v4.json"),schema=read("data/component-s
 if(models.format!=="voltpro-component-models"||models.version!==4||!Array.isArray(models.components)||models.components.length<10)fail("v4 component model contract");
 if(schema.type!=="object"||!schema.required?.includes("version")||!schema.required?.includes("symbols")||!schema.required?.includes("simulation"))fail("v4 component schema contract");
 if(registry.format!=="voltpro-components"||registry.version!==4||!Array.isArray(registry.components)||registry.components.length<10)fail("v4 component registry");
-for(const x of registry.components){for(const k of ["id","version","name","standards","symbols","assets","pins","parameters","simulation","documentation","tags"])if(x[k]===undefined)fail("component missing "+k+": "+x.id);if(!x.symbols.iecSvg||!x.symbols.ansiSvg)fail("symbol references: "+x.id)}
+for(const x of registry.components){for(const k of ["id","version","name","standards","symbols","assets","pins","parameters","simulation","documentation","tags"])if(x[k]===undefined)fail("component missing "+k+": "+x.id);if(!x.symbols.iecSvg||!x.symbols.ansiSvg)fail("symbol references: "+x.id);for(const asset of [x.symbols.iecSvg,x.symbols.ansiSvg,x.assets.panelImage])if(!fs.existsSync(asset))fail("missing asset: "+asset+" for "+x.id)}
 const manifest=read("pwa.webmanifest");if(!manifest.name||!manifest.start_url||!Array.isArray(manifest.icons)||manifest.icons.length<2)fail("PWA manifest");
 console.log("VoltPRo v4 data, module and PWA validation: OK");
