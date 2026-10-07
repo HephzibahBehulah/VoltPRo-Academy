@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
-</head>
+<link rel="manifest" href="pwa.webmanifest"></head>
 <body>
 <div id="app" class="app-shell">
   <aside class="sidebar" id="sidebar">
@@ -45,5 +45,5 @@
 </div>
 <dialog id="lessonDialog"><div id="lessonModal"></div></dialog>
 <script src="script.js"></script>
-</body>
+<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("service-worker.js").catch(()=>{})}</script></body>
 </html>

@@ -1,0 +1,10 @@
+{
+  "name": "VoltPRo Academy",
+  "short_name": "VoltPRo",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#050c15",
+  "theme_color": "#07111f",
+  "description": "Open-source electrical learning and simulation laboratory.",
+  "icons": []
+}
