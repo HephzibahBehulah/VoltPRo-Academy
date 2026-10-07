@@ -37,3 +37,5 @@ button{min-height:36px}
   .sim-top{padding-right:14px}
   .toolbar{padding-bottom:5px}
 }
+
+.palette-thumb{width:34px;height:30px;object-fit:contain;background:#0e253a;border-radius:7px;padding:3px}.palette-item img{display:block}
