@@ -1,4 +1,4 @@
-const test=require("node:test");const assert=require("node:assert/strict");const fs=require("node:fs");const vm=require("node:vm");
+const test=require("node:test");const assert=require("node:assert/strict");const fs=require("node:fs");const vm=require("node:vm");const ctx={window:{}};vm.createContext(ctx);vm.runInContext(fs.readFileSync("engine/voltpro-engine.js","utf8"),ctx);const VoltProEngine=ctx.window.VoltProEngine;const fs=require("node:fs");const vm=require("node:vm");
 const source=fs.readFileSync("engine/voltpro-engine.js","utf8");
 function engine(){const ctx={window:{},console,Date};vm.createContext(ctx);vm.runInContext(source,ctx);return ctx.window.VoltProEngine}
 function circuit(r=1000){return {components:[{id:"v1",type:"battery",props:{voltage:12},pins:["v1:0","v1:1"]},{id:"r1",type:"resistor",props:{resistance:r},pins:["r1:0","r1:1"]}],wires:[{a:"v1:0",b:"r1:0"},{a:"r1:1",b:"v1:1"}]}}
