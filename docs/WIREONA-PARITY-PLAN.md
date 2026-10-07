@@ -112,3 +112,12 @@ The new workbench is included in the offline cache, and the simulator's removed 
 A user must be able to open VoltPRo without an account or subscription, place real electrical/electronic components, wire them, run an actual local simulation, operate switches/controls, observe calculated results, introduce faults, diagnose them, save the project and continue working offline.
 
 This is the product target: **a personal electrical/electronics simulator, not a WireONa copy.**
+
+
+## Component database implementation — October 2026
+
+VoltPRo now uses a versioned component manifest plus family databases under `components/<family>/index.json`. The first database release contains 768 structured records across protection, switching, contactors, relays, motors, transformers, sensors, lighting, measurement, semiconductor, electronics, PLC, automation, renewable, KNX, industrial, communication, wires, power, grounding, panel, microcontroller, loads and logic families.
+
+Each record carries terminals, editable parameters, ratings, IEC-oriented original symbol metadata, panel metadata, electrical model metadata, behaviour metadata, fault modes and documentation metadata. The browser registry loads these family databases and exposes them to the simulator palette and reference workbench without requiring one monolithic component JSON file.
+
+The simulator inspector supports double-click editing. Parameter values are persisted in the project component instance and are used by the existing simulation path where that component model exposes the corresponding electrical property. Complex industrial behaviours remain explicitly modelled as educational behaviour layers rather than being falsely presented as manufacturer-certified simulation.
