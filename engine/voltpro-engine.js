@@ -48,7 +48,7 @@ function dc(project,options={}){
  const source=comps.find(x=>["battery","dcsource"].includes(x.type));
  if(!source)return {ok:false,error:"No DC source found",analysis:"DC operating point"};
  const refs=[];comps.forEach(x=>componentPins(project,x).forEach(r=>refs.push(r)));
- const groundRef=options.groundRef||null;
+ const groundRef=options.groundRef||componentPins(project,source)[1];
  const nodeMap=new Map();let ni=0;
  const nodeFor=r=>{const q=topo.resolve(r);if(groundRef&&q===topo.resolve(groundRef))return 0;if(!nodeMap.has(q))nodeMap.set(q,++ni);return nodeMap.get(q)};
  const branches=[];
