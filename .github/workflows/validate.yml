@@ -1,20 +1,29 @@
 name: VoltPRo Quality Check
 on:
   push:
-    branches: [main]
+    branches: ["**"]
   pull_request:
-    branches: [main]
 jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
       - name: Validate JavaScript syntax
-        run: node --check script.js
+        run: |
+          node --check script.js
+          node --check simulator.js
       - name: Validate required frontend files
         run: |
           test -s index.html
           test -s styles.css
           test -s script.js
-          grep -q '<script src="script.js"></script>' index.html
-          grep -q 'rel="stylesheet"' index.html
+          test -s simulator.html
+          test -s simulator.css
+          test -s simulator.js
+          grep -q 'simulator.js' simulator.html
+          grep -q 'simulator.css' simulator.html
+      - name: Validate component registry
+        run: node -e "const x=JSON.parse(require('fs').readFileSync('components.json','utf8')); if(x.format!=='voltpro-components'||!Array.isArray(x.library)||x.library.length<100) process.exit(1); console.log('registry entries:',x.library.length)"
