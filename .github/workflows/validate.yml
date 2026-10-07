@@ -17,7 +17,7 @@ jobs:
           node --check simulator.js
           node --check engineering.js
           node --check engine/voltpro-engine.js
-          node -e "const x=JSON.parse(require(\"fs\").readFileSync(\"pwa.webmanifest\",\"utf8\")); if(!x.name||!x.start_url) process.exit(1)"
+          node -e "const x=JSON.parse(require(\"fs\").readFileSync(\"pwa.webmanifest\",\"utf8\")); if(!x.name||!x.start_url||!Array.isArray(x.icons)||x.icons.length<2) process.exit(1)"
       - name: Validate required frontend files
         run: |
           test -s index.html
