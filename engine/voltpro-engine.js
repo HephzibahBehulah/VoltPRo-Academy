@@ -74,7 +74,7 @@ function linearSolve(b,options,history={}){
   if(q.kind==="resistor")stampG(A,q.a,q.b,C(1/q.R));
   else if(q.kind==="open"){}
   else if(q.kind==="capacitor"){const g=options.ac?C(0,q.C*options.omega):C(options.dt?q.C/options.dt:0); if(mag(g)>0)stampG(A,q.a,q.b,g);}
-  else if(q.kind==="inductor"){const g=options.ac?div(C(0,-1),C(0,options.omega*q.L)):C(options.dt?options.dt/q.L:1e12);stampG(A,q.a,q.b,g);if(options.dt){const old=history[q.comp.id]||0;stampI(z,q.a,q.b,C(-old))}}
+  else if(q.kind==="inductor"){const g=options.ac?C(0,-1/(options.omega*q.L)):C(options.dt?options.dt/q.L:1e12);stampG(A,q.a,q.b,g);if(options.dt){const old=history[q.comp.id]||0;stampI(z,q.a,q.b,C(-old))}}
   else if(q.kind==="diode"){const vd=v(q.a).re-v(q.b).re;const on=vd>=q.vf;const g=on?1/q.rd:q.reverse;const iEq=on?(vd-q.vf)/q.rd-g*vd:0;stampG(A,q.a,q.b,C(g));stampI(z,q.a,q.b,C(iEq))}
   else if(q.kind==="bjt"){const vd=v(q.a).re-v(q.b).re;const g=vd>q.vt?1/q.beta:1e-9;stampG(A,q.a,q.b,C(g))}
   else if(q.kind==="mosfet"){const vd=v(q.a).re-v(q.b).re;stampG(A,q.a,q.b,C(vd>q.threshold?1/q.onResistance:1e-9))}
@@ -94,7 +94,7 @@ function operatingPoint(project,options={}){
  for(let it=0;it<12;it++){const previous=xPrev.slice();result=linearSolve(b,{...options,xPrev});if(!result.ok)return {ok:false,analysis:"DC operating point",error:result.error};xPrev=result.x.slice(0,b.N);if(xPrev.every((v,i)=>mag(sub(v,previous[i]||C()))<1e-9))break}
  const x=result.x, nodeVoltage=n=>n===0?0:(x[n-1]?.re||0), branches=b.branches.map(q=>{const u=nodeVoltage(q.a)-nodeVoltage(q.b);let i=0;if(q.kind==="resistor")i=u/q.R;else if(q.kind==="diode")i=u>=q.vf?(u-q.vf)/q.rd:u*q.reverse;else if(q.kind==="bjt")i=u>q.vt?(u-q.vt)/q.beta/Math.max(q.vt,EPS):u*1e-9;else if(q.kind==="mosfet")i=u>q.threshold?u/q.onResistance:u*1e-9;return {id:q.comp.id,type:q.comp.type,voltage:u,current:i,power:u*i}});
  const sourceCurrents=b.voltageSources.map((q,k)=>({id:q.comp.id,type:q.comp.type,current:x[b.N+k]?.re||0}));
- const totalCurrent=sourceCurrents.filter(q=>q.current>0).reduce((s,q)=>s+q.current,0);
+ const totalCurrent=sourceCurrents.reduce((s,q)=>s+Math.abs(q.current),0);
  return {ok:true,analysis:"DC operating point (MNA)",engine:"VoltPRo MNA",sourceVoltage:b.voltageSources[0]?.value||0,totalCurrent,totalPower:branches.reduce((s,q)=>s+q.power,0),nodes:b.N,branches,sourceCurrents,nodeVoltages:Array.from({length:b.N},(_,i)=>({node:i+1,voltage:nodeVoltage(i+1)})),iterations:12};
 }
 function dc(project,options={}){return operatingPoint(project,options)}
