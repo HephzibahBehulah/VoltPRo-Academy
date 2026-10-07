@@ -79,8 +79,24 @@ function solve(){const src=S.components.find(c=>c.type==="battery"||c.type==="ac
  const V=+src.props.voltage||12;const R=[];for(const c of active){const ps=S.wires.filter(w=>w.a.startsWith(c.id+":")||w.b.startsWith(c.id+":"));if(ps.length<2)continue;const na=ps[0].a.startsWith(c.id)?nodeOf(ps[0].b):nodeOf(ps[0].a);const nb=ps[1].a.startsWith(c.id)?nodeOf(ps[1].b):nodeOf(ps[1].a);R.push({c,na,nb,r:resistance(c)})}
  let series=0;for(const x of R)series+=x.r;const current=series>0?V/series:0;return {voltage:V,current,loads:R.map(x=>({id:x.c.id,name:compDef(x.c.type).name,current:current,resistance:x.r}))}
 }
-function run(){S.running=true;const r=solve();$("#meterReadout").textContent=r.current.toFixed(3)+" A";$("#console").textContent="RUN simulation\nSource: "+r.voltage+" V\nTotal current: "+r.current.toFixed(3)+" A\n";r.loads.forEach(x=>$("#console").textContent+=x.name+" "+x.resistance+" Ω · "+x.current.toFixed(3)+" A\n");renderCanvas();$("#simStatus").textContent="RUNNING"}
-function stop(){S.running=false;$("#simStatus").textContent="READY";renderCanvas()}
+function run(){
+ S.running=true;
+ const project={components:S.components.map(c=>({...c,pins:Array.from({length:compDef(c.type).pins},(_,i)=>c.id+":"+i)})),wires:S.wires};
+ let r;
+ if(window.VoltProEngine){
+   r=VoltProEngine.analyze(project,{transient:{duration:.1,steps:40},ac:{frequency:50}});
+ } else {
+   r={dc:solve()};
+ }
+ const dc=r.dc||r;
+ if(!dc.ok){$("#meterReadout").textContent="--";$("#console").textContent="RUN ERROR\\n"+(dc.error||"Unable to solve circuit.");$("#calcPanel").textContent="Check source, connections and component values.";renderCanvas();return}
+ const amps=Number(dc.totalCurrent)||0;
+ $("#meterReadout").textContent=amps.toFixed(4)+" A";
+ $("#console").textContent="VOLTPro Engine v3\\nAnalysis: "+(dc.analysis||"DC operating point")+"\\nSource: "+(dc.sourceVoltage||0)+" V\\nTotal current: "+amps.toFixed(4)+" A\\nTotal power: "+(Number(dc.totalPower)||0).toFixed(4)+" W\\nNodes: "+(dc.nodes||0)+"\\n";
+ (dc.branches||[]).forEach(x=>$("#console").textContent+=x.name+" · "+(Number(x.voltage)||0).toFixed(3)+" V · "+(Number(x.current)||0).toFixed(4)+" A · "+(Number(x.power)||0).toFixed(4)+" W\\n");
+ $("#calcPanel").innerHTML="<b>DC operating point</b><br>Current: "+amps.toFixed(4)+" A<br>Power: "+(Number(dc.totalPower)||0).toFixed(4)+" W<br><small>Engine v3 · educational analysis</small>";
+ renderCanvas();$("#simStatus").textContent="RUNNING";log("Engine v3 analysis complete.");
+}function stop(){S.running=false;$("#simStatus").textContent="READY";renderCanvas()}
 function renderInspector(){const c=S.components.find(x=>x.id===S.selected);if(!c){$("#inspectorBody").innerHTML='<div class="empty">Select a component to inspect it.<br><br>Tip: use double-click or click a component and edit its properties here.</div>';return}const d=compDef(c.type);const fields=Object.entries(c.props).map(([k,v])=>'<div class="prop"><label>'+esc(k)+'</label><input data-prop="'+esc(k)+'" value="'+esc(v)+'"></div>').join("");$("#inspectorBody").innerHTML='<div class="prop"><label>Component</label><input value="'+esc(d.name)+'" disabled></div>'+fields+'<div class="prop-row"><button class="ins-btn" id="rotateBtn">Rotate</button><button class="ins-btn" id="duplicateBtn">Duplicate</button></div><button class="ins-btn" id="removeBtn" style="margin-top:7px;color:#ff8c96">Delete component</button>';
  $$("[data-prop]").forEach(i=>i.onchange=()=>{saveHistory();c.props[i.dataset.prop]=isNaN(i.value)?i.value:+i.value;render()});$("#rotateBtn").onclick=()=>{saveHistory();c.rotation=(c.rotation+90)%360;render()};$("#duplicateBtn").onclick=()=>{saveHistory();const n={...JSON.parse(JSON.stringify(c)),id:uid(),x:c.x+S.grid,y:c.y+S.grid};S.components.push(n);S.selected=n.id;render()};$("#removeBtn").onclick=()=>{saveHistory();S.components=S.components.filter(x=>x.id!==c.id);S.wires=S.wires.filter(w=>!w.a.startsWith(c.id+":")&&!w.b.startsWith(c.id+":"));S.selected=null;render()};
 }
