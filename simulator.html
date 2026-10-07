@@ -4,7 +4,7 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="VoltPRo Simulator — browser-based electrical and electronics simulation lab.">
 <meta name="theme-color" content="#07111f"><title>VoltPRo Simulator</title>
-<link rel="stylesheet" href="simulator.css">
+<link rel="stylesheet" href="simulator.css"><link rel="manifest" href="pwa.webmanifest">
 </head>
 <body>
 <div class="sim-app">
@@ -48,5 +48,5 @@ Educational simulation only.</pre>
 <footer class="sim-footer"><span>VoltPRo Academy · Open Source</span><span id="engineInfo">DC educational engine · local-only</span><span>Educational use — verify real installations against current standards and manufacturer data.</span></footer>
 </div>
 <input type="file" id="fileInput" accept=".voltpro,.json" hidden>
-<script src="simulator.js"></script>
+<script src="simulator.js"></script><script>if("serviceWorker" in navigator){navigator.serviceWorker.register("service-worker.js").catch(()=>{})}</script>
 </body></html>
