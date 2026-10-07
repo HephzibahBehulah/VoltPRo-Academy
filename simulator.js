@@ -35,6 +35,7 @@ const defs={
  rail:{cat:"Panel",name:"DIN Rail",symbol:"DIN",pins:0,props:{length:18}},
  wirelabel:{cat:"Panel",name:"Wire Label",symbol:"LBL",pins:1,props:{label:"101"}}
 };
+window.S=S; window.defs=defs;
 const cats=[...new Set(Object.values(defs).map(d=>d.cat))];
 const $=q=>document.querySelector(q), $$=q=>[...document.querySelectorAll(q)];
 const svg=$("#canvas"), comps=$("#components"), wires=$("#wires"), labels=$("#labels"), selg=$("#selection"), wrap=$("#canvasWrap");
