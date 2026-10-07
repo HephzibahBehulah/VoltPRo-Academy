@@ -80,7 +80,7 @@ function dc(project,options={}){
  return {ok:true,analysis:"DC operating point",sourceVoltage:V,totalCurrent:total,totalPower:V*total,nodes:N,branches:results,nodeVoltages:Array.from({length:N},(_,i)=>({node:i+1,voltage:voltage(i+1)}))};
 }
 function transient(project,{duration=0.1,steps=100}={}){
- const base=dc(project);if(!base.ok)return base;
+ const base=dc(project,arguments[1]||{});if(!base.ok)return base;
  const dt=duration/Math.max(1,steps);return {ok:true,analysis:"Transient educational envelope",duration,steps,dt,samples:Array.from({length:steps+1},(_,i)=>({t:i*dt,current:base.totalCurrent,power:base.totalPower})),note:"R-only DC baseline; dynamic C/L/semiconductor models are isolated for the next solver tier."};
 }
 function ac(project,{frequency=50}={}){
@@ -88,9 +88,9 @@ function ac(project,{frequency=50}={}){
  return {ok:true,analysis:"AC impedance preview",frequency,impedance:base.totalCurrent?base.sourceVoltage/base.totalCurrent:Infinity,phaseDeg:0,note:"Frequency-domain UI contract is active; reactive component models require the next model pack."};
 }
 function analyze(project,options={}){
- const a=dc(project,options),out={engine:"VoltPRo Engine v3",timestamp:new Date().toISOString(),dc:a};
- if(options.transient)out.transient=transient(project,options.transient===true?{}:options.transient);
- if(options.ac)out.ac=ac(project,options.ac===true?{}:options.ac);
+ const a=dc(project,options),out={engine:"VoltPRo Engine v3",dc:a};
+ if(options.transient)out.transient=transient(project,options.transient===true?options:options.transient);
+ if(options.ac)out.ac=ac(project,options.ac===true?options:options.ac);
  return out;
 }
 window.VoltProEngine={version:3,analyze,dc,transient,ac,math:{abs,solveLinear}};
