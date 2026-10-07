@@ -40,7 +40,7 @@ function buildTopology(project){
  const union=(a,b)=>{a=find(a);b=find(b);if(a!==b)parent.set(a,b)};
  refs.forEach(w=>union(w.a,w.b));
  const resolve=r=>find(r);
- (project.components||[]).forEach(c=>componentPins(project,c).forEach(r=>parent.set(r,r)));
+ (project.components||[]).forEach(c=>componentPins(project,c).forEach(r=>{if(!parent.has(r))parent.set(r,r)}));
  return {resolve}
 }
 function dc(project,options={}){
