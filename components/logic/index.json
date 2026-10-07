@@ -1,0 +1,2216 @@
+{
+  "format": "voltpro-component-family",
+  "version": 1,
+  "category": "logic",
+  "count": 32,
+  "components": [
+    {
+      "id": "logic-logic-and",
+      "name": "Logic AND",
+      "category": "logic",
+      "terminals": [
+        {
+          "id": "T1",
+          "name": "Terminal 1"
+        },
+        {
+          "id": "T2",
+          "name": "Terminal 2"
+        }
+      ],
+      "parameters": {
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "ratedVoltage": {
+          "type": "number",
+          "unit": "V",
+          "default": 24,
+          "min": 0,
+          "max": 1000
+        },
+        "value": {
+          "type": "number",
+          "default": 1
+        }
+      },
+      "ratings": {
+        "frequency": 50
+      },
+      "symbol": {
+        "style": "IEC",
+        "label": "LOGI",
+        "original": true
+      },
+      "panelModel": {
+        "mount": "DIN35",
+        "widthModules": 2,
+        "interactive": true
+      },
+      "electricalModel": {
+        "type": "logic",
+        "engine": "VoltPro MNA educational",
+        "editable": true
+      },
+      "behaviorModel": {
+        "type": "logic-node",
+        "states": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      "faultModes": [
+        "open-circuit",
+        "short-circuit",
+        "parameter-out-of-range"
+      ],
+      "documentation": {
+        "summary": "Educational Logic model for AND.",
+        "usage": "Double-click to edit parameters, connect terminals and run simulation.",
+        "standards": [
+          "IEC-oriented educational representation"
+        ]
+      }
+    },
+    {
+      "id": "logic-logic-or",
+      "name": "Logic OR",
+      "category": "logic",
+      "terminals": [
+        {
+          "id": "T1",
+          "name": "Terminal 1"
+        },
+        {
+          "id": "T2",
+          "name": "Terminal 2"
+        }
+      ],
+      "parameters": {
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "ratedVoltage": {
+          "type": "number",
+          "unit": "V",
+          "default": 24,
+          "min": 0,
+          "max": 1000
+        },
+        "value": {
+          "type": "number",
+          "default": 1
+        }
+      },
+      "ratings": {
+        "frequency": 50
+      },
+      "symbol": {
+        "style": "IEC",
+        "label": "LOGI",
+        "original": true
+      },
+      "panelModel": {
+        "mount": "DIN35",
+        "widthModules": 2,
+        "interactive": true
+      },
+      "electricalModel": {
+        "type": "logic",
+        "engine": "VoltPro MNA educational",
+        "editable": true
+      },
+      "behaviorModel": {
+        "type": "logic-node",
+        "states": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      "faultModes": [
+        "open-circuit",
+        "short-circuit",
+        "parameter-out-of-range"
+      ],
+      "documentation": {
+        "summary": "Educational Logic model for OR.",
+        "usage": "Double-click to edit parameters, connect terminals and run simulation.",
+        "standards": [
+          "IEC-oriented educational representation"
+        ]
+      }
+    },
+    {
+      "id": "logic-logic-not",
+      "name": "Logic NOT",
+      "category": "logic",
+      "terminals": [
+        {
+          "id": "T1",
+          "name": "Terminal 1"
+        },
+        {
+          "id": "T2",
+          "name": "Terminal 2"
+        }
+      ],
+      "parameters": {
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "ratedVoltage": {
+          "type": "number",
+          "unit": "V",
+          "default": 24,
+          "min": 0,
+          "max": 1000
+        },
+        "value": {
+          "type": "number",
+          "default": 1
+        }
+      },
+      "ratings": {
+        "frequency": 50
+      },
+      "symbol": {
+        "style": "IEC",
+        "label": "LOGI",
+        "original": true
+      },
+      "panelModel": {
+        "mount": "DIN35",
+        "widthModules": 2,
+        "interactive": true
+      },
+      "electricalModel": {
+        "type": "logic",
+        "engine": "VoltPro MNA educational",
+        "editable": true
+      },
+      "behaviorModel": {
+        "type": "logic-node",
+        "states": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      "faultModes": [
+        "open-circuit",
+        "short-circuit",
+        "parameter-out-of-range"
+      ],
+      "documentation": {
+        "summary": "Educational Logic model for NOT.",
+        "usage": "Double-click to edit parameters, connect terminals and run simulation.",
+        "standards": [
+          "IEC-oriented educational representation"
+        ]
+      }
+    },
+    {
+      "id": "logic-logic-nand",
+      "name": "Logic NAND",
+      "category": "logic",
+      "terminals": [
+        {
+          "id": "T1",
+          "name": "Terminal 1"
+        },
+        {
+          "id": "T2",
+          "name": "Terminal 2"
+        }
+      ],
+      "parameters": {
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "ratedVoltage": {
+          "type": "number",
+          "unit": "V",
+          "default": 24,
+          "min": 0,
+          "max": 1000
+        },
+        "value": {
+          "type": "number",
+          "default": 1
+        }
+      },
+      "ratings": {
+        "frequency": 50
+      },
+      "symbol": {
+        "style": "IEC",
+        "label": "LOGI",
+        "original": true
+      },
+      "panelModel": {
+        "mount": "DIN35",
+        "widthModules": 2,
+        "interactive": true
+      },
+      "electricalModel": {
+        "type": "logic",
+        "engine": "VoltPro MNA educational",
+        "editable": true
+      },
+      "behaviorModel": {
+        "type": "logic-node",
+        "states": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      "faultModes": [
+        "open-circuit",
+        "short-circuit",
+        "parameter-out-of-range"
+      ],
+      "documentation": {
+        "summary": "Educational Logic model for NAND.",
+        "usage": "Double-click to edit parameters, connect terminals and run simulation.",
+        "standards": [
+          "IEC-oriented educational representation"
+        ]
+      }
+    },
+    {
+      "id": "logic-logic-nor",
+      "name": "Logic NOR",
+      "category": "logic",
+      "terminals": [
+        {
+          "id": "T1",
+          "name": "Terminal 1"
+        },
+        {
+          "id": "T2",
+          "name": "Terminal 2"
+        }
+      ],
+      "parameters": {
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "ratedVoltage": {
+          "type": "number",
+          "unit": "V",
+          "default": 24,
+          "min": 0,
+          "max": 1000
+        },
+        "value": {
+          "type": "number",
+          "default": 1
+        }
+      },
+      "ratings": {
+        "frequency": 50
+      },
+      "symbol": {
+        "style": "IEC",
+        "label": "LOGI",
+        "original": true
+      },
+      "panelModel": {
+        "mount": "DIN35",
+        "widthModules": 2,
+        "interactive": true
+      },
+      "electricalModel": {
+        "type": "logic",
+        "engine": "VoltPro MNA educational",
+        "editable": true
+      },
+      "behaviorModel": {
+        "type": "logic-node",
+        "states": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      "faultModes": [
+        "open-circuit",
+        "short-circuit",
+        "parameter-out-of-range"
+      ],
+      "documentation": {
+        "summary": "Educational Logic model for NOR.",
+        "usage": "Double-click to edit parameters, connect terminals and run simulation.",
+        "standards": [
+          "IEC-oriented educational representation"
+        ]
+      }
+    },
+    {
+      "id": "logic-logic-xor",
+      "name": "Logic XOR",
+      "category": "logic",
+      "terminals": [
+        {
+          "id": "T1",
+          "name": "Terminal 1"
+        },
+        {
+          "id": "T2",
+          "name": "Terminal 2"
+        }
+      ],
+      "parameters": {
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "ratedVoltage": {
+          "type": "number",
+          "unit": "V",
+          "default": 24,
+          "min": 0,
+          "max": 1000
+        },
+        "value": {
+          "type": "number",
+          "default": 1
+        }
+      },
+      "ratings": {
+        "frequency": 50
+      },
+      "symbol": {
+        "style": "IEC",
+        "label": "LOGI",
+        "original": true
+      },
+      "panelModel": {
+        "mount": "DIN35",
+        "widthModules": 2,
+        "interactive": true
+      },
+      "electricalModel": {
+        "type": "logic",
+        "engine": "VoltPro MNA educational",
+        "editable": true
+      },
+      "behaviorModel": {
+        "type": "logic-node",
+        "states": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      "faultModes": [
+        "open-circuit",
+        "short-circuit",
+        "parameter-out-of-range"
+      ],
+      "documentation": {
+        "summary": "Educational Logic model for XOR.",
+        "usage": "Double-click to edit parameters, connect terminals and run simulation.",
+        "standards": [
+          "IEC-oriented educational representation"
+        ]
+      }
+    },
+    {
+      "id": "logic-logic-xnor",
+      "name": "Logic XNOR",
+      "category": "logic",
+      "terminals": [
+        {
+          "id": "T1",
+          "name": "Terminal 1"
+        },
+        {
+          "id": "T2",
+          "name": "Terminal 2"
+        }
+      ],
+      "parameters": {
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "ratedVoltage": {
+          "type": "number",
+          "unit": "V",
+          "default": 24,
+          "min": 0,
+          "max": 1000
+        },
+        "value": {
+          "type": "number",
+          "default": 1
+        }
+      },
+      "ratings": {
+        "frequency": 50
+      },
+      "symbol": {
+        "style": "IEC",
+        "label": "LOGI",
+        "original": true
+      },
+      "panelModel": {
+        "mount": "DIN35",
+        "widthModules": 2,
+        "interactive": true
+      },
+      "electricalModel": {
+        "type": "logic",
+        "engine": "VoltPro MNA educational",
+        "editable": true
+      },
+      "behaviorModel": {
+        "type": "logic-node",
+        "states": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      "faultModes": [
+        "open-circuit",
+        "short-circuit",
+        "parameter-out-of-range"
+      ],
+      "documentation": {
+        "summary": "Educational Logic model for XNOR.",
+        "usage": "Double-click to edit parameters, connect terminals and run simulation.",
+        "standards": [
+          "IEC-oriented educational representation"
+        ]
+      }
+    },
+    {
+      "id": "logic-logic-rs-latch",
+      "name": "Logic RS-Latch",
+      "category": "logic",
+      "terminals": [
+        {
+          "id": "T1",
+          "name": "Terminal 1"
+        },
+        {
+          "id": "T2",
+          "name": "Terminal 2"
+        }
+      ],
+      "parameters": {
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "ratedVoltage": {
+          "type": "number",
+          "unit": "V",
+          "default": 24,
+          "min": 0,
+          "max": 1000
+        },
+        "value": {
+          "type": "number",
+          "default": 1
+        }
+      },
+      "ratings": {
+        "frequency": 50
+      },
+      "symbol": {
+        "style": "IEC",
+        "label": "LOGI",
+        "original": true
+      },
+      "panelModel": {
+        "mount": "DIN35",
+        "widthModules": 2,
+        "interactive": true
+      },
+      "electricalModel": {
+        "type": "logic",
+        "engine": "VoltPro MNA educational",
+        "editable": true
+      },
+      "behaviorModel": {
+        "type": "logic-node",
+        "states": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      "faultModes": [
+        "open-circuit",
+        "short-circuit",
+        "parameter-out-of-range"
+      ],
+      "documentation": {
+        "summary": "Educational Logic model for RS-Latch.",
+        "usage": "Double-click to edit parameters, connect terminals and run simulation.",
+        "standards": [
+          "IEC-oriented educational representation"
+        ]
+      }
+    },
+    {
+      "id": "logic-logic-d-latch",
+      "name": "Logic D-Latch",
+      "category": "logic",
+      "terminals": [
+        {
+          "id": "T1",
+          "name": "Terminal 1"
+        },
+        {
+          "id": "T2",
+          "name": "Terminal 2"
+        }
+      ],
+      "parameters": {
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "ratedVoltage": {
+          "type": "number",
+          "unit": "V",
+          "default": 24,
+          "min": 0,
+          "max": 1000
+        },
+        "value": {
+          "type": "number",
+          "default": 1
+        }
+      },
+      "ratings": {
+        "frequency": 50
+      },
+      "symbol": {
+        "style": "IEC",
+        "label": "LOGI",
+        "original": true
+      },
+      "panelModel": {
+        "mount": "DIN35",
+        "widthModules": 2,
+        "interactive": true
+      },
+      "electricalModel": {
+        "type": "logic",
+        "engine": "VoltPro MNA educational",
+        "editable": true
+      },
+      "behaviorModel": {
+        "type": "logic-node",
+        "states": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      "faultModes": [
+        "open-circuit",
+        "short-circuit",
+        "parameter-out-of-range"
+      ],
+      "documentation": {
+        "summary": "Educational Logic model for D-Latch.",
+        "usage": "Double-click to edit parameters, connect terminals and run simulation.",
+        "standards": [
+          "IEC-oriented educational representation"
+        ]
+      }
+    },
+    {
+      "id": "logic-logic-d-flipflop",
+      "name": "Logic D-FlipFlop",
+      "category": "logic",
+      "terminals": [
+        {
+          "id": "T1",
+          "name": "Terminal 1"
+        },
+        {
+          "id": "T2",
+          "name": "Terminal 2"
+        }
+      ],
+      "parameters": {
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "ratedVoltage": {
+          "type": "number",
+          "unit": "V",
+          "default": 24,
+          "min": 0,
+          "max": 1000
+        },
+        "value": {
+          "type": "number",
+          "default": 1
+        }
+      },
+      "ratings": {
+        "frequency": 50
+      },
+      "symbol": {
+        "style": "IEC",
+        "label": "LOGI",
+        "original": true
+      },
+      "panelModel": {
+        "mount": "DIN35",
+        "widthModules": 2,
+        "interactive": true
+      },
+      "electricalModel": {
+        "type": "logic",
+        "engine": "VoltPro MNA educational",
+        "editable": true
+      },
+      "behaviorModel": {
+        "type": "logic-node",
+        "states": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      "faultModes": [
+        "open-circuit",
+        "short-circuit",
+        "parameter-out-of-range"
+      ],
+      "documentation": {
+        "summary": "Educational Logic model for D-FlipFlop.",
+        "usage": "Double-click to edit parameters, connect terminals and run simulation.",
+        "standards": [
+          "IEC-oriented educational representation"
+        ]
+      }
+    },
+    {
+      "id": "logic-logic-jk-flipflop",
+      "name": "Logic JK-FlipFlop",
+      "category": "logic",
+      "terminals": [
+        {
+          "id": "T1",
+          "name": "Terminal 1"
+        },
+        {
+          "id": "T2",
+          "name": "Terminal 2"
+        }
+      ],
+      "parameters": {
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "ratedVoltage": {
+          "type": "number",
+          "unit": "V",
+          "default": 24,
+          "min": 0,
+          "max": 1000
+        },
+        "value": {
+          "type": "number",
+          "default": 1
+        }
+      },
+      "ratings": {
+        "frequency": 50
+      },
+      "symbol": {
+        "style": "IEC",
+        "label": "LOGI",
+        "original": true
+      },
+      "panelModel": {
+        "mount": "DIN35",
+        "widthModules": 2,
+        "interactive": true
+      },
+      "electricalModel": {
+        "type": "logic",
+        "engine": "VoltPro MNA educational",
+        "editable": true
+      },
+      "behaviorModel": {
+        "type": "logic-node",
+        "states": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      "faultModes": [
+        "open-circuit",
+        "short-circuit",
+        "parameter-out-of-range"
+      ],
+      "documentation": {
+        "summary": "Educational Logic model for JK-FlipFlop.",
+        "usage": "Double-click to edit parameters, connect terminals and run simulation.",
+        "standards": [
+          "IEC-oriented educational representation"
+        ]
+      }
+    },
+    {
+      "id": "logic-logic-t-flipflop",
+      "name": "Logic T-FlipFlop",
+      "category": "logic",
+      "terminals": [
+        {
+          "id": "T1",
+          "name": "Terminal 1"
+        },
+        {
+          "id": "T2",
+          "name": "Terminal 2"
+        }
+      ],
+      "parameters": {
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "ratedVoltage": {
+          "type": "number",
+          "unit": "V",
+          "default": 24,
+          "min": 0,
+          "max": 1000
+        },
+        "value": {
+          "type": "number",
+          "default": 1
+        }
+      },
+      "ratings": {
+        "frequency": 50
+      },
+      "symbol": {
+        "style": "IEC",
+        "label": "LOGI",
+        "original": true
+      },
+      "panelModel": {
+        "mount": "DIN35",
+        "widthModules": 2,
+        "interactive": true
+      },
+      "electricalModel": {
+        "type": "logic",
+        "engine": "VoltPro MNA educational",
+        "editable": true
+      },
+      "behaviorModel": {
+        "type": "logic-node",
+        "states": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      "faultModes": [
+        "open-circuit",
+        "short-circuit",
+        "parameter-out-of-range"
+      ],
+      "documentation": {
+        "summary": "Educational Logic model for T-FlipFlop.",
+        "usage": "Double-click to edit parameters, connect terminals and run simulation.",
+        "standards": [
+          "IEC-oriented educational representation"
+        ]
+      }
+    },
+    {
+      "id": "logic-logic-counter-up",
+      "name": "Logic Counter-Up",
+      "category": "logic",
+      "terminals": [
+        {
+          "id": "T1",
+          "name": "Terminal 1"
+        },
+        {
+          "id": "T2",
+          "name": "Terminal 2"
+        }
+      ],
+      "parameters": {
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "ratedVoltage": {
+          "type": "number",
+          "unit": "V",
+          "default": 24,
+          "min": 0,
+          "max": 1000
+        },
+        "value": {
+          "type": "number",
+          "default": 1
+        }
+      },
+      "ratings": {
+        "frequency": 50
+      },
+      "symbol": {
+        "style": "IEC",
+        "label": "LOGI",
+        "original": true
+      },
+      "panelModel": {
+        "mount": "DIN35",
+        "widthModules": 2,
+        "interactive": true
+      },
+      "electricalModel": {
+        "type": "logic",
+        "engine": "VoltPro MNA educational",
+        "editable": true
+      },
+      "behaviorModel": {
+        "type": "logic-node",
+        "states": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      "faultModes": [
+        "open-circuit",
+        "short-circuit",
+        "parameter-out-of-range"
+      ],
+      "documentation": {
+        "summary": "Educational Logic model for Counter-Up.",
+        "usage": "Double-click to edit parameters, connect terminals and run simulation.",
+        "standards": [
+          "IEC-oriented educational representation"
+        ]
+      }
+    },
+    {
+      "id": "logic-logic-counter-down",
+      "name": "Logic Counter-Down",
+      "category": "logic",
+      "terminals": [
+        {
+          "id": "T1",
+          "name": "Terminal 1"
+        },
+        {
+          "id": "T2",
+          "name": "Terminal 2"
+        }
+      ],
+      "parameters": {
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "ratedVoltage": {
+          "type": "number",
+          "unit": "V",
+          "default": 24,
+          "min": 0,
+          "max": 1000
+        },
+        "value": {
+          "type": "number",
+          "default": 1
+        }
+      },
+      "ratings": {
+        "frequency": 50
+      },
+      "symbol": {
+        "style": "IEC",
+        "label": "LOGI",
+        "original": true
+      },
+      "panelModel": {
+        "mount": "DIN35",
+        "widthModules": 2,
+        "interactive": true
+      },
+      "electricalModel": {
+        "type": "logic",
+        "engine": "VoltPro MNA educational",
+        "editable": true
+      },
+      "behaviorModel": {
+        "type": "logic-node",
+        "states": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      "faultModes": [
+        "open-circuit",
+        "short-circuit",
+        "parameter-out-of-range"
+      ],
+      "documentation": {
+        "summary": "Educational Logic model for Counter-Down.",
+        "usage": "Double-click to edit parameters, connect terminals and run simulation.",
+        "standards": [
+          "IEC-oriented educational representation"
+        ]
+      }
+    },
+    {
+      "id": "logic-logic-timer-delay",
+      "name": "Logic Timer-Delay",
+      "category": "logic",
+      "terminals": [
+        {
+          "id": "T1",
+          "name": "Terminal 1"
+        },
+        {
+          "id": "T2",
+          "name": "Terminal 2"
+        }
+      ],
+      "parameters": {
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "ratedVoltage": {
+          "type": "number",
+          "unit": "V",
+          "default": 24,
+          "min": 0,
+          "max": 1000
+        },
+        "value": {
+          "type": "number",
+          "default": 1
+        }
+      },
+      "ratings": {
+        "frequency": 50
+      },
+      "symbol": {
+        "style": "IEC",
+        "label": "LOGI",
+        "original": true
+      },
+      "panelModel": {
+        "mount": "DIN35",
+        "widthModules": 2,
+        "interactive": true
+      },
+      "electricalModel": {
+        "type": "logic",
+        "engine": "VoltPro MNA educational",
+        "editable": true
+      },
+      "behaviorModel": {
+        "type": "logic-node",
+        "states": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      "faultModes": [
+        "open-circuit",
+        "short-circuit",
+        "parameter-out-of-range"
+      ],
+      "documentation": {
+        "summary": "Educational Logic model for Timer-Delay.",
+        "usage": "Double-click to edit parameters, connect terminals and run simulation.",
+        "standards": [
+          "IEC-oriented educational representation"
+        ]
+      }
+    },
+    {
+      "id": "logic-logic-pulse",
+      "name": "Logic Pulse",
+      "category": "logic",
+      "terminals": [
+        {
+          "id": "T1",
+          "name": "Terminal 1"
+        },
+        {
+          "id": "T2",
+          "name": "Terminal 2"
+        }
+      ],
+      "parameters": {
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "ratedVoltage": {
+          "type": "number",
+          "unit": "V",
+          "default": 24,
+          "min": 0,
+          "max": 1000
+        },
+        "value": {
+          "type": "number",
+          "default": 1
+        }
+      },
+      "ratings": {
+        "frequency": 50
+      },
+      "symbol": {
+        "style": "IEC",
+        "label": "LOGI",
+        "original": true
+      },
+      "panelModel": {
+        "mount": "DIN35",
+        "widthModules": 2,
+        "interactive": true
+      },
+      "electricalModel": {
+        "type": "logic",
+        "engine": "VoltPro MNA educational",
+        "editable": true
+      },
+      "behaviorModel": {
+        "type": "logic-node",
+        "states": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      "faultModes": [
+        "open-circuit",
+        "short-circuit",
+        "parameter-out-of-range"
+      ],
+      "documentation": {
+        "summary": "Educational Logic model for Pulse.",
+        "usage": "Double-click to edit parameters, connect terminals and run simulation.",
+        "standards": [
+          "IEC-oriented educational representation"
+        ]
+      }
+    },
+    {
+      "id": "logic-logic-edge-rising",
+      "name": "Logic Edge-Rising",
+      "category": "logic",
+      "terminals": [
+        {
+          "id": "T1",
+          "name": "Terminal 1"
+        },
+        {
+          "id": "T2",
+          "name": "Terminal 2"
+        }
+      ],
+      "parameters": {
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "ratedVoltage": {
+          "type": "number",
+          "unit": "V",
+          "default": 24,
+          "min": 0,
+          "max": 1000
+        },
+        "value": {
+          "type": "number",
+          "default": 1
+        }
+      },
+      "ratings": {
+        "frequency": 50
+      },
+      "symbol": {
+        "style": "IEC",
+        "label": "LOGI",
+        "original": true
+      },
+      "panelModel": {
+        "mount": "DIN35",
+        "widthModules": 2,
+        "interactive": true
+      },
+      "electricalModel": {
+        "type": "logic",
+        "engine": "VoltPro MNA educational",
+        "editable": true
+      },
+      "behaviorModel": {
+        "type": "logic-node",
+        "states": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      "faultModes": [
+        "open-circuit",
+        "short-circuit",
+        "parameter-out-of-range"
+      ],
+      "documentation": {
+        "summary": "Educational Logic model for Edge-Rising.",
+        "usage": "Double-click to edit parameters, connect terminals and run simulation.",
+        "standards": [
+          "IEC-oriented educational representation"
+        ]
+      }
+    },
+    {
+      "id": "logic-logic-edge-falling",
+      "name": "Logic Edge-Falling",
+      "category": "logic",
+      "terminals": [
+        {
+          "id": "T1",
+          "name": "Terminal 1"
+        },
+        {
+          "id": "T2",
+          "name": "Terminal 2"
+        }
+      ],
+      "parameters": {
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "ratedVoltage": {
+          "type": "number",
+          "unit": "V",
+          "default": 24,
+          "min": 0,
+          "max": 1000
+        },
+        "value": {
+          "type": "number",
+          "default": 1
+        }
+      },
+      "ratings": {
+        "frequency": 50
+      },
+      "symbol": {
+        "style": "IEC",
+        "label": "LOGI",
+        "original": true
+      },
+      "panelModel": {
+        "mount": "DIN35",
+        "widthModules": 2,
+        "interactive": true
+      },
+      "electricalModel": {
+        "type": "logic",
+        "engine": "VoltPro MNA educational",
+        "editable": true
+      },
+      "behaviorModel": {
+        "type": "logic-node",
+        "states": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      "faultModes": [
+        "open-circuit",
+        "short-circuit",
+        "parameter-out-of-range"
+      ],
+      "documentation": {
+        "summary": "Educational Logic model for Edge-Falling.",
+        "usage": "Double-click to edit parameters, connect terminals and run simulation.",
+        "standards": [
+          "IEC-oriented educational representation"
+        ]
+      }
+    },
+    {
+      "id": "logic-logic-comparator",
+      "name": "Logic Comparator",
+      "category": "logic",
+      "terminals": [
+        {
+          "id": "T1",
+          "name": "Terminal 1"
+        },
+        {
+          "id": "T2",
+          "name": "Terminal 2"
+        }
+      ],
+      "parameters": {
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "ratedVoltage": {
+          "type": "number",
+          "unit": "V",
+          "default": 24,
+          "min": 0,
+          "max": 1000
+        },
+        "value": {
+          "type": "number",
+          "default": 1
+        }
+      },
+      "ratings": {
+        "frequency": 50
+      },
+      "symbol": {
+        "style": "IEC",
+        "label": "LOGI",
+        "original": true
+      },
+      "panelModel": {
+        "mount": "DIN35",
+        "widthModules": 2,
+        "interactive": true
+      },
+      "electricalModel": {
+        "type": "logic",
+        "engine": "VoltPro MNA educational",
+        "editable": true
+      },
+      "behaviorModel": {
+        "type": "logic-node",
+        "states": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      "faultModes": [
+        "open-circuit",
+        "short-circuit",
+        "parameter-out-of-range"
+      ],
+      "documentation": {
+        "summary": "Educational Logic model for Comparator.",
+        "usage": "Double-click to edit parameters, connect terminals and run simulation.",
+        "standards": [
+          "IEC-oriented educational representation"
+        ]
+      }
+    },
+    {
+      "id": "logic-logic-schmitt",
+      "name": "Logic Schmitt",
+      "category": "logic",
+      "terminals": [
+        {
+          "id": "T1",
+          "name": "Terminal 1"
+        },
+        {
+          "id": "T2",
+          "name": "Terminal 2"
+        }
+      ],
+      "parameters": {
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "ratedVoltage": {
+          "type": "number",
+          "unit": "V",
+          "default": 24,
+          "min": 0,
+          "max": 1000
+        },
+        "value": {
+          "type": "number",
+          "default": 1
+        }
+      },
+      "ratings": {
+        "frequency": 50
+      },
+      "symbol": {
+        "style": "IEC",
+        "label": "LOGI",
+        "original": true
+      },
+      "panelModel": {
+        "mount": "DIN35",
+        "widthModules": 2,
+        "interactive": true
+      },
+      "electricalModel": {
+        "type": "logic",
+        "engine": "VoltPro MNA educational",
+        "editable": true
+      },
+      "behaviorModel": {
+        "type": "logic-node",
+        "states": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      "faultModes": [
+        "open-circuit",
+        "short-circuit",
+        "parameter-out-of-range"
+      ],
+      "documentation": {
+        "summary": "Educational Logic model for Schmitt.",
+        "usage": "Double-click to edit parameters, connect terminals and run simulation.",
+        "standards": [
+          "IEC-oriented educational representation"
+        ]
+      }
+    },
+    {
+      "id": "logic-logic-multiplexer",
+      "name": "Logic Multiplexer",
+      "category": "logic",
+      "terminals": [
+        {
+          "id": "T1",
+          "name": "Terminal 1"
+        },
+        {
+          "id": "T2",
+          "name": "Terminal 2"
+        }
+      ],
+      "parameters": {
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "ratedVoltage": {
+          "type": "number",
+          "unit": "V",
+          "default": 24,
+          "min": 0,
+          "max": 1000
+        },
+        "value": {
+          "type": "number",
+          "default": 1
+        }
+      },
+      "ratings": {
+        "frequency": 50
+      },
+      "symbol": {
+        "style": "IEC",
+        "label": "LOGI",
+        "original": true
+      },
+      "panelModel": {
+        "mount": "DIN35",
+        "widthModules": 2,
+        "interactive": true
+      },
+      "electricalModel": {
+        "type": "logic",
+        "engine": "VoltPro MNA educational",
+        "editable": true
+      },
+      "behaviorModel": {
+        "type": "logic-node",
+        "states": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      "faultModes": [
+        "open-circuit",
+        "short-circuit",
+        "parameter-out-of-range"
+      ],
+      "documentation": {
+        "summary": "Educational Logic model for Multiplexer.",
+        "usage": "Double-click to edit parameters, connect terminals and run simulation.",
+        "standards": [
+          "IEC-oriented educational representation"
+        ]
+      }
+    },
+    {
+      "id": "logic-logic-demultiplexer",
+      "name": "Logic Demultiplexer",
+      "category": "logic",
+      "terminals": [
+        {
+          "id": "T1",
+          "name": "Terminal 1"
+        },
+        {
+          "id": "T2",
+          "name": "Terminal 2"
+        }
+      ],
+      "parameters": {
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "ratedVoltage": {
+          "type": "number",
+          "unit": "V",
+          "default": 24,
+          "min": 0,
+          "max": 1000
+        },
+        "value": {
+          "type": "number",
+          "default": 1
+        }
+      },
+      "ratings": {
+        "frequency": 50
+      },
+      "symbol": {
+        "style": "IEC",
+        "label": "LOGI",
+        "original": true
+      },
+      "panelModel": {
+        "mount": "DIN35",
+        "widthModules": 2,
+        "interactive": true
+      },
+      "electricalModel": {
+        "type": "logic",
+        "engine": "VoltPro MNA educational",
+        "editable": true
+      },
+      "behaviorModel": {
+        "type": "logic-node",
+        "states": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      "faultModes": [
+        "open-circuit",
+        "short-circuit",
+        "parameter-out-of-range"
+      ],
+      "documentation": {
+        "summary": "Educational Logic model for Demultiplexer.",
+        "usage": "Double-click to edit parameters, connect terminals and run simulation.",
+        "standards": [
+          "IEC-oriented educational representation"
+        ]
+      }
+    },
+    {
+      "id": "logic-logic-encoder",
+      "name": "Logic Encoder",
+      "category": "logic",
+      "terminals": [
+        {
+          "id": "T1",
+          "name": "Terminal 1"
+        },
+        {
+          "id": "T2",
+          "name": "Terminal 2"
+        }
+      ],
+      "parameters": {
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "ratedVoltage": {
+          "type": "number",
+          "unit": "V",
+          "default": 24,
+          "min": 0,
+          "max": 1000
+        },
+        "value": {
+          "type": "number",
+          "default": 1
+        }
+      },
+      "ratings": {
+        "frequency": 50
+      },
+      "symbol": {
+        "style": "IEC",
+        "label": "LOGI",
+        "original": true
+      },
+      "panelModel": {
+        "mount": "DIN35",
+        "widthModules": 2,
+        "interactive": true
+      },
+      "electricalModel": {
+        "type": "logic",
+        "engine": "VoltPro MNA educational",
+        "editable": true
+      },
+      "behaviorModel": {
+        "type": "logic-node",
+        "states": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      "faultModes": [
+        "open-circuit",
+        "short-circuit",
+        "parameter-out-of-range"
+      ],
+      "documentation": {
+        "summary": "Educational Logic model for Encoder.",
+        "usage": "Double-click to edit parameters, connect terminals and run simulation.",
+        "standards": [
+          "IEC-oriented educational representation"
+        ]
+      }
+    },
+    {
+      "id": "logic-logic-decoder",
+      "name": "Logic Decoder",
+      "category": "logic",
+      "terminals": [
+        {
+          "id": "T1",
+          "name": "Terminal 1"
+        },
+        {
+          "id": "T2",
+          "name": "Terminal 2"
+        }
+      ],
+      "parameters": {
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "ratedVoltage": {
+          "type": "number",
+          "unit": "V",
+          "default": 24,
+          "min": 0,
+          "max": 1000
+        },
+        "value": {
+          "type": "number",
+          "default": 1
+        }
+      },
+      "ratings": {
+        "frequency": 50
+      },
+      "symbol": {
+        "style": "IEC",
+        "label": "LOGI",
+        "original": true
+      },
+      "panelModel": {
+        "mount": "DIN35",
+        "widthModules": 2,
+        "interactive": true
+      },
+      "electricalModel": {
+        "type": "logic",
+        "engine": "VoltPro MNA educational",
+        "editable": true
+      },
+      "behaviorModel": {
+        "type": "logic-node",
+        "states": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      "faultModes": [
+        "open-circuit",
+        "short-circuit",
+        "parameter-out-of-range"
+      ],
+      "documentation": {
+        "summary": "Educational Logic model for Decoder.",
+        "usage": "Double-click to edit parameters, connect terminals and run simulation.",
+        "standards": [
+          "IEC-oriented educational representation"
+        ]
+      }
+    },
+    {
+      "id": "logic-logic-shiftregister",
+      "name": "Logic ShiftRegister",
+      "category": "logic",
+      "terminals": [
+        {
+          "id": "T1",
+          "name": "Terminal 1"
+        },
+        {
+          "id": "T2",
+          "name": "Terminal 2"
+        }
+      ],
+      "parameters": {
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "ratedVoltage": {
+          "type": "number",
+          "unit": "V",
+          "default": 24,
+          "min": 0,
+          "max": 1000
+        },
+        "value": {
+          "type": "number",
+          "default": 1
+        }
+      },
+      "ratings": {
+        "frequency": 50
+      },
+      "symbol": {
+        "style": "IEC",
+        "label": "LOGI",
+        "original": true
+      },
+      "panelModel": {
+        "mount": "DIN35",
+        "widthModules": 2,
+        "interactive": true
+      },
+      "electricalModel": {
+        "type": "logic",
+        "engine": "VoltPro MNA educational",
+        "editable": true
+      },
+      "behaviorModel": {
+        "type": "logic-node",
+        "states": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      "faultModes": [
+        "open-circuit",
+        "short-circuit",
+        "parameter-out-of-range"
+      ],
+      "documentation": {
+        "summary": "Educational Logic model for ShiftRegister.",
+        "usage": "Double-click to edit parameters, connect terminals and run simulation.",
+        "standards": [
+          "IEC-oriented educational representation"
+        ]
+      }
+    },
+    {
+      "id": "logic-logic-adder",
+      "name": "Logic Adder",
+      "category": "logic",
+      "terminals": [
+        {
+          "id": "T1",
+          "name": "Terminal 1"
+        },
+        {
+          "id": "T2",
+          "name": "Terminal 2"
+        }
+      ],
+      "parameters": {
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "ratedVoltage": {
+          "type": "number",
+          "unit": "V",
+          "default": 24,
+          "min": 0,
+          "max": 1000
+        },
+        "value": {
+          "type": "number",
+          "default": 1
+        }
+      },
+      "ratings": {
+        "frequency": 50
+      },
+      "symbol": {
+        "style": "IEC",
+        "label": "LOGI",
+        "original": true
+      },
+      "panelModel": {
+        "mount": "DIN35",
+        "widthModules": 2,
+        "interactive": true
+      },
+      "electricalModel": {
+        "type": "logic",
+        "engine": "VoltPro MNA educational",
+        "editable": true
+      },
+      "behaviorModel": {
+        "type": "logic-node",
+        "states": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      "faultModes": [
+        "open-circuit",
+        "short-circuit",
+        "parameter-out-of-range"
+      ],
+      "documentation": {
+        "summary": "Educational Logic model for Adder.",
+        "usage": "Double-click to edit parameters, connect terminals and run simulation.",
+        "standards": [
+          "IEC-oriented educational representation"
+        ]
+      }
+    },
+    {
+      "id": "logic-logic-subtractor",
+      "name": "Logic Subtractor",
+      "category": "logic",
+      "terminals": [
+        {
+          "id": "T1",
+          "name": "Terminal 1"
+        },
+        {
+          "id": "T2",
+          "name": "Terminal 2"
+        }
+      ],
+      "parameters": {
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "ratedVoltage": {
+          "type": "number",
+          "unit": "V",
+          "default": 24,
+          "min": 0,
+          "max": 1000
+        },
+        "value": {
+          "type": "number",
+          "default": 1
+        }
+      },
+      "ratings": {
+        "frequency": 50
+      },
+      "symbol": {
+        "style": "IEC",
+        "label": "LOGI",
+        "original": true
+      },
+      "panelModel": {
+        "mount": "DIN35",
+        "widthModules": 2,
+        "interactive": true
+      },
+      "electricalModel": {
+        "type": "logic",
+        "engine": "VoltPro MNA educational",
+        "editable": true
+      },
+      "behaviorModel": {
+        "type": "logic-node",
+        "states": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      "faultModes": [
+        "open-circuit",
+        "short-circuit",
+        "parameter-out-of-range"
+      ],
+      "documentation": {
+        "summary": "Educational Logic model for Subtractor.",
+        "usage": "Double-click to edit parameters, connect terminals and run simulation.",
+        "standards": [
+          "IEC-oriented educational representation"
+        ]
+      }
+    },
+    {
+      "id": "logic-logic-logic-high",
+      "name": "Logic Logic-High",
+      "category": "logic",
+      "terminals": [
+        {
+          "id": "T1",
+          "name": "Terminal 1"
+        },
+        {
+          "id": "T2",
+          "name": "Terminal 2"
+        }
+      ],
+      "parameters": {
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "ratedVoltage": {
+          "type": "number",
+          "unit": "V",
+          "default": 24,
+          "min": 0,
+          "max": 1000
+        },
+        "value": {
+          "type": "number",
+          "default": 1
+        }
+      },
+      "ratings": {
+        "frequency": 50
+      },
+      "symbol": {
+        "style": "IEC",
+        "label": "LOGI",
+        "original": true
+      },
+      "panelModel": {
+        "mount": "DIN35",
+        "widthModules": 2,
+        "interactive": true
+      },
+      "electricalModel": {
+        "type": "logic",
+        "engine": "VoltPro MNA educational",
+        "editable": true
+      },
+      "behaviorModel": {
+        "type": "logic-node",
+        "states": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      "faultModes": [
+        "open-circuit",
+        "short-circuit",
+        "parameter-out-of-range"
+      ],
+      "documentation": {
+        "summary": "Educational Logic model for Logic-High.",
+        "usage": "Double-click to edit parameters, connect terminals and run simulation.",
+        "standards": [
+          "IEC-oriented educational representation"
+        ]
+      }
+    },
+    {
+      "id": "logic-logic-logic-low",
+      "name": "Logic Logic-Low",
+      "category": "logic",
+      "terminals": [
+        {
+          "id": "T1",
+          "name": "Terminal 1"
+        },
+        {
+          "id": "T2",
+          "name": "Terminal 2"
+        }
+      ],
+      "parameters": {
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "ratedVoltage": {
+          "type": "number",
+          "unit": "V",
+          "default": 24,
+          "min": 0,
+          "max": 1000
+        },
+        "value": {
+          "type": "number",
+          "default": 1
+        }
+      },
+      "ratings": {
+        "frequency": 50
+      },
+      "symbol": {
+        "style": "IEC",
+        "label": "LOGI",
+        "original": true
+      },
+      "panelModel": {
+        "mount": "DIN35",
+        "widthModules": 2,
+        "interactive": true
+      },
+      "electricalModel": {
+        "type": "logic",
+        "engine": "VoltPro MNA educational",
+        "editable": true
+      },
+      "behaviorModel": {
+        "type": "logic-node",
+        "states": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      "faultModes": [
+        "open-circuit",
+        "short-circuit",
+        "parameter-out-of-range"
+      ],
+      "documentation": {
+        "summary": "Educational Logic model for Logic-Low.",
+        "usage": "Double-click to edit parameters, connect terminals and run simulation.",
+        "standards": [
+          "IEC-oriented educational representation"
+        ]
+      }
+    },
+    {
+      "id": "logic-logic-clock",
+      "name": "Logic Clock",
+      "category": "logic",
+      "terminals": [
+        {
+          "id": "T1",
+          "name": "Terminal 1"
+        },
+        {
+          "id": "T2",
+          "name": "Terminal 2"
+        }
+      ],
+      "parameters": {
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "ratedVoltage": {
+          "type": "number",
+          "unit": "V",
+          "default": 24,
+          "min": 0,
+          "max": 1000
+        },
+        "value": {
+          "type": "number",
+          "default": 1
+        }
+      },
+      "ratings": {
+        "frequency": 50
+      },
+      "symbol": {
+        "style": "IEC",
+        "label": "LOGI",
+        "original": true
+      },
+      "panelModel": {
+        "mount": "DIN35",
+        "widthModules": 2,
+        "interactive": true
+      },
+      "electricalModel": {
+        "type": "logic",
+        "engine": "VoltPro MNA educational",
+        "editable": true
+      },
+      "behaviorModel": {
+        "type": "logic-node",
+        "states": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      "faultModes": [
+        "open-circuit",
+        "short-circuit",
+        "parameter-out-of-range"
+      ],
+      "documentation": {
+        "summary": "Educational Logic model for Clock.",
+        "usage": "Double-click to edit parameters, connect terminals and run simulation.",
+        "standards": [
+          "IEC-oriented educational representation"
+        ]
+      }
+    },
+    {
+      "id": "logic-logic-oneshot",
+      "name": "Logic OneShot",
+      "category": "logic",
+      "terminals": [
+        {
+          "id": "T1",
+          "name": "Terminal 1"
+        },
+        {
+          "id": "T2",
+          "name": "Terminal 2"
+        }
+      ],
+      "parameters": {
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "ratedVoltage": {
+          "type": "number",
+          "unit": "V",
+          "default": 24,
+          "min": 0,
+          "max": 1000
+        },
+        "value": {
+          "type": "number",
+          "default": 1
+        }
+      },
+      "ratings": {
+        "frequency": 50
+      },
+      "symbol": {
+        "style": "IEC",
+        "label": "LOGI",
+        "original": true
+      },
+      "panelModel": {
+        "mount": "DIN35",
+        "widthModules": 2,
+        "interactive": true
+      },
+      "electricalModel": {
+        "type": "logic",
+        "engine": "VoltPro MNA educational",
+        "editable": true
+      },
+      "behaviorModel": {
+        "type": "logic-node",
+        "states": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      "faultModes": [
+        "open-circuit",
+        "short-circuit",
+        "parameter-out-of-range"
+      ],
+      "documentation": {
+        "summary": "Educational Logic model for OneShot.",
+        "usage": "Double-click to edit parameters, connect terminals and run simulation.",
+        "standards": [
+          "IEC-oriented educational representation"
+        ]
+      }
+    },
+    {
+      "id": "logic-logic-statemachine",
+      "name": "Logic StateMachine",
+      "category": "logic",
+      "terminals": [
+        {
+          "id": "T1",
+          "name": "Terminal 1"
+        },
+        {
+          "id": "T2",
+          "name": "Terminal 2"
+        }
+      ],
+      "parameters": {
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "ratedVoltage": {
+          "type": "number",
+          "unit": "V",
+          "default": 24,
+          "min": 0,
+          "max": 1000
+        },
+        "value": {
+          "type": "number",
+          "default": 1
+        }
+      },
+      "ratings": {
+        "frequency": 50
+      },
+      "symbol": {
+        "style": "IEC",
+        "label": "LOGI",
+        "original": true
+      },
+      "panelModel": {
+        "mount": "DIN35",
+        "widthModules": 2,
+        "interactive": true
+      },
+      "electricalModel": {
+        "type": "logic",
+        "engine": "VoltPro MNA educational",
+        "editable": true
+      },
+      "behaviorModel": {
+        "type": "logic-node",
+        "states": [
+          "enabled",
+          "disabled"
+        ]
+      },
+      "faultModes": [
+        "open-circuit",
+        "short-circuit",
+        "parameter-out-of-range"
+      ],
+      "documentation": {
+        "summary": "Educational Logic model for StateMachine.",
+        "usage": "Double-click to edit parameters, connect terminals and run simulation.",
+        "standards": [
+          "IEC-oriented educational representation"
+        ]
+      }
+    }
+  ]
+}
