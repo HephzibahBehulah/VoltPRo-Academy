@@ -39,6 +39,15 @@ window.S=S; window.defs=defs;
 const cats=[...new Set(Object.values(defs).map(d=>d.cat))];
 const $=q=>document.querySelector(q), $$=q=>[...document.querySelectorAll(q)];
 const svg=$("#canvas"), comps=$("#components"), wires=$("#wires"), labels=$("#labels"), selg=$("#selection"), wrap=$("#canvasWrap");
+function bindExtraControls(){
+ const demo=document.querySelector("#demoBtn"); if(demo) demo.onclick=()=>{saveHistory();S.components=[];S.wires=[];const v={id:uid(),type:"battery",x:160,y:240,rotation:0,props:{voltage:12},pins:[]},r={id:uid(),type:"resistor",x:360,y:240,rotation:0,props:{resistance:100},pins:[]},l={id:uid(),type:"lamp",x:560,y:240,rotation:0,props:{resistance:120},pins:[]};S.components=[v,r,l];S.wires=[{a:v.id+":0",b:r.id+":0"},{a:r.id+":1",b:l.id+":0"},{a:l.id+":1",b:v.id+":1"}];render();run()};
+ const dm=document.querySelector("#demoMotorBtn"); if(dm) dm.onclick=demoMotor;
+ const dl=document.querySelector("#demoLogicBtn"); if(dl) dl.onclick=demoLogic;
+ const pb=document.querySelector("#paletteBtn"); if(pb) pb.onclick=()=>{const p=document.querySelector("#palette");p.classList.toggle("collapsed");};
+ const gs=document.querySelector("#gridSize"); if(gs) gs.onchange=()=>{S.grid=Math.max(5,Math.min(80,+gs.value||20));render()};
+ const svgEl=document.querySelector("#canvas"); if(svgEl) svgEl.addEventListener("mousedown",e=>{if(e.button!==1)return;const start={x:e.clientX,y:e.clientY},orig={...S.pan};const move=q=>{S.pan={x:orig.x+q.clientX-start.x,y:orig.y+q.clientY-start.y};renderCanvas()};const up=()=>{window.removeEventListener("mousemove",move);window.removeEventListener("mouseup",up)};window.addEventListener("mousemove",move);window.addEventListener("mouseup",up)});
+}
+
 let search="",cat="All",dragging=null,panStart=null;
 function uid(){return "c"+Math.random().toString(36).slice(2,9)}
 function snap(v){return Math.round(v/S.grid)*S.grid}
@@ -116,5 +125,5 @@ $$(".mode").forEach(b=>b.onclick=()=>{$$(".mode").forEach(x=>x.classList.remove(
 $("#themeBtn").onclick=()=>{document.body.classList.toggle("light");localStorage.setItem("voltpro-theme",document.body.classList.contains("light")?"light":"dark")};
 function toast(m){const t=document.createElement("div");t.textContent=m;t.style="position:fixed;right:18px;bottom:45px;background:#12314a;border:1px solid #39647f;color:white;padding:9px 13px;border-radius:8px;z-index:99;font-size:11px";document.body.append(t);setTimeout(()=>t.remove(),1600)}
 window.addEventListener("keydown",e=>{if((e.ctrlKey||e.metaKey)&&e.key==="z"){e.preventDefault();$("#undoBtn").click()}if((e.ctrlKey||e.metaKey)&&e.key==="s"){e.preventDefault();$("#saveBtn").click()}if(e.key==="Delete")$("#deleteBtn").click();});
-render();log("Component registry: "+Object.keys(defs).length+" active simulation components.");
+render();bindExtraControls();log("Component registry: "+Object.keys(defs).length+" active simulation components.");
 })();
