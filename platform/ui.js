@@ -9,10 +9,9 @@ function panel(title,body){
 function project(){return window.VoltProProject?.normalize({components:window.S?.components||[],wires:window.S?.wires||[]})||{components:[],wires:[]}}
 function mount(){
   const bar=document.querySelector(".toolbar"); if(!bar)return;
-  const items=[["Engineering","engineering"],["Documentation","docs"],["BOM","bom"],["Fault Lab","fault"],["Challenges","challenge"],["Tutorials","tutorial"],["MCU Lab","mcu"],["Accessibility","a11y"],["Panel Designer","panel"],["Component Info","info"],["Language","language"]];
+  const items=[["Engineering","engineering"],["Documentation","docs"],["BOM","bom"],["Fault Lab","fault"],["Challenges","challenge"],["Tutorials","tutorial"],["MCU Lab","mcu"],["Accessibility","a11y"],["Panel Designer","panel"],["Component Info","info"]];
   for(const [label,id] of items){if(document.getElementById("vp-"+id))continue;const b=document.createElement("button");b.id="vp-"+id;b.textContent=label;b.onclick=()=>actions[id]();bar.appendChild(b)}
   document.addEventListener("keydown",e=>{if(e.target.matches("input,textarea"))return;if(e.key==="Escape")document.getElementById("vpPlatformPanel")?.remove();if(e.key.toLowerCase()==="b")actions.bom();if(e.key.toLowerCase()==="f")actions.fault()});
-  document.addEventListener("voltpro:locale-changed",()=>VoltProI18n.apply());
 }
 function downloadText(name,text,type){const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([text],{type}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
 const actions={
@@ -25,11 +24,6 @@ tutorial(){const t={id:"first-circuit",title:"First circuit",steps:["Place a sou
 mcu(){panel("Microcontroller Lab",'<textarea id=vpCode rows=10 style="width:100%">void setup(){ pinMode(13, OUTPUT); Serial.println("VoltPRo"); }\nvoid loop(){ digitalWrite(13,HIGH); }</textarea><br><button id=vpRun>Simulate</button><pre id=vpMcuOut></pre>');$("#vpRun").onclick=()=>$("#vpMcuOut").textContent=JSON.stringify(VoltProMCU.simulate($("#vpCode").value,{target:"Arduino UNO"}),null,2)},
 panel(){const p=project(),items=VoltProPanel.layout((p.components||[]).map((c,i)=>({id:c.id,type:c.type,position:i*55,width:45})));const v=VoltProPanel.validate(items,[{id:"R1",length:18}]);panel("DIN Rail Panel Designer","<p>Rail R1 · 35 mm · 18 modules</p><p>"+(v.valid?"Layout valid":"Layout warnings: "+v.errors.join("; "))+"</p><pre>"+items.map(x=>x.id+" · "+x.type+" · "+x.position+" mm").join("\n")+"</pre>")},
 info(){const d=window.VoltProWorkspace?.getDefinitions?.()||{};const first=Object.entries(d)[0];panel("Component Information",first?JSON.stringify(VoltProComponentInfo.describe(first[1]),null,2):"Select a component in the workspace.")},
-language(){
-  const isEnglish=VoltProI18n.locale==="en";
-  panel(isEnglish?"Language":"Sprache",'<p id="vpLanguageLabel">'+(isEnglish?"Language":"Sprache")+'</p><button id="vpLanguageToggle">'+(isEnglish?"Deutsch":"English")+"</button><p>"+(isEnglish?"Click the button to switch the simulator language.":"Klicken Sie auf die Schaltfläche, um die Simulatorsprache zu wechseln.")+"</p>");
-  $("#vpLanguageToggle").onclick=async()=>{await VoltProI18n.toggle();actions.language()};
-},
 a11y(){document.documentElement.style.fontSize=document.documentElement.style.fontSize==="18px"?"":"18px";document.body.classList.toggle("vpHighContrast");panel("Accessibility","Keyboard shortcuts: B = BOM, F = Fault Lab, Escape = close panel. Font size toggle applied.")}
 };
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",mount);else mount();
