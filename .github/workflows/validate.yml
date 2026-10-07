@@ -16,6 +16,7 @@ jobs:
           node --check script.js
           node --check simulator.js
           node --check engineering.js
+          node --check engine/voltpro-engine.js
           node -e "const x=JSON.parse(require(\"fs\").readFileSync(\"pwa.webmanifest\",\"utf8\")); if(!x.name||!x.start_url) process.exit(1)"
       - name: Validate required frontend files
         run: |
@@ -34,3 +35,8 @@ jobs:
           grep -q 'simulator.css' simulator.html
       - name: Validate component registry
         run: node -e "const x=JSON.parse(require('fs').readFileSync('components.json','utf8')); if(x.format!=='voltpro-components'||!Array.isArray(x.library)||x.library.length<100) process.exit(1); console.log('registry entries:',x.library.length)"
+
+      - name: Run regression tests
+        run: npm test
+      - name: Validate v3 data contracts
+        run: node -e "for (const f of ['data/component-models.v3.json','data/component-schema.json','data/challenges.json','data/tutorials.json','data/faults.json']) JSON.parse(require('fs').readFileSync(f,'utf8')); console.log('v3 data contracts: OK')"
