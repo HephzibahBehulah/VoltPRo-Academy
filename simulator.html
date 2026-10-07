@@ -11,18 +11,18 @@
 <header class="sim-top">
   <div class="brand"><span class="mark">V</span><div><b>VoltPRo</b><small>SIMULATOR LAB</small></div></div>
   <div class="mode-tabs">
-    <button class="mode active" data-mode="schematic">Schematic</button><button class="mode" data-mode="panel">Panel</button><button class="mode" data-mode="micro">Microcontroller</button>
+    <button class="mode active" data-mode="schematic" data-i18n="ui.schematic">Schematic</button><button class="mode" data-mode="panel" data-i18n="ui.panel">Panel</button><button class="mode" data-mode="micro" data-i18n="ui.microcontroller">Microcontroller</button>
   </div>
-  <div class="top-actions"><button id="newBtn">New</button><button id="saveBtn" aria-label="Save project">Save</button><button id="loadBtn" aria-label="Load project">Load</button><button id="exportBtn" aria-label="Export project">Export</button><button id="pngBtn">SVG</button><a href="index.html">Academy</a><button id="themeBtn">Theme</button></div>
+  <div class="top-actions"><button id="newBtn" data-i18n="ui.new">New</button><button id="saveBtn" aria-label="Save project" data-i18n="ui.save">Save</button><button id="loadBtn" aria-label="Load project" data-i18n="ui.load">Load</button><button id="exportBtn" aria-label="Export project" data-i18n="ui.export">Export</button><button id="pngBtn" data-i18n="ui.svg">SVG</button><a href="index.html" data-i18n="ui.academy">Academy</a><button id="themeBtn" data-i18n="ui.theme">Theme</button></div>
 </header>
 <div class="toolbar">
- <button id="runBtn" class="primary" aria-label="Run simulation">▶ Run</button><button id="demoBtn">Demo Circuit</button><button id="demoMotorBtn">Motor Starter</button><button id="demoLogicBtn">Logic Lab</button><button id="paletteBtn">Library</button><button id="stopBtn">■ Stop</button><button id="wireBtn">Wire</button><button id="deleteBtn">Delete</button><button id="undoBtn">Undo</button><button id="redoBtn">Redo</button>
- <span class="sep"></span><label>Grid <input id="gridSize" type="number" value="20" min="5" max="80"></label><button id="fitBtn">Fit</button><span class="status" id="simStatus">READY</span>
+ <button id="runBtn" class="primary" aria-label="Run simulation" data-i18n="ui.run">▶ Run</button><button id="demoBtn" data-i18n="ui.demoCircuit">Demo Circuit</button><button id="demoMotorBtn" data-i18n="ui.motorStarter">Motor Starter</button><button id="demoLogicBtn" data-i18n="ui.logicLab">Logic Lab</button><button id="paletteBtn" data-i18n="ui.library">Library</button><button id="stopBtn" data-i18n="ui.stop">■ Stop</button><button id="wireBtn" data-i18n="ui.wire">Wire</button><button id="deleteBtn" data-i18n="ui.delete">Delete</button><button id="undoBtn" data-i18n="ui.undo">Undo</button><button id="redoBtn" data-i18n="ui.redo">Redo</button>
+ <span class="sep"></span><label><span data-i18n="ui.grid">Grid</span> <input id="gridSize" type="number" value="20" min="5" max="80"></label><button id="fitBtn" data-i18n="ui.fit">Fit</button><span class="status" id="simStatus">READY</span>
 </div>
 <main class="workspace">
  <aside class="palette" id="palette">
-  <div class="panel-title">COMPONENT LIBRARY <span id="componentCount">0</span></div>
-  <input id="componentSearch" aria-label="Search components" placeholder="Search components...">
+  <div class="panel-title" data-i18n="ui.library">COMPONENT LIBRARY <span id="componentCount">0</span></div>
+  <input id="componentSearch" aria-label="Search components" data-i18n-placeholder="ui.search" placeholder="Search components...">
   <div class="cat-tabs" id="catTabs"></div><div id="paletteList"></div>
   <div class="palette-note">Drag components onto the canvas. Click a pin, then another pin to wire. Double-click a component for properties.</div>
  </aside>
@@ -33,15 +33,15 @@
      <rect id="gridRect" width="100%" height="100%" fill="url(#grid)"/>
      <g id="wires"></g><g id="components"></g><g id="labels"></g><g id="selection"></g>
    </svg>
-   <div class="canvas-help">Wheel: zoom · Middle/space drag: pan · Drag palette item: place · Click pins: wire</div>
+   <div class="canvas-help" data-i18n="ui.canvasHelp">Wheel: zoom · Middle/space drag: pan · Drag palette item: place · Click pins: wire</div>
    <div class="zoom"><button id="zoomOut">−</button><span id="zoomLabel">100%</span><button id="zoomIn">+</button></div>
  </section>
  <aside class="inspector">
-   <div class="panel-title">INSPECTOR</div><div id="inspectorBody"><div class="empty">Select a component to inspect it.</div></div>
-   <div class="panel-title instruments-title">INSTRUMENTS</div>
+   <div class="panel-title" data-i18n="ui.inspector">INSPECTOR</div><div id="inspectorBody"><div class="empty" data-i18n="ui.selectComponent">Select a component to inspect it.</div></div>
+   <div class="panel-title instruments-title" data-i18n="ui.instruments">INSTRUMENTS</div>
    <div class="instrument-grid"><button data-meter="voltage">V</button><button data-meter="current">A</button><button data-meter="resistance">Ω</button><button data-meter="continuity">🔔</button></div>
    <div id="meterReadout" class="meter">--</div>
-   <div class="panel-title">CALCULATIONS</div><div id="calcPanel" class="calc-panel">Select Run to calculate circuit values.</div><div class="panel-title">NETLIST / EVENTS</div><pre id="console" class="console">VoltPRo engine ready.
+   <div class="panel-title" data-i18n="ui.calculations">CALCULATIONS</div><div id="calcPanel" class="calc-panel">Select Run to calculate circuit values.</div><div class="panel-title" data-i18n="ui.netlist">NETLIST / EVENTS</div><pre id="console" class="console">VoltPRo engine ready.
 Educational simulation only.</pre>
  </aside>
 </main>
