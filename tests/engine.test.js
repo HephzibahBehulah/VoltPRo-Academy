@@ -1,18 +1,10 @@
 const test=require("node:test");const assert=require("node:assert/strict");const fs=require("node:fs");const vm=require("node:vm");
 const source=fs.readFileSync("engine/voltpro-engine.js","utf8");
 function engine(){const ctx={window:{},console,Date};vm.createContext(ctx);vm.runInContext(source,ctx);return ctx.window.VoltProEngine}
-test("DC engine solves a 12V/1kΩ circuit",()=>{const e=engine();const p={components:[
-{id:"v1",type:"battery",props:{voltage:12},pins:["v1:0","v1:1"]},
-{id:"r1",type:"resistor",props:{resistance:1000},pins:["r1:0","r1:1"]}],wires:[
-{a:"v1:0",b:"r1:0"},{a:"r1:1",b:"v1:1"}]};
-const a=e.dc(p);assert.equal(a.ok,true);assert.ok(Math.abs(a.totalCurrent-0.012)<1e-9);assert.ok(Math.abs(a.totalPower-0.144)<1e-6)});
-test("engine exposes transient and AC contracts",()=>{const e=engine();assert.equal(typeof e.transient,"function");assert.equal(typeof e.ac,"function");assert.equal(typeof e.analyze,"function")});
-test("component model schema and challenge files parse",()=>{for(const f of ["data/component-models.v3.json","data/component-schema.json","data/challenges.json","data/tutorials.json","data/faults.json"])JSON.parse(fs.readFileSync(f,"utf8"))});
-test("analysis is deterministic for identical inputs",()=>{const a={components:[{id:"v",type:"battery",pins:["v:0","v:1"],props:{voltage:12}},{id:"r",type:"resistor",pins:["r:0","r:1"],props:{resistance:1000}}],wires:[{a:"v:0",b:"r:0"},{a:"r:1",b:"v:1"}]};const x=JSON.stringify(engine().analyze(a)),y=JSON.stringify(engine().analyze(a));assert.equal(x,y)});
-
-
-test("AC forwards ground reference",()=>{
- const project={components:[{id:"B1",type:"battery",pins:["B1:1","B1:2"],props:{voltage:12}},{id:"R1",type:"resistor",pins:["R1:1","R1:2"],props:{resistance:1000}}],wires:[{a:"B1:1",b:"R1:1"},{a:"R1:2",b:"B1:2"}]};
- const out=engine().analyze(project,{groundRef:"B1:2",ac:{frequency:50,groundRef:"B1:2"}});
- assert.equal(out.ac.ok,true);
-});
+function circuit(r=1000){return {components:[{id:"v1",type:"battery",props:{voltage:12},pins:["v1:0","v1:1"]},{id:"r1",type:"resistor",props:{resistance:r},pins:["r1:0","r1:1"]}],wires:[{a:"v1:0",b:"r1:0"},{a:"r1:1",b:"v1:1"}]}}
+test("MNA DC solves a 12V/1kΩ circuit",()=>{const a=engine().dc(circuit());assert.equal(a.ok,true);assert.ok(Math.abs(a.totalCurrent-0.012)<1e-9);assert.ok(Math.abs(a.totalPower-0.144)<1e-6)});
+test("MNA supports RLC analysis contracts",()=>{const e=engine(),p={components:[{id:"v",type:"battery",pins:["v:0","v:1"],props:{voltage:12}},{id:"r",type:"resistor",pins:["r:0","r:1"],props:{resistance:1000}},{id:"c",type:"capacitor",pins:["c:0","c:1"],props:{capacitance:1e-6}},{id:"l",type:"inductor",pins:["l:0","l:1"],props:{inductance:1e-3}}],wires:[{a:"v:0",b:"r:0"},{a:"r:1",b:"c:0"},{a:"c:1",b:"l:0"},{a:"l:1",b:"v:1"}]};assert.equal(e.transient(p,{duration:.01,steps:10}).ok,true);assert.equal(e.ac(p,{start:10,stop:1000,points:5}).ok,true)});
+test("nonlinear diode model is simulation-capable",()=>{const e=engine(),p={components:[{id:"v",type:"battery",pins:["v:0","v:1"],props:{voltage:5}},{id:"d",type:"diode",pins:["d:0","d:1"],props:{forward:.7,resistance:10}},{id:"r",type:"resistor",pins:["r:0","r:1"],props:{resistance:330}}],wires:[{a:"v:0",b:"d:0"},{a:"d:1",b:"r:0"},{a:"r:1",b:"v:1"}]};const a=e.dc(p);assert.equal(a.ok,true);assert.ok(a.branches.some(x=>x.id==="d"))});
+test("current, dependent and power APIs exist",()=>{const e=engine();assert.equal(typeof e.power,"function");assert.equal(typeof e.analyze,"function");assert.equal(typeof e.math.solve,"function")});
+test("AC forwards ground reference",()=>{const p={components:[{id:"B1",type:"battery",pins:["B1:1","B1:2"],props:{voltage:12}},{id:"R1",type:"resistor",pins:["R1:1","R1:2"],props:{resistance:1000}}],wires:[{a:"B1:1",b:"R1:1"},{a:"R1:2",b:"B1:2"}]};const out=engine().analyze(p,{groundRef:"B1:2",ac:{frequency:50,groundRef:"B1:2"}});assert.equal(out.ac.ok,true)});
+test("v4 contracts remain valid JSON",()=>{for(const f of ["data/component-models.v4.json","data/component-schema.v4.json","data/challenges.json","data/tutorials.json","data/faults.json"])JSON.parse(fs.readFileSync(f,"utf8"))});

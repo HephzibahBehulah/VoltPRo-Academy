@@ -1,12 +1,7 @@
-# Third-party and asset provenance
+# Third-party licenses
 
-VoltPRo is intended to remain compatible with its open-source license.
+Phase 2 core engine and core SVG symbols are original project work.
 
-Before adding a dependency or visual asset:
-- record its name, version, source and license;
-- verify redistribution rights;
-- keep attribution where required;
-- do not copy proprietary simulator UI, symbols, photos or code;
-- prefer original SVG assets, public-domain material or compatible open licenses.
+Before release, inventory every dependency, font, icon, image, WASM binary and generated asset with source, author, licence, URL, modification status and compatibility.
 
-A registry entry is not proof of license compatibility. Every external asset must have explicit provenance before release.
+No WireONa asset may be copied.

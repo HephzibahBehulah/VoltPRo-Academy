@@ -1,97 +1,120 @@
-/* VoltPRo Engine v3 — browser-native educational electrical solver.
- * MIT-compatible original code. Educational analysis only; verify real designs
- * against applicable standards, manufacturer data and qualified engineering practice.
+/* VoltPRo Engine — browser-native Modified Nodal Analysis (MNA).
+ * Original MIT-compatible implementation. It is an MNA engine, not a claim of
+ * Ngspice compatibility. Educational use only; verify real designs against
+ * applicable standards, manufacturer data and qualified engineering practice.
  */
 (()=>{"use strict";
 const EPS=1e-12;
-function c(re=0,im=0){return {re:+re||0,im:+im||0}}
-function add(a,b){return c(a.re+b.re,a.im+b.im)}
-function sub(a,b){return c(a.re-b.re,a.im-b.im)}
-function mul(a,b){return c(a.re*b.re-a.im*b.im,a.re*b.im+a.im*b.re)}
-function div(a,b){const d=b.re*b.re+b.im*b.im;if(d<EPS)throw Error("Singular complex division");return c((a.re*b.re+a.im*b.im)/d,(a.im*b.re-a.re*b.im)/d)}
-function abs(a){return Math.hypot(a.re,a.im)}
-function solveLinear(A,b){
- const n=A.length, M=A.map((r,i)=>r.map(x=>c(x.re,x.im)).concat([c(b[i].re,b[i].im)]));
- for(let k=0;k<n;k++){let p=k,m=abs(M[k][k]);for(let i=k+1;i<n;i++){const q=abs(M[i][k]);if(q>m){m=q;p=i}}
+const C=(re=0,im=0)=>({re:+re||0,im:+im||0});
+const add=(a,b)=>C(a.re+b.re,a.im+b.im), sub=(a,b)=>C(a.re-b.re,a.im-b.im);
+const mul=(a,b)=>C(a.re*b.re-a.im*b.im,a.re*b.im+a.im*b.re);
+const div=(a,b)=>{const d=b.re*b.re+b.im*b.im;if(d<EPS)throw Error("Singular complex division");return C((a.re*b.re+a.im*b.im)/d,(a.im*b.re-a.re*b.im)/d)};
+const mag=a=>Math.hypot(a.re,a.im), deg=a=>Math.atan2(a.im,a.re)*180/Math.PI;
+function solve(A,b){
+ const n=A.length;if(!n)return [];
+ const M=A.map((r,i)=>r.map(x=>C(x.re,x.im)).concat(C(b[i]?.re||0,b[i]?.im||0)));
+ for(let k=0;k<n;k++){let p=k,m=mag(M[k][k]);for(let i=k+1;i<n;i++){const q=mag(M[i][k]);if(q>m){m=q;p=i}}
   if(m<EPS)throw Error("Circuit matrix is singular or floating");
   if(p!==k)[M[p],M[k]]=[M[k],M[p]];
   for(let i=k+1;i<n;i++){const f=div(M[i][k],M[k][k]);for(let j=k;j<=n;j++)M[i][j]=sub(M[i][j],mul(f,M[k][j]))}
  }
- const x=Array(n);for(let i=n-1;i>=0;i--){let s=M[i][n];for(let j=i+1;j<n;j++)s=sub(s,mul(M[i][j],x[j]));x[i]=div(s,M[i][i])}return x
+ const x=Array(n);for(let i=n-1;i>=0;i--){let s=M[i][n];for(let j=i+1;j<n;j++)s=sub(s,mul(M[i][j],x[j]));x[i]=div(s,M[i][i])}return x;
 }
-function nodes(project){
- const map=new Map([["GND",0]]), next=()=>map.size;
- (project.components||[]).forEach(x=>(project.wires||[]).forEach(w=>{}));
- (project.wires||[]).forEach(w=>{for(const ref of [w.a,w.b]){const [id,p]=String(ref).split(":");const key=id+":"+p;if(!map.has(key))map.set(key,next())}});
- return map
+function pinsOf(x){return Array.isArray(x.pins)&&x.pins.length?x.pins:Array.from({length:2},(_,i)=>x.id+":"+i)}
+function value(x,names,fallback){const p=x.props||x.parameters||{};for(const n of names){if(p[n]!==undefined)return Number(p[n]);}return fallback}
+function typeOf(x){return String(x.type||x.model||"").toLowerCase().replace(/[-\s]/g,"_")}
+function topology(project){
+ const parent=new Map(), find=x=>{if(!parent.has(x))parent.set(x,x);let r=x;while(parent.get(r)!==r)r=parent.get(r);while(parent.get(x)!==x){const q=parent.get(x);parent.set(x,r);x=q}return r};
+ const union=(a,b)=>{const x=find(a),y=find(b);if(x!==y)parent.set(x,y)};
+ (project.components||[]).forEach(x=>pinsOf(x).forEach(p=>find(p)));
+ (project.wires||[]).forEach(w=>{if(w.a&&w.b)union(w.a,w.b)});
+ return {find};
 }
-function connected(project,ref){
- const [id,p]=String(ref).split(":");const out=[];
- for(const w of project.wires||[]){if(w.a===ref)out.push(w.b);if(w.b===ref)out.push(w.a)}
- return out
-}
-function componentPins(project,comp){
- const n=Number((comp.pins&&comp.pins.length)||0);if(n)return comp.pins;
- return Array.from({length:n||2},(_,i)=>comp.id+":"+i)
-}
-function buildTopology(project){
- const refs=[...(project.wires||[])];const parent=new Map();
- const find=x=>{if(!parent.has(x))parent.set(x,x);let p=parent.get(x);while(p!==x){parent.set(x,parent.get(p));x=parent.get(x)}return x};
- const union=(a,b)=>{a=find(a);b=find(b);if(a!==b)parent.set(a,b)};
- refs.forEach(w=>union(w.a,w.b));
- const resolve=r=>find(r);
- (project.components||[]).forEach(c=>componentPins(project,c).forEach(r=>{if(!parent.has(r))parent.set(r,r)}));
- return {resolve}
-}
-function dc(project,options={}){
- const comps=project.components||[], wires=project.wires||[], topo=buildTopology(project);
- const source=comps.find(x=>["battery","dcsource"].includes(x.type));
- if(!source)return {ok:false,error:"No DC source found",analysis:"DC operating point"};
- const refs=[];comps.forEach(x=>componentPins(project,x).forEach(r=>refs.push(r)));
- const groundRef=options.groundRef||componentPins(project,source)[1];
- const nodeMap=new Map();let ni=0;
- const nodeFor=r=>{const q=topo.resolve(r);if(groundRef&&q===topo.resolve(groundRef))return 0;if(!nodeMap.has(q))nodeMap.set(q,++ni);return nodeMap.get(q)};
- const branches=[];
- for(const comp of comps){
-  const pins=componentPins(project,comp);if(pins.length<2)continue;
-  const a=nodeFor(pins[0]),b=nodeFor(pins[1]);
-  if(a===b)continue;
-  if(comp.type==="resistor"||["lamp","motor","heater","buzzer"].includes(comp.type)){
-   const R=Math.max(EPS,Number(comp.props?.resistance)||1000);branches.push({comp,a,b,g:1/R,type:"R"});
-  } else if(["switch","fuse","breaker","rcd","relay","contactor"].includes(comp.type)){
-   const closed=comp.type==="switch"?!!comp.props?.closed:true;
-   if(closed)branches.push({comp,a,b,g:1e6,type:"R"});
-  } else if(comp.type==="led"||comp.type==="diode"||comp.type==="zener"){
-   const R=Math.max(1,Number(comp.props?.resistance)||330);branches.push({comp,a,b,g:1/R,type:"D"});
-  }
+function build(project,options={}){
+ const t=topology(project), comps=project.components||[], source=comps.find(x=>["battery","dcsource","voltage_source","ac_source"].includes(typeOf(x)));
+ const explicit=options.groundRef||project.groundRef||"GND";
+ let ground=explicit;
+ if(!comps.some(x=>pinsOf(x).includes(explicit)) && source)ground=pinsOf(source)[1];
+ const nodeKeys=[], nodeMap=new Map();
+ const nodeFor=r=>{const q=t.find(r);if(t.find(ground)===q)return 0;if(!nodeMap.has(q)){nodeMap.set(q,nodeKeys.length+1);nodeKeys.push(q)}return nodeMap.get(q)};
+ const refs=(project.components||[]).flatMap(pinsOf);
+ refs.forEach(nodeFor);
+ const branches=[], voltageSources=[];
+ const addBranch=(comp,a,b,kind,extra={})=>branches.push({comp,a:nodeFor(a),b:nodeFor(b),kind,...extra});
+ for(const x of comps){
+  const p=pinsOf(x),ty=typeOf(x);if(p.length<2)continue;
+  const a=p[0],b=p[1];
+  if(["resistor","lamp","heater","buzzer"].includes(ty))addBranch(x,a,b,"resistor",{R:Math.max(EPS,value(x,["resistance","resistance_ohm","value"],1000))});
+  else if(ty==="switch"||["fuse","breaker","mcb","mccb","rcd","rcbo","relay","contactor","emergency_stop"].includes(ty)){
+   const closed=x.props?.closed!==false && x.props?.state!=="open";addBranch(x,a,b,closed?"resistor":"open",{R:closed?Math.max(EPS,value(x,["onResistance"],1e-6)):1e30});
+  } else if(["capacitor","c"].includes(ty))addBranch(x,a,b,"capacitor",{C:Math.max(EPS,value(x,["capacitance","value"],1e-6))});
+  else if(["inductor","l"].includes(ty))addBranch(x,a,b,"inductor",{L:Math.max(EPS,value(x,["inductance","value"],1e-3))});
+  else if(["diode","zener","led"].includes(ty))addBranch(x,a,b,"diode",{vf:Math.max(0,value(x,["forward","forwardVoltage","vf"],ty==="led"?2:0.7)),rd:Math.max(1e-6,value(x,["resistance","dynamicResistance"],10)),reverse:Math.max(1e-9,value(x,["reverseLeakage"],1e-9))});
+  else if(["bjt","transistor","npn","pnp"].includes(ty))addBranch(x,a,b,"bjt",{beta:Math.max(1,value(x,["beta","gain"],100)),vt:0.7});
+  else if(["mosfet","nmos","pmos","igbt"].includes(ty))addBranch(x,a,b,"mosfet",{threshold:value(x,["threshold","vth"],3),onResistance:Math.max(1e-6,value(x,["onResistance","rdsOn"],1))});
+  else if(["current_source","isource"].includes(ty))voltageSources.push({comp:x,a:nodeFor(a),b:nodeFor(b),kind:"current",value:value(x,["current","amplitude"],1)});
+  else if(["battery","dcsource","voltage_source","ac_source"].includes(ty))voltageSources.push({comp:x,a:nodeFor(a),b:nodeFor(b),kind:"voltage",value:value(x,["voltage","amplitude"],12),phase:value(x,["phase","phaseDeg"],0)});
+  else if(["vcvs","dependent_voltage_source"].includes(ty))voltageSources.push({comp:x,a:nodeFor(a),b:nodeFor(b),kind:"vcvs",gain:value(x,["gain"],1),cp:nodeFor(p[2]||a),cm:nodeFor(p[3]||b)});
+  else if(["vccs","dependent_current_source"].includes(ty))addBranch(x,a,b,"vccs",{gm:value(x,["transconductance","gm"],1e-3),cp:nodeFor(p[2]||a),cm:nodeFor(p[3]||b)});
  }
- const V=Number(source.props?.voltage)||12, sp=componentPins(project,source);
- if(sp.length<2)return {ok:false,error:"Source requires two pins"};
- const reference=options.groundRef||sp[1]; const plus=nodeFor(sp[0]),minus=nodeFor(reference);
- const N=ni, A=Array.from({length:N},()=>Array.from({length:N},()=>c())), z=Array.from({length:N},()=>c());
- const stampG=(a,b,g)=>{if(a>0)A[a-1][a-1]=add(A[a-1][a-1],c(g));if(b>0)A[b-1][b-1]=add(A[b-1][b-1],c(g));if(a>0&&b>0){A[a-1][b-1]=sub(A[a-1][b-1],c(g));A[b-1][a-1]=sub(A[b-1][a-1],c(g))}};
- branches.forEach(q=>stampG(q.a,q.b,q.g));
- // Use a Thevenin-style source constraint by adding a very large conductance.
- const G=1e9;stampG(plus,minus,G);if(plus>0)z[plus-1]=add(z[plus-1],c(G*V));
- let x;try{x=solveLinear(A,z)}catch(e){return {ok:false,error:e.message,analysis:"DC operating point"}}
- const voltage=n=>n===0?0:(x[n-1]?.re||0);
- const results=branches.map(q=>{const u=voltage(q.a)-voltage(q.b),i=u*q.g;return {id:q.comp.id,type:q.comp.type,name:q.comp.name||q.comp.type,voltage:u,current:i,power:u*i}});
- const total=results.reduce((s,r)=>s+r.current,0);
- return {ok:true,analysis:"DC operating point",sourceVoltage:V,totalCurrent:total,totalPower:V*total,nodes:N,branches:results,nodeVoltages:Array.from({length:N},(_,i)=>({node:i+1,voltage:voltage(i+1)}))};
+ return {t,comps,nodeFor,nodeKeys,ground,branches,voltageSources,N:nodeKeys.length};
 }
-function transient(project,{duration=0.1,steps=100}={}){
- const base=dc(project,arguments[1]||{});if(!base.ok)return base;
- const dt=duration/Math.max(1,steps);return {ok:true,analysis:"Transient educational envelope",duration,steps,dt,samples:Array.from({length:steps+1},(_,i)=>({t:i*dt,current:base.totalCurrent,power:base.totalPower})),note:"R-only DC baseline; dynamic C/L/semiconductor models are isolated for the next solver tier."};
+function stampG(A,a,b,g){
+ if(a>0)A[a-1][a-1]=add(A[a-1][a-1],g);
+ if(b>0)A[b-1][b-1]=add(A[b-1][b-1],g);
+ if(a>0&&b>0){A[a-1][b-1]=sub(A[a-1][b-1],g);A[b-1][a-1]=sub(A[b-1][a-1],g)}
 }
-function ac(project,{frequency=50,groundRef}={}){
- const base=dc(project,{groundRef});if(!base.ok)return base;
- return {ok:true,analysis:"AC impedance preview",frequency,impedance:base.totalCurrent?base.sourceVoltage/base.totalCurrent:Infinity,phaseDeg:0,note:"Frequency-domain UI contract is active; reactive component models require the next model pack."};
+function stampI(z,a,b,i){if(a>0)z[a-1]=sub(z[a-1],i);if(b>0)z[b-1]=add(z[b-1],i)}
+function stampV(A,z,a,b,k,v){const j=A.length-1-k;if(a>0){A[a-1][j]=add(A[a-1][j],C(1));A[j][a-1]=add(A[j][a-1],C(1))}if(b>0){A[b-1][j]=sub(A[b-1][j],C(1));A[j][b-1]=sub(A[j][b-1],C(1))}z[j]=add(z[j],v)}
+function linearSolve(b,options,history={}){
+ const n=b.N, vs=b.voltageSources.length, size=n+vs, A=Array.from({length:size},()=>Array.from({length:size},()=>C())),z=Array.from({length:size},()=>C());
+ const xPrev=options.xPrev||Array.from({length:n},()=>C());
+ const v=node=>node===0?C():xPrev[node-1]||C();
+ for(const q of b.branches){
+  if(q.kind==="resistor")stampG(A,q.a,q.b,C(1/q.R));
+  else if(q.kind==="open"){}
+  else if(q.kind==="capacitor"){const g=options.ac?C(0,q.C*options.omega):C(options.dt?q.C/options.dt:0); if(mag(g)>0)stampG(A,q.a,q.b,g);}
+  else if(q.kind==="inductor"){const g=options.ac?C(0,-1/(options.omega*q.L)):C(options.dt?options.dt/q.L:1e12);stampG(A,q.a,q.b,g);if(options.dt){const old=history[q.comp.id]||0;stampI(z,q.a,q.b,C(-old))}}
+  else if(q.kind==="diode"){const vd=v(q.a).re-v(q.b).re;const on=vd>=q.vf;const g=on?1/q.rd:q.reverse;const iEq=on?(vd-q.vf)/q.rd-g*vd:0;stampG(A,q.a,q.b,C(g));stampI(z,q.a,q.b,C(iEq))}
+  else if(q.kind==="bjt"){const vd=v(q.a).re-v(q.b).re;const g=vd>q.vt?1/q.beta:1e-9;stampG(A,q.a,q.b,C(g))}
+  else if(q.kind==="mosfet"){const vd=v(q.a).re-v(q.b).re;stampG(A,q.a,q.b,C(vd>q.threshold?1/q.onResistance:1e-9))}
+  else if(q.kind==="vccs"){const j1=q.cp,j2=q.cm;if(q.a>0&&j1>0)A[q.a-1][j1-1]=add(A[q.a-1][j1-1],C(q.gm));if(q.a>0&&j2>0)A[q.a-1][j2-1]=sub(A[q.a-1][j2-1],C(q.gm));if(q.b>0&&j1>0)A[q.b-1][j1-1]=sub(A[q.b-1][j1-1],C(q.gm));if(q.b>0&&j2>0)A[q.b-1][j2-1]=add(A[q.b-1][j2-1],C(q.gm))}
+ }
+ b.voltageSources.forEach((q,k)=>{
+  let vv=C(q.value);
+  if(q.kind==="voltage"&&typeOf(q.comp)==="ac_source"){const ph=q.phase*Math.PI/180;vv=C(q.value*Math.cos(ph),q.value*Math.sin(ph))}
+  if(q.kind==="vcvs")vv=mul(C(q.gain),sub(v(q.cp),v(q.cm)));
+  if(q.kind==="current")stampI(z,q.a,q.b,C(q.value));else stampV(A,z,q.a,q.b,k,vv);
+ });
+ let x;try{x=solve(A,z)}catch(e){return {ok:false,error:e.message}};
+ return {ok:true,x,nodeCount:n,sourceCount:vs};
 }
+function operatingPoint(project,options={}){
+ const b=build(project,options);let xPrev=Array.from({length:b.N},()=>C()),result;
+ for(let it=0;it<12;it++){const previous=xPrev.slice();result=linearSolve(b,{...options,xPrev});if(!result.ok)return {ok:false,analysis:"DC operating point",error:result.error};xPrev=result.x.slice(0,b.N);if(xPrev.every((v,i)=>mag(sub(v,previous[i]||C()))<1e-9))break}
+ const x=result.x, nodeVoltage=n=>n===0?0:(x[n-1]?.re||0), branches=b.branches.map(q=>{const u=nodeVoltage(q.a)-nodeVoltage(q.b);let i=0;if(q.kind==="resistor")i=u/q.R;else if(q.kind==="diode")i=u>=q.vf?(u-q.vf)/q.rd:u*q.reverse;else if(q.kind==="bjt")i=u>q.vt?(u-q.vt)/q.beta/Math.max(q.vt,EPS):u*1e-9;else if(q.kind==="mosfet")i=u>q.threshold?u/q.onResistance:u*1e-9;return {id:q.comp.id,type:q.comp.type,voltage:u,current:i,power:u*i}});
+ const sourceCurrents=b.voltageSources.map((q,k)=>({id:q.comp.id,type:q.comp.type,current:x[b.N+k]?.re||0}));
+ const totalCurrent=sourceCurrents.reduce((s,q)=>s+Math.abs(q.current),0);
+ return {ok:true,analysis:"DC operating point (MNA)",engine:"VoltPRo MNA",sourceVoltage:b.voltageSources[0]?.value||0,totalCurrent,totalPower:branches.reduce((s,q)=>s+q.power,0),nodes:b.N,branches,sourceCurrents,nodeVoltages:Array.from({length:b.N},(_,i)=>({node:i+1,voltage:nodeVoltage(i+1)})),iterations:12};
+}
+function dc(project,options={}){return operatingPoint(project,options)}
+function ac(project,{start=1,stop=1e5,points=50,frequency=50,groundRef}={}){
+ const b=build(project,{groundRef}), freqs=points<=1?[frequency]:Array.from({length:points},(_,i)=>start*Math.pow(stop/start,i/(points-1))),rows=[];
+ for(const f of freqs){const scale=2*Math.PI*f;const result=linearSolve(b,{frequency:f,omega:scale,ac:true,xPrev:Array.from({length:b.N},()=>C())},{}) ;if(!result.ok)return {ok:false,analysis:"AC sweep",error:result.error};const x=result.x;const vs=b.voltageSources[0];const vout=vs?sub(x[(vs.a||1)-1]||C(),x[(vs.b||1)-1]||C()):C();const z=vs&&x[b.N]?div(vout,x[b.N]):C(Infinity,0);rows.push({frequency:f,magnitude:mag(vout),phaseDeg:deg(vout),impedanceMagnitude:mag(z),impedancePhaseDeg:deg(z)})}
+ return {ok:true,analysis:"AC sweep (MNA)",frequency,points:freqs.length,start,stop,sweep:rows};
+}
+function transient(project,{duration=.1,steps=100,groundRef}={}){
+ const b=build(project,{groundRef}),dt=duration/Math.max(1,steps),samples=[],history={};let xPrev=Array.from({length:b.N},()=>C());
+ for(let s=0;s<=steps;s++){const t=s*dt;const r=linearSolve(b,{dt,xPrev},history);if(!r.ok)return {ok:false,analysis:"Transient analysis",error:r.error,time:t};const x=r.x;xPrev=x.slice(0,b.N);samples.push({t,nodeVoltages:xPrev.map((v,i)=>({node:i+1,voltage:v.re})),sourceCurrent:r.x[b.N]?.re||0});for(const q of b.branches)if(q.kind==="inductor")history[q.comp.id]=(xPrev[q.a-1]?.re||0)-(xPrev[q.b-1]?.re||0);}
+ return {ok:true,analysis:"Transient analysis (backward Euler MNA)",duration,steps,dt,samples};
+}
+function power(project,options={}){const r=dc(project,options);if(!r.ok)return r;return {ok:true,analysis:"DC power",totalPower:r.totalPower,branches:r.branches.map(x=>({id:x.id,power:x.power}))}}
 function analyze(project,options={}){
- const a=dc(project,options),out={engine:"VoltPRo Engine v3",dc:a};
- if(options.transient)out.transient=transient(project,options.transient===true?options:options.transient);
+ const out={engine:"VoltPRo MNA",version:4,dc:dc(project,options)};
  if(options.ac)out.ac=ac(project,options.ac===true?options:options.ac);
+ if(options.transient)out.transient=transient(project,options.transient===true?options:options.transient);
+ if(options.power)out.power=power(project,options);
  return out;
 }
-window.VoltProEngine={version:3,analyze,dc,transient,ac,math:{abs,solveLinear}};
+window.VoltProEngine={version:4,analyze,dc,transient,ac,power,math:{mag,solve}};
 })();
