@@ -36,7 +36,6 @@ const defs={
  wirelabel:{cat:"Panel",name:"Wire Label",symbol:"LBL",pins:1,props:{label:"101"}}
 };
 window.S=S; window.defs=defs;
-const cats=[...new Set(Object.values(defs).map(d=>d.cat))];
 const $=q=>document.querySelector(q), $$=q=>[...document.querySelectorAll(q)];
 const svg=$("#canvas"), comps=$("#components"), wires=$("#wires"), labels=$("#labels"), selg=$("#selection"), wrap=$("#canvasWrap");
 function bindExtraControls(){
@@ -55,8 +54,9 @@ function esc(x){return String(x??"").replace(/[&<>"]/g,m=>({"&":"&amp;","<":"&lt
 function log(m){$("#console").textContent+=("\n"+m);$("#console").scrollTop=$("#console").scrollHeight}
 function saveHistory(){S.history.push(JSON.stringify({components:S.components,wires:S.wires}));if(S.history.length>30)S.history.shift();S.future=[]}
 function restore(s){const x=JSON.parse(s);S.components=x.components;S.wires=x.wires;S.selected=null;render()}
-function compDef(t){return defs[t]||defs.resistor}
-function addComponent(type,x,y){saveHistory();const d=compDef(type);const c={id:uid(),type,x:snap(x),y:snap(y),rotation:0,props:JSON.parse(JSON.stringify(d.props)),pins:[]};S.components.push(c);S.selected=c.id;render();log("PLACED "+d.name+" "+c.id)}
+function compDef(t){return defs[t]||window.VoltProRegistry?.definition?.(t)||defs.resistor}
+function paletteEntries(){const base=Object.entries(defs);const reg=(window.VoltProRegistry?.search?.("")||[]).map(r=>[r.id,compDef(r.id)]);const seen=new Set();return [...base,...reg].filter(([k])=>{if(seen.has(k))return false;seen.add(k);return true})}
+function addComponent(type,x,y){saveHistory();const d=compDef(type);const c={id:uid(),type,x:snap(x),y:snap(y),rotation:0,registryId:d.registryId||null,props:JSON.parse(JSON.stringify(d.props||{})),pins:[]};S.components.push(c);S.selected=c.id;render();log("PLACED "+d.name+" "+c.id)}
 function posFromEvent(e){const r=svg.getBoundingClientRect();return{x:(e.clientX-r.left-S.pan.x)/S.zoom,y:(e.clientY-r.top-S.pan.y)/S.zoom}}
 function pinPos(c,i){const d=compDef(c.type), n=d.pins;const spacing=22; if(n===1)return{x:c.x+38,y:c.y};if(n===2)return{x:c.x+(i?55:-55),y:c.y};if(n===3)return{x:c.x-55+i*55,y:c.y+42};return{x:c.x-55+(i%2)*110,y:c.y+(i<2?-34:34)}}
 function symbol(c){const d=compDef(c.type), active=S.running&&["battery","acsource","threephase","lamp","led","motor","heater","buzzer"].includes(c.type);let extra="";
@@ -65,10 +65,10 @@ function symbol(c){const d=compDef(c.type), active=S.running&&["battery","acsour
  else if(c.type==="ground")extra='<path d="M-20 0H20M-13 7H13M-6 14H6" class="symbol"/>';
  else extra='<rect x="-34" y="-21" width="68" height="42" rx="7" class="body"/><text y="4" text-anchor="middle">'+esc(d.symbol)+'</text>';
  return extra}
-function render(){renderPalette();renderCanvas();renderInspector();$("#componentCount").textContent=Object.keys(defs).length;$("#simStatus").textContent=S.running?"RUNNING":"READY";$("#zoomLabel").textContent=Math.round(S.zoom*100)+"%"}
-function renderPalette(){const tabs=$("#catTabs");tabs.innerHTML=["All",...cats].map(x=>'<button class="'+(cat===x?"active":"")+'" data-cat="'+esc(x)+'">'+esc(x)+'</button>').join("");$$("[data-cat]").forEach(b=>b.onclick=()=>{cat=b.dataset.cat;renderPalette()});
- const list=Object.entries(defs).filter(([k,d])=>(cat==="All"||d.cat===cat)&&(d.name+" "+k).toLowerCase().includes(search.toLowerCase()));
- $("#paletteList").innerHTML=list.map(([k,d])=>'<div class="palette-item" draggable="true" data-type="'+k+'"><span class="sym">'+esc(d.symbol)+'</span><span><b>'+esc(d.name)+'</b><small>'+esc(d.cat)+'</small></span></div>').join("");
+function render(){renderPalette();renderCanvas();renderInspector();$("#componentCount").textContent=paletteEntries().length;$("#simStatus").textContent=S.running?"RUNNING":"READY";$("#zoomLabel").textContent=Math.round(S.zoom*100)+"%"}
+function renderPalette(){const entries=paletteEntries();const cats=["All",...new Set(entries.map(([,d])=>d.cat))];const tabs=$("#catTabs");tabs.innerHTML=cats.map(x=>'<button class="'+(cat===x?"active":"")+'" data-cat="'+esc(x)+'">'+esc(x)+'</button>').join("");$$("[data-cat]").forEach(b=>b.onclick=()=>{cat=b.dataset.cat;renderPalette()});
+ const list=entries.filter(([k,d])=>(cat==="All"||d.cat===cat)&&(d.name+" "+k).toLowerCase().includes(search.toLowerCase()));
+ $("#paletteList").innerHTML=list.map(([k,d])=>{const media=window.VoltProMedia?.get?.(d.name)||null;const visual=media?.url?'<img class="palette-thumb" loading="lazy" src="'+esc(media.url)+'" alt="" referrerpolicy="no-referrer">':'<span class="sym">'+esc(d.symbol||"◇")+'</span>';return '<div class="palette-item" draggable="true" data-type="'+k+'">'+visual+'<span><b>'+esc(d.name)+'</b><small>'+esc(d.cat)+(d.registryId?" · catalog":"")+'</small></span></div>'}).join("");
  $$(".palette-item").forEach(el=>{el.ondragstart=e=>{e.dataTransfer.setData("text/plain",el.dataset.type)}});
 }
 function renderCanvas(){comps.innerHTML=S.components.map(c=>{const d=compDef(c.type),pins=Array.from({length:d.pins},(_,i)=>{const p=pinPos(c,i);return '<circle class="pin '+(S.wireStart===c.id+":"+i?"selected":"")+'" data-pin="'+c.id+":"+i+'" cx="'+(p.x-c.x)+'" cy="'+(p.y-c.y)+'" r="4"/>'}).join("");return '<g class="component '+(S.selected===c.id?"selected":"")+'" data-id="'+c.id+'" transform="translate('+c.x+','+c.y+') rotate('+c.rotation+')">'+symbol(c)+'<text y="36" text-anchor="middle">'+esc(d.name)+'</text><text class="value" y="48" text-anchor="middle">'+esc(valueText(c))+'</text>'+pins+'</g>'}).join("");
@@ -81,8 +81,8 @@ function valueText(c){const p=c.props;if(c.type==="contactor")return (p.closed?"
 function getPin(ref){const [id,ix]=ref.split(":");const c=S.components.find(x=>x.id===id);return c?pinPos(c,+ix):null}
 function handlePin(ref){if(!S.wireStart){S.wireStart=ref;renderCanvas();return}if(S.wireStart===ref){S.wireStart=null;renderCanvas();return}saveHistory();S.wires.push({a:S.wireStart,b:ref});log("NET "+S.wires.length+" CONNECTED");S.wireStart=null;renderCanvas()}
 function isClosed(c){return c.type!=="switch"||!!c.props.closed}
-function resistance(c){const p=c.props;if(c.type==="resistor")return Math.max(.001,+p.resistance||1);if(c.type==="lamp"||c.type==="motor"||c.type==="heater"||c.type==="buzzer")return Math.max(.001,+p.resistance||100);if(c.type==="led"||c.type==="diode"||c.type==="zener")return Math.max(1,+p.resistance||330);if(c.type==="switch")return isClosed(c)?.01:Infinity;if(c.type==="fuse"||c.type==="breaker"||c.type==="rcd")return 0.05;if(c.type==="contactor"||c.type==="relay")return Math.max(.01,+p.coilResistance||100);return Infinity}
-function solve(){const src=S.components.find(c=>c.type==="battery"||c.type==="acsource");if(!src)return {voltage:0,current:0,loads:[]};const active=S.components.filter(c=>["resistor","lamp","led","motor","heater","buzzer","diode","zener","switch","fuse","breaker","rcd","relay","contactor"].includes(c.type)&&isClosed(c));const adj=new Map();S.wires.forEach(w=>{const [a]=w.a.split(":"),[b]=w.b.split(":");if(!adj.has(a))adj.set(a,[]);if(!adj.has(b))adj.set(b,[]);adj.get(a).push(b);adj.get(b).push(a)});
+function resistance(c){const p=c.props;if(c.type==="resistor")return Math.max(.001,+p.resistance||1);if(c.type==="lamp"||c.type==="motor"||c.type==="heater"||c.type==="buzzer")return Math.max(.001,+p.resistance||100);if(c.type==="led"||c.type==="diode"||c.type==="zener")return Math.max(1,+p.resistance||330);if(c.type==="switch")return isClosed(c)?.01:Infinity;if(c.type==="fuse"||c.type==="breaker"||c.type==="rcd")return 0.05;if(c.type==="contactor"||c.type==="relay")return Math.max(.01,+p.coilResistance||100);const d=compDef(c.type);if(d.registryId&&typeof d.res==="number")return Math.max(.001,d.res);return Infinity}
+function solve(){const src=S.components.find(c=>c.type==="battery"||c.type==="acsource");if(!src)return {voltage:0,current:0,loads:[]};const active=S.components.filter(c=>{const d=compDef(c.type);return ["resistor","lamp","led","motor","heater","buzzer","diode","zener","switch","fuse","breaker","rcd","relay","contactor"].includes(c.type)||(d.registryId&&typeof d.res==="number");}).filter(isClosed);const adj=new Map();S.wires.forEach(w=>{const [a]=w.a.split(":"),[b]=w.b.split(":");if(!adj.has(a))adj.set(a,[]);if(!adj.has(b))adj.set(b,[]);adj.get(a).push(b);adj.get(b).push(a)});
  const srcPins=S.wires.filter(w=>w.a.startsWith(src.id+":")||w.b.startsWith(src.id+":"));if(srcPins.length<2)return {voltage:+src.props.voltage||0,current:0,loads:[]};
  const nodes=new Map();let n=0;function nodeOf(pin){const [id]=pin.split(":");if(!nodes.has(id))nodes.set(id,n++);return nodes.get(id)}
  S.wires.forEach(w=>{nodeOf(w.a);nodeOf(w.b)});let plus=null,minus=null;for(const w of S.wires){if(w.a.startsWith(src.id+":0"))plus=nodeOf(w.b);if(w.b.startsWith(src.id+":0"))plus=nodeOf(w.a);if(w.a.startsWith(src.id+":1"))minus=nodeOf(w.b);if(w.b.startsWith(src.id+":1"))minus=nodeOf(w.a)}if(plus===null||minus===null)return {voltage:+src.props.voltage||0,current:0,loads:[]};
@@ -123,5 +123,5 @@ $$(".mode").forEach(b=>b.onclick=()=>{$$(".mode").forEach(x=>x.classList.remove(
 $("#themeBtn").onclick=()=>{document.body.classList.toggle("light");localStorage.setItem("voltpro-theme",document.body.classList.contains("light")?"light":"dark")};
 function toast(m){const t=document.createElement("div");t.textContent=m;t.style="position:fixed;right:18px;bottom:45px;background:#12314a;border:1px solid #39647f;color:white;padding:9px 13px;border-radius:8px;z-index:99;font-size:11px";document.body.append(t);setTimeout(()=>t.remove(),1600)}
 window.addEventListener("keydown",e=>{if((e.ctrlKey||e.metaKey)&&e.key==="z"){e.preventDefault();$("#undoBtn").click()}if((e.ctrlKey||e.metaKey)&&e.key==="s"){e.preventDefault();$("#saveBtn").click()}if(e.key==="Delete")$("#deleteBtn").click();});
-window.addEventListener("voltpro-registry-ready",()=>render());if(window.VoltProRegistry?.ready)window.VoltProRegistry.ready.then(()=>render());render();bindExtraControls();log("Component registry: "+Object.keys(defs).length+" active simulation components.");
+window.addEventListener("voltpro-registry-ready",()=>{render();log("Component registry loaded: "+(window.VoltProRegistry?.count||0)+" catalog records.")});if(window.VoltProRegistry?.ready)window.VoltProRegistry.ready.then(()=>render());if(window.VoltProMedia?.ready)window.VoltProMedia.ready.then(()=>renderPalette());render();bindExtraControls();log("Base simulation components: "+Object.keys(defs).length+" · catalog registry loads asynchronously.");
 })();
