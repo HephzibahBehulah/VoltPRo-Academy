@@ -4,7 +4,7 @@
 
 VoltPRo Academy will provide a **free, local-first, no-subscription electrical and electronics simulator**. The application is hosted as a static GitHub Pages site and projects remain in the browser unless the user explicitly exports them.
 
-WireONa is being used as a **functional/product reference**, not as a source of proprietary code or assets. Its public product description confirms the useful target workflow: arrange panel components, connect terminals, simulate electrical behaviour, and work with PLC logic in one workspace. citeturn3search0
+WireONa is being used as a **functional/product reference**, not as a source of proprietary code or assets. Its public product description confirms the useful target workflow: arrange panel components, connect terminals, simulate electrical behaviour, and work with PLC logic in one workspace.
 
 ## What we will reproduce as original VoltPRo functionality
 
@@ -29,7 +29,7 @@ WireONa is being used as a **functional/product reference**, not as a source of 
 
 We will not copy WireONa source code, proprietary SVGs, screenshots, product images, private APIs, database content, account system, or other protected assets without an explicit licence or permission.
 
-WireONa's current Terms require uploaded content to be owned or authorised by the uploader, and the service is commercially operated with Free/Professional/Advanced plans. citeturn1view0
+WireONa's current Terms require uploaded content to be owned or authorised by the uploader, and the service is commercially operated with Free/Professional/Advanced plans.
 
 Therefore, VoltPRo will achieve feature parity by **reimplementing the behaviour and workflow independently**.
 
@@ -39,10 +39,10 @@ Where an existing open-source implementation materially accelerates the simulato
 
 Examples evaluated:
 
-- Repath: MIT-licensed browser mixed-signal simulator with MNA/Newton methods and local execution. citeturn2search2
-- SimcirJS: MIT-licensed browser circuit simulator. citeturn2search5
-- ngspice-wasm: browser WebAssembly build of ngspice, with the upstream mixed licensing obligations documented by the project. citeturn2search6
-- OpenCircuits is free/open source but GPL-3.0, so it is **not automatically suitable for direct code incorporation into VoltPRo's current MIT codebase**. citeturn2search0
+- Repath: MIT-licensed browser mixed-signal simulator with MNA/Newton methods and local execution.
+- SimcirJS: MIT-licensed browser circuit simulator.
+- ngspice-wasm: browser WebAssembly build of ngspice, with the upstream mixed licensing obligations documented by the project.
+- OpenCircuits is free/open source but GPL-3.0, so it is **not automatically suitable for direct code incorporation into VoltPRo's current MIT codebase**.
 
 No dependency is copied into VoltPRo merely because it looks useful. Licence compatibility is checked first.
 
