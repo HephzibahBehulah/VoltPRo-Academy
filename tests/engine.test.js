@@ -13,6 +13,6 @@ test("analysis is deterministic for identical inputs",()=>{const a={components:[
 
 test("AC forwards ground reference",()=>{
  const project={components:[{id:"B1",type:"battery",pins:["B1:1","B1:2"],props:{voltage:12}},{id:"R1",type:"resistor",pins:["R1:1","R1:2"],props:{resistance:1000}}],wires:[{a:"B1:1",b:"R1:1"},{a:"R1:2",b:"B1:2"}]};
- const out=VoltProEngine.analyze(project,{groundRef:"B1:2",ac:{frequency:50,groundRef:"B1:2"}});
+ const out=engine().analyze(project,{groundRef:"B1:2",ac:{frequency:50,groundRef:"B1:2"}});
  assert.equal(out.ac.ok,true);
 });
