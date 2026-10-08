@@ -1,5 +1,5 @@
 /* VoltPRo Engine — browser-native Modified Nodal Analysis (MNA).
- * Original MIT-compatible implementation. It is an MNA engine, not a claim of
+ * Original VoltPRo implementation. It is an MNA engine, not a claim of
  * Ngspice compatibility. Educational use only; verify real designs against
  * applicable standards, manufacturer data and qualified engineering practice.
  */
