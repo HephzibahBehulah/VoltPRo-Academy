@@ -1,0 +1,4 @@
+(()=>{'use strict';
+function face(device){const name=device.ref||device.id||'DEV',type=device.type||'device',ts=device.terminals||[];const labels=ts.map((t,i)=>'<text x="'+(i%2?86:14)+'" y="'+(35+Math.floor(i/2)*18)+'">'+String(t.number||t.label||t.id)+'</text>').join('');return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 150" role="img" aria-label="'+name+' '+type+'"><rect x="5" y="5" width="110" height="140" rx="6" fill="#e8edf2" stroke="#273444" stroke-width="2"/><rect x="12" y="12" width="96" height="18" fill="#d4dce5"/><text x="60" y="25" text-anchor="middle" font-family="sans-serif" font-size="10">'+name+'</text><text x="60" y="65" text-anchor="middle" font-family="sans-serif" font-size="13">'+type+'</text><g font-family="monospace" font-size="8" fill="#17212b">'+labels+'</g></svg>'}
+window.VoltProDeviceFace={face};
+})();
