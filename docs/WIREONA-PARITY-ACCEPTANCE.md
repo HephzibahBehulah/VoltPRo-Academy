@@ -4,30 +4,32 @@ WireONa publicly presents three core workflows: design/wire, explore logic/simul
 
 | Capability | VoltPRo implementation | Gate |
 |---|---|---|
-| Component library | `src/ui/component-library.js` + existing catalogue | PASS |
-| Terminal wiring | terminal graph + net resolver | PASS |
-| Schematic symbols | original SVG symbol layer | PASS |
-| Physical device view | device-face renderer | PASS |
-| Panel/DIN rail | panel designer + footprints | PASS |
-| Orthogonal wiring | wire router + metadata | PASS |
-| Contactors/relays | executable multi-contact models | PASS |
-| Protection | MCB/MCCB/fuse/RCD/RCBO | PASS |
-| Overload | thermal overload model | PASS |
-| Three-phase | phase-domain service | PASS |
-| Motor | educational induction-motor model | PASS |
-| Measurement | multimeter/probe services | PASS |
-| Fault training | fault engine + scenarios | PASS |
-| PLC ladder | editor + scan runtime | PASS |
-| PLC/electrical integration | I/O mapping | PASS |
-| Engineering documentation | BOM/wire/terminal schedules | PASS |
-| Guided training | challenge engine + templates | PASS |
-| Local project persistence | v5 schema + deterministic I/O | PASS |
-| Undo/redo | command history | PASS |
-| Accessibility | keyboard command layer | PASS |
-| Offline/PWA boundary | platform capability contract | PASS |
-| Licensing/provenance | Apache-2.0 + attribution gate | PASS |
+| Component library | `src/ui/component-library.js` + existing catalogue | IMPLEMENTED |
+| Terminal wiring | terminal graph + net resolver | IMPLEMENTED |
+| Schematic symbols | original SVG symbol layer | IMPLEMENTED |
+| Physical device view | device-face renderer | IMPLEMENTED |
+| Panel/DIN rail | panel designer + footprints | IMPLEMENTED |
+| Orthogonal wiring | wire router + metadata | IMPLEMENTED |
+| Contactors/relays | executable multi-contact models | IMPLEMENTED |
+| Protection | MCB/MCCB/fuse/RCD/RCBO | IMPLEMENTED |
+| Overload | thermal overload model | IMPLEMENTED |
+| Three-phase | phase-domain service | IMPLEMENTED |
+| Motor | educational induction-motor model | IMPLEMENTED |
+| Measurement | multimeter/probe services | IMPLEMENTED |
+| Fault training | fault engine + scenarios | IMPLEMENTED |
+| PLC ladder | editor + scan runtime | IMPLEMENTED |
+| PLC/electrical integration | I/O mapping | IMPLEMENTED |
+| Engineering documentation | BOM/wire/terminal schedules | IMPLEMENTED |
+| Guided training | challenge engine + templates | IMPLEMENTED |
+| Local project persistence | v5 schema + deterministic I/O | IMPLEMENTED |
+| Undo/redo | command history | IMPLEMENTED |
+| Accessibility | keyboard command layer | IMPLEMENTED |
+| Offline/PWA boundary | platform capability contract | IMPLEMENTED |
+| Licensing/provenance | Apache-2.0 + attribution gate | IMPLEMENTED |
 
 ## Production gate
+
+Current status: IMPLEMENTED ARCHITECTURE / VALIDATION PENDING. The GitHub connector did not expose a completed Actions run for this branch, so production readiness must not be claimed until the CI and browser smoke tests below are actually executed.
 
 The implementation is production-ready only after:
 1. `npm test` passes on Node 22+.
