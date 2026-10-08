@@ -1,0 +1,3 @@
+const test=require('node:test');const assert=require('node:assert/strict');const fs=require('node:fs');const vm=require('node:vm');
+test('project serialization is deterministic for object key order',()=>{const ctx={window:{}};vm.createContext(ctx);vm.runInContext(fs.readFileSync('src/project/io.js','utf8'),ctx);const i=ctx.window.VoltProProjectIO;assert.equal(i.serialize({b:1,a:2}),i.serialize({a:2,b:1}))});
+test('export envelope round-trips project',()=>{const ctx={window:{}};vm.createContext(ctx);vm.runInContext(fs.readFileSync('src/project/io.js','utf8'),ctx);const i=ctx.window.VoltProProjectIO,p={format:'voltpro',version:5,devices:[]};assert.deepEqual(i.parse(JSON.stringify(i.envelope(p))),p)})
