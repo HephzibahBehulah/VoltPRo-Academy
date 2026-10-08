@@ -11,7 +11,7 @@ function dol(){return {format:'voltpro',version:5,metadata:{name:'DOL Motor Star
 {id:'W001',from:'QF1:1',to:'KM1:L1',domain:'three-phase',phase:'L1'},{id:'W002',from:'QF1:2',to:'KM1:L2',domain:'three-phase',phase:'L2'},{id:'W003',from:'QF1:3',to:'KM1:L3',domain:'three-phase',phase:'L3'},
 {id:'W004',from:'KM1:T1',to:'OL1:1',domain:'three-phase',phase:'L1'},{id:'W005',from:'KM1:T2',to:'OL1:2',domain:'three-phase',phase:'L2'},{id:'W006',from:'KM1:T3',to:'OL1:3',domain:'three-phase',phase:'L3'},
 {id:'W007',from:'OL1:4',to:'M1:U1',domain:'three-phase',phase:'L1'},{id:'W008',from:'OL1:5',to:'M1:V1',domain:'three-phase',phase:'L2'},{id:'W009',from:'OL1:6',to:'M1:W1',domain:'three-phase',phase:'L3'},
-{id:'W010',from:'S0:11',to:'S1:21',domain:'control'},{id:'W011',from:'S1:22',to:'S2:13',domain:'control'},{id:'W012',from:'S2:14',to:'KM1:A1',domain:'control'},{id:'W013',from:'KM1:A2',to:'OL1:96',domain:'control'},{id:'W014',from:'OL1:95',to:'S0:12',domain:'control'},{id:'W015',from:'KM1:13',to:'S2:13',domain:'control'}
+{id:'W010',from:'S0:11',to:'S1:21',domain:'control'},{id:'W011',from:'S1:22',to:'S2:13',domain:'control'},{id:'W012',from:'S2:14',to:'KM1:A1',domain:'control'},{id:'W013',from:'KM1:A2',to:'OL1:96',domain:'control'},{id:'W014',from:'OL1:95',to:'S0:12',domain:'control'},{id:'W015',from:'KM1:13',to:'S2:13',domain:'control'},{id:'W016',from:'KM1:14',to:'S2:14',domain:'control'}
 ],nets:[],panel:{rails:[{id:'R1',length:72,y:80}],items:[],width:900,height:600},simulation:{mode:'three-phase',running:false,time:0},plc:null};}
 window.VoltProTemplates={dol};
 })();
