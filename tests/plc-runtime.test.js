@@ -1,0 +1,2 @@
+const test=require('node:test');const assert=require('node:assert/strict');const fs=require('node:fs');const vm=require('node:vm');
+test('PLC scan propagates NO contact to coil',()=>{const ctx={window:{}};vm.createContext(ctx);vm.runInContext(fs.readFileSync('src/plc/runtime.js','utf8'),ctx);const r=ctx.window.VoltProPLCRuntime.scan({rungs:[{nodes:[{type:'contact-no',tag:'START'},{type:'coil',tag:'KM1'}]}]},{io:{START:1}});assert.equal(r.io.KM1,true)});
