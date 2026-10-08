@@ -1,8 +1,24 @@
 (()=>{"use strict";
-const CURRENT=4;
-function normalize(p={}){return {format:"voltpro",version:CURRENT,metadata:{name:"Untitled Circuit",author:"",created:new Date().toISOString(),updated:new Date().toISOString(),standards:["IEC 60617","IEC 81346","IEC 60417"]},settings:{grid:20,units:"SI",symbolStandard:"IEC",theme:"dark"},components:Array.isArray(p.components)?p.components:[],wires:Array.isArray(p.wires)?p.wires:[],panel:p.panel||{rails:[],items:[],width:600,height:400},firmware:p.firmware||{target:null,language:"arduino-cpp",code:""},faults:p.faults||[],history:[]}}
+const CURRENT=5;
+function legacyTerminals(d){
+ if(Array.isArray(d.terminals)&&d.terminals.length)return d.terminals.map((t,i)=>({id:t.id||String(i),label:t.label||t.id||String(i),type:t.type||"electrical",number:t.number??null,domain:t.domain||"dc"}));
+ if(Array.isArray(d.pins)&&d.pins.length)return d.pins.map((p,i)=>{const id=typeof p==="string"?String(p).split(":").pop():p.id||String(i);return {id,label:typeof p==="string"?id:(p.label||id),type:typeof p==="string"?"electrical":(p.type||"electrical"),number:typeof p==="string"?null:(p.number??null),domain:typeof p==="string"?"dc":(p.domain||"dc")};});
+ return [{id:"0",label:"1",type:"electrical",number:"1",domain:"dc"},{id:"1",label:"2",type:"electrical",number:"2",domain:"dc"}];
+}
+function migrateDevice(d,index){
+ const id=d.id||"D"+String(index+1).padStart(3,"0");
+ return {id,type:d.type||d.model||"unknown",version:d.version||"1.0.0",ref:d.ref||id,position:{x:Number(d.position?.x||0),y:Number(d.position?.y||0)},rotation:Number(d.rotation||0),terminals:legacyTerminals(d),parameters:structuredClone(d.parameters||d.props||{}),state:structuredClone(d.state||{}),model:d.model||d.simulation?.model||null};
+}
+function normalize(raw={}){
+ const now=new Date().toISOString();
+ const devices=(raw.devices||raw.components||[]).map(migrateDevice);
+ return {format:"voltpro",version:CURRENT,metadata:{name:"Untitled Circuit",author:"",created:now,updated:now,standards:["IEC 60617","IEC 81346","IEC 60417"],...(raw.metadata||{})},settings:{grid:20,units:"SI",symbolStandard:"IEC",theme:"dark",...(raw.settings||{})},workspace:raw.workspace||"schematic",devices,wires:(raw.wires||[]).map((w,i)=>({id:w.id||"W"+String(i+1).padStart(3,"0"),from:w.from||w.a,to:w.to||w.b,segments:Array.isArray(w.segments)?structuredClone(w.segments):[],number:w.number??null,crossSection:w.crossSection??null,colour:w.colour??null,material:w.material??null,domain:w.domain||"dc",phase:w.phase??null})),nets:Array.isArray(raw.nets)?structuredClone(raw.nets):[],panel:raw.panel||{rails:[],items:[],width:600,height:400},simulation:raw.simulation||{mode:"dc",running:false,time:0},plc:raw.plc||null,firmware:raw.firmware||{target:null,language:"arduino-cpp",code:""},faults:raw.faults||[],history:[]};
+}
 function encode(p){return JSON.stringify(normalize(p),null,2)}
 function decode(s){const p=typeof s==="string"?JSON.parse(s):s;if(!p||typeof p!=="object")throw Error("Invalid .voltpro project");return normalize(p)}
-function migrate(p){const raw=typeof p==="string"?JSON.parse(p):p;const old=raw?.version??CURRENT;const x=decode(p);if(old<CURRENT){x.metadata=x.metadata||{};x.metadata.migratedFrom=old}return x}
+function migrate(p){
+ const raw=typeof p==="string"?JSON.parse(p):p;if(!raw||typeof raw!=="object")throw Error("Invalid .voltpro project");
+ const old=Number(raw.version||1),x=normalize(raw);if(old<CURRENT){x.metadata.migratedFrom=old;x.metadata.migratedAt=new Date().toISOString()}return x;
+}
 window.VoltProProject={CURRENT,normalize,encode,decode,migrate};
 })();
