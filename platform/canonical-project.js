@@ -12,7 +12,7 @@
   const object = value => value !== null && typeof value === "object" && !Array.isArray(value);
   const nonempty = value => typeof value === "string" && value.trim().length > 0;
   const stableId = (value, label) => {
-    if (!nonempty(value) || !/^[A-Za-z][A-Za-z0-9_.-]{0,63}$/.test(value)) throw new Error(label + " must match [A-Za-z][A-Za-z0-9_.-]{0,63}");
+    if (!nonempty(value) || !/^[A-Za-z][A-Za-z0-9_.-]{0,63}$/.test(value)) throw new Error(label + " must be a stable id matching [A-Za-z][A-Za-z0-9_.-]{0,63}");
     return value;
   };
   const terminalKey = (deviceId, localId) => stableId(deviceId, "device id") + ":" + (nonempty(localId) && /^[A-Za-z0-9][A-Za-z0-9_.-]{0,63}$/.test(localId) ? localId : (() => { throw new Error("terminal id must be a stable local identifier"); })());
