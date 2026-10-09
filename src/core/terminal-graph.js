@@ -74,8 +74,12 @@
     return def ? clone(def) : null;
   }
   function localTerminalDefinitions(device) {
-    const explicit = Array.isArray(device.terminals) && device.terminals.length ? device.terminals : null;
     const definition = definitionFor(device.type);
+    const supplied = Array.isArray(device.terminals) && device.terminals.length ? device.terminals : null;
+    const suppliedIds = supplied?.map(t => String(t.id ?? t.terminalId ?? "")) || [];
+    const genericFallback = suppliedIds.length === 2 && suppliedIds[0] === "1" && suppliedIds[1] === "2" &&
+      definition && (definition.terminals.length !== 2 || definition.terminals.some((t,i) => t.id !== suppliedIds[i]));
+    const explicit = genericFallback ? null : supplied;
     const base = explicit || definition?.terminals;
     if (!base) throw new Error("No explicit terminal definition for device type '" + device.type + "'");
     return base.map((t,i) => {
@@ -120,6 +124,7 @@
       this.errors = [];
       this.rebuild();
     }
+    get valid() { return this.errors.length === 0; }
     rebuild() {
       this.terminals.clear(); this.devicesById.clear(); this.errors = [];
       const devices = this.project.devices || this.project.components || [];
