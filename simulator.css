@@ -81,3 +81,6 @@ html,body{width:100%;max-width:100%;overflow:hidden}
   .zoom{right:7px;bottom:7px}
   .canvas-help{left:7px;bottom:7px;font-size:8px}
 }
+
+/* Wiring workflow states; preserves the existing workspace and palette. */
+.toolbar button.active{color:var(--text);border-color:var(--amber);background:#2b261b}.pin.selected{fill:var(--amber);stroke:#fff;stroke-width:2.4;filter:url(#glow)}.wire.selected{stroke:var(--amber);stroke-width:4;filter:url(#glow)}.wire-preview{stroke:var(--amber);stroke-width:2.5;stroke-dasharray:7 5;fill:none;pointer-events:none;opacity:.9}.wire-junction{fill:var(--cyan);stroke:#07111f;stroke-width:1.5;pointer-events:none}
