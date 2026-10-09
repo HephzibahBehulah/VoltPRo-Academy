@@ -64,6 +64,10 @@ test("contactor has independently addressable coil, main and auxiliary paths", (
   assert.deepEqual(paths.map(x=>x.id),["coil","main-1","main-2","main-3","aux-no-13-14","aux-nc-21-22"]);
   assert.notEqual(paths.find(x=>x.id==="main-1").from,paths.find(x=>x.id==="main-2").from);
   assert.equal(paths.find(x=>x.id==="coil").kind,"coil");
+  const legacyGeneric=project([P.createDevice({id:"KM2",type:"contactor"})]);
+  const modelEngine=T.build(legacyGeneric);
+  assert.equal(modelEngine.terminalsForDevice("KM2").length,12);
+  assert.ok(modelEngine.resolveTerminal("KM2:A1"));
 });
 
 test("connected wires, connected nets, compatibility and dangling terminals work", () => {
@@ -75,6 +79,16 @@ test("connected wires, connected nets, compatibility and dangling terminals work
   assert.ok(engine.danglingTerminals().includes("R1:1"));
   assert.equal(engine.validateConnection("R1:2","R2:1",{domain:"dc"}).valid,true);
   assert.equal(engine.validateConnection("R1:2","R2:1",{domain:"ac"}).valid,false);
+});
+
+test("canonical object endpoints resolve to the same stable terminal identity", () => {
+  const p=project([device("R1","resistor"),device("R2","resistor")],[
+    {id:"W1",from:{deviceId:"R1",terminalId:"2"},to:{deviceId:"R2",terminalId:"1"},domain:"dc"}
+  ]);
+  const engine=T.build(p);
+  assert.equal(engine.findConnectedWires("R1:2").length,1);
+  assert.deepEqual(engine.findConnectedNets("R1:2"),["R1:2","R2:1"]);
+  assert.equal(engine.validateTopology().valid,true);
 });
 
 test("invalid wire references and duplicate wire ids fail topology validation", () => {
