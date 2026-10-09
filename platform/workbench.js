@@ -31,7 +31,7 @@ function reference(){
 }
 function panel(){
  const comps=(window.S?.components||[]), list=comps.map((c,i)=>{const d=window.defs?.[c.type]||window.VoltProRegistry?.definition?.(c.type)||{};return '<div class="vpw-device" style="left:'+(25+i*88)+'px">'+esc(d.symbol||c.type)+'<small>'+esc(d.name||c.type)+'</small></div>'}).join("");
- open("PANEL DESIGNER · DIN RAIL WORKSPACE",'<main class="vpw-main"><div class="vpw-panel"><div class="vpw-rail">'+list+'<div class="vpw-rail-line"></div></div><aside class="vpw-sidebox"><h4>Panel workflow</h4><p>Place protection, contactors, relays, terminals and loads on the rail.</p><p>Use the main canvas for electrical connectivity. This view is the panel layout companion.</p><p><b>Current devices:</b> '+comps.length+'</p><p><b>Rail:</b> TS 35 / DIN · 18 modules</p></aside></div></main>')
+ open("PANEL DESIGNER · DIN RAIL WORKSPACE",'<main class="vpw-main" style="grid-column:1 / -1;min-width:0"><div class="vpw-panel"><div class="vpw-rail">'+list+'<div class="vpw-rail-line"></div></div><aside class="vpw-sidebox"><h4>Panel workflow</h4><p>Place protection, contactors, relays, terminals and loads on the rail.</p><p>Use the main canvas for electrical connectivity. This view is the panel layout companion.</p><p><b>Current devices:</b> '+comps.length+'</p><p><b>Rail:</b> TS 35 / DIN · 18 modules</p></aside></div></main>')
 }
 function plc(){
  const io={i0:false,i1:false,i2:false,q0:false,q1:false};
