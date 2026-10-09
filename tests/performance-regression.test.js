@@ -101,3 +101,9 @@ test("PLC input switches calculate output state instead of only appending toggle
   assert.ok(source.includes('io.q1=io.q0'));
   assert.ok(source.includes('else if(b.dataset.mode==="plc")plc()'));
 });
+
+
+test("component terminal hit targets render above wire strokes", () => {
+  const html = fs.readFileSync(path.join(root, "simulator.html"), "utf8");
+  assert.ok(html.includes('<g id="wires"></g><g id="components"></g>'));
+});
