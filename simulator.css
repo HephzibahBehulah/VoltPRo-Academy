@@ -104,3 +104,16 @@ html,body{width:100%;max-width:100%;overflow:hidden}
 @media(min-width:901px) and (max-width:1100px){.mode-tabs{display:flex!important;gap:4px;flex-shrink:0}.brand{min-width:145px}.top-actions{gap:4px}}
 @media(max-width:900px){#vpWorkbench .vpw-body{grid-template-columns:minmax(0,1fr)}#vpWorkbench .vpw-side{max-height:32vh;border-right:0;border-bottom:1px solid #29475f}#vpWorkbench .vpw-main{min-height:0}#vpWorkbench .vpw-panel,#vpWorkbench .vpw-plc{grid-template-columns:minmax(0,1fr)}}
 @media(max-width:900px){.mode-tabs{display:flex!important;gap:4px}.sim-top{overflow-x:auto}}@media(max-width:760px){.mode-tabs{display:flex;gap:4px}.sim-top{overflow-x:auto}.top-actions{flex-shrink:0}}
+
+@media(min-width:801px){.workspace.palette-hidden{grid-template-columns:minmax(0,1fr) 290px}.workspace.palette-hidden .palette{display:none}}
+body.simulator-page.light{--bg:#f2f6fb;--panel:#fff;--panel2:#eaf0f7;--line:#cbd7e5;--text:#15273a;--muted:#4e647a;background:#f2f6fb;color:#15273a}
+body.simulator-page.light .sim-top,body.simulator-page.light .toolbar,body.simulator-page.light .palette,body.simulator-page.light .inspector,body.simulator-page.light .sim-footer{background:#f8fbff!important;color:#15273a!important;border-color:#cbd7e5!important}
+body.simulator-page.light .mode,body.simulator-page.light .top-actions button,body.simulator-page.light .top-actions a,body.simulator-page.light .toolbar button,body.simulator-page.light .cat-tabs button,body.simulator-page.light .instrument-grid button{background:#eaf1f8!important;color:#233b52!important;border-color:#c1d0df!important}
+body.simulator-page.light .mode.active,body.simulator-page.light .mode:hover,body.simulator-page.light .top-actions button:hover,body.simulator-page.light .top-actions a:hover{background:#dcecff!important;color:#10263a!important;border-color:#4b91c9!important}
+body.simulator-page.light .canvas-wrap{background:#f8fbff!important;background-image:radial-gradient(#d4e1ed .8px,transparent .8px)!important;background-size:20px 20px!important}
+body.simulator-page.light .component text{fill:#15273a!important}
+body.simulator-page.light .component .symbol,body.simulator-page.light .component .lead{stroke:#087ea4!important}
+body.simulator-page.light .component .symbol-label{fill:#087ea4!important}
+body.simulator-page.light .pin{fill:#087ea4!important;stroke:#f8fbff!important}
+body.simulator-page.light .prop input,body.simulator-page.light .prop select,body.simulator-page.light #componentSearch,body.simulator-page.light .toolbar input{background:#fff!important;color:#15273a!important;border-color:#c1d0df!important}
+body.simulator-page.light .console,body.simulator-page.light .calc-panel,body.simulator-page.light .meter{background:#fff!important;color:#17543b!important;border-color:#c1d0df!important}
