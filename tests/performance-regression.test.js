@@ -113,7 +113,7 @@ test("every rendered component, terminal, and wire receives interaction handlers
   const source = fs.readFileSync(path.join(root, "simulator.js"), "utf8");
   assert.ok(source.includes('$$("[data-id]").forEach(g=>{'), "all components must be selectable and draggable");
   assert.ok(source.includes('$$(".pin").forEach(p=>p.onpointerdown='), "all terminals must be clickable for wiring and selection");
-  assert.ok(source.includes('$("[data-wire]").forEach(el=>{') && source.includes("el.onclick=e=>"), "all wires must be selectable");
+  assert.ok(source.includes('$$("[data-wire]").forEach(el=>{') && source.includes("el.onclick=e=>"), "all wires must be selectable");
 });
 
 
