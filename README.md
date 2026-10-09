@@ -457,6 +457,7 @@ Important project documentation includes:
 - `docs/SYMBOL_GUIDE.md`
 - `docs/PLATFORM-INTEGRATION.md`
 - `docs/PHASE-1-STABILISATION-REPORT.md`
+- `docs/DEMO-PROJECT-LIBRARY.md` — 100 guided educational demo variants
 
 ## Quick start
 
