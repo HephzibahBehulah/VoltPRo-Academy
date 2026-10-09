@@ -42,7 +42,7 @@ const wiring=window.VoltProWiring?new window.VoltProWiring.Controller({
  getWires:()=>S.wires,nextId:()=>"W"+uid(),
  onState:s=>{S.wiringMode=s.active;S.wireStart=s.start;S.wirePointer=s.pointer;if(svg)svg.style.cursor=s.active?"crosshair":"default";const b=$("#wireBtn");if(b)b.classList.toggle("active",s.active);renderCanvas()},
  onStart:(ref,pos)=>{S.selected=ref.split(":")[0];S.wirePointer=pos||null;log("WIRE START "+ref+" · select a destination terminal or press Escape");renderCanvas()},
- onPreview:(start,p)=>{S.wirePointer=p;renderWires()},
+ onPreview:(start,p)=>{S.wirePointer=p;if(!wirePreviewFrame)wirePreviewFrame=requestAnimationFrame(()=>{wirePreviewFrame=0;renderWires()})},
  onCommit:w=>{saveHistory();S.wires.push(window.VoltProWiring.normalizeWire(w,S.wires.length));render();log("WIRE "+w.id+" CONNECTED "+w.a+" → "+w.b)},
  onError:(message,detail)=>{log("WIRE ERROR ["+detail.code+"]: "+message);toast("Wire not created: "+message)},
  onCancel:()=>{S.wirePointer=null;S.wireStart=null;log("Wiring cancelled.")},
@@ -56,10 +56,10 @@ function bindExtraControls(){
  const dl=document.querySelector("#demoLogicBtn"); if(dl) dl.onclick=demoLogic;
  const pb=document.querySelector("#paletteBtn"); if(pb) pb.onclick=()=>{const p=document.querySelector("#palette");p.classList.toggle("collapsed");};
  const gs=document.querySelector("#gridSize"); if(gs) gs.onchange=()=>{S.grid=Math.max(5,Math.min(80,+gs.value||20));render()};
- const svgEl=document.querySelector("#canvas"); if(svgEl) svgEl.addEventListener("mousedown",e=>{if(e.button!==1)return;const start={x:e.clientX,y:e.clientY},orig={...S.pan};const move=q=>{S.pan={x:orig.x+q.clientX-start.x,y:orig.y+q.clientY-start.y};renderCanvas()};const up=()=>{window.removeEventListener("mousemove",move);window.removeEventListener("mouseup",up)};window.addEventListener("mousemove",move);window.addEventListener("mouseup",up)});
+ const svgEl=document.querySelector("#canvas"); if(svgEl) svgEl.addEventListener("mousedown",e=>{if(e.button!==1)return;const start={x:e.clientX,y:e.clientY},orig={...S.pan};const move=q=>{S.pan={x:orig.x+q.clientX-start.x,y:orig.y+q.clientY-start.y};if(!panFrame)panFrame=requestAnimationFrame(()=>{panFrame=0;applyViewport()})};const up=()=>{window.removeEventListener("mousemove",move);window.removeEventListener("mouseup",up)};window.addEventListener("mousemove",move);window.addEventListener("mouseup",up)});
 }
 
-let search="",cat="All",dragging=null,panStart=null,dragFrame=0,paletteRenderKey="";
+let search="",cat="All",dragging=null,panStart=null,dragFrame=0,panFrame=0,wirePreviewFrame=0,paletteRenderKey="";
 function uid(){return "c"+Math.random().toString(36).slice(2,9)}
 function snap(v){return Math.round(v/S.grid)*S.grid}
 function esc(x){return String(x??"").replace(/[&<>"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]))}
@@ -95,7 +95,7 @@ function symbol(c){
  if(c.type==="multimeter"||c.type==="oscilloscope") return line(-55,0,-25,0)+circle(25)+text(c.type==="multimeter"?"V/A":"OSC")+line(25,0,55,0);
  return line(-55,0,-34,0)+'<rect class="body" x="-34" y="-21" width="68" height="42" rx="7"/>'+text(d.symbol)+line(34,0,55,0);
 }
-function render(){const key=[cat,search,window.VoltProRegistry?.count||0].join("|");if(key!==paletteRenderKey)renderPalette();renderCanvas();renderInspector();$("#componentCount").textContent=paletteEntries().length;$("#simStatus").textContent=S.running?"RUNNING":"READY";$("#zoomLabel").textContent=Math.round(S.zoom*100)+"%"}
+function render(){const key=[cat,search,window.VoltProRegistry?.count||0].join("|");if(key!==paletteRenderKey)renderPalette();renderCanvas();renderInspector();$("#componentCount").textContent=window.VoltProRegistry?.count||Object.keys(defs).length;$("#simStatus").textContent=S.running?"RUNNING":"READY";$("#zoomLabel").textContent=Math.round(S.zoom*100)+"%"}
 function renderPalette(){const entries=paletteEntries();paletteRenderKey=[cat,search,window.VoltProRegistry?.count||0].join("|");const cats=["All",...new Set(entries.map(([,d])=>d.cat))];const tabs=$("#catTabs");tabs.innerHTML=cats.map(x=>'<button class="'+(cat===x?"active":"")+'" data-cat="'+esc(x)+'">'+esc(x)+'</button>').join("");$$("[data-cat]").forEach(b=>b.onclick=()=>{cat=b.dataset.cat;renderPalette()});
  const list=entries.filter(([k,d])=>(cat==="All"||d.cat===cat)&&(d.name+" "+k).toLowerCase().includes(search.toLowerCase()));
  $("#paletteList").innerHTML=list.map(([k,d])=>{const media=window.VoltProMedia?.get?.(d.name)||null;const visual=media?.url?'<img class="palette-thumb" loading="lazy" src="'+esc(media.url)+'" alt="" referrerpolicy="no-referrer">':'<span class="sym">'+esc(d.symbol||"◇")+'</span>';return '<div class="palette-item" draggable="true" data-type="'+k+'">'+visual+'<span><b>'+esc(d.name)+'</b><small>'+esc(d.cat)+(d.registryId?" · catalog":"")+'</small></span></div>'}).join("");
