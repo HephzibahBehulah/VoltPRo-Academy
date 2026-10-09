@@ -75,16 +75,18 @@
   }
   function localTerminalDefinitions(device) {
     const explicit = Array.isArray(device.terminals) && device.terminals.length ? device.terminals : null;
-    const base = explicit || definitionFor(device.type)?.terminals;
+    const definition = definitionFor(device.type);
+    const base = explicit || definition?.terminals;
     if (!base) throw new Error("No explicit terminal definition for device type '" + device.type + "'");
     return base.map((t,i) => {
       const id = String(t.id ?? t.terminalId ?? i);
-      const pos = t.position || t.localPosition || {};
-      return { id, label:String(t.label ?? t.name ?? id), number:t.number == null ? null : String(t.number),
-        type:t.type || "electrical", domain:t.domain || "dc",
+      const template = definition?.terminals?.find(item => String(item.id) === id) || {};
+      const pos = t.position || t.localPosition || template.position || {};
+      return { id, label:String(t.label ?? t.name ?? template.label ?? id), number:t.number == null ? (template.number ?? null) : String(t.number),
+        type:t.type || template.type || "electrical", domain:t.domain || template.domain || "dc",
         position:{x:Number(pos.x ?? t.x ?? 0),y:Number(pos.y ?? t.y ?? 0)},
-        direction:t.direction || t.connectionDirection || "passive", phase:t.phase ?? null, polarity:t.polarity ?? null,
-        electrical:clone(t.electrical || {}), metadata:clone(t.metadata || {}) };
+        direction:t.direction || t.connectionDirection || template.direction || "passive", phase:t.phase ?? template.phase ?? null, polarity:t.polarity ?? template.polarity ?? null,
+        electrical:clone(t.electrical || template.electrical || {}), metadata:clone(t.metadata || template.metadata || {}) };
     });
   }
   function terminalPosition(device, t) {
@@ -192,7 +194,8 @@
       if(!object(device)||!validId(device.id))throw new Error("Device requires a valid stable id");
       if(this.devicesById.has(device.id))throw new Error("Duplicate device id: "+device.id);
       const normalized=clone(device);
-      if(!Array.isArray(normalized.terminals)||!normalized.terminals.length) normalized.terminals=localTerminalDefinitions({id:normalized.id,type:normalized.type}).map(t=>({...t,localPosition:clone(t.position)}));
+      const specs=localTerminalDefinitions(normalized);
+      normalized.terminals=specs.map(t=>({...t,localPosition:clone(t.position)}));
       this.project.devices ||= []; this.project.devices.push(normalized); this.rebuild();
       if(this.errors.some(e=>e.deviceId===normalized.id)) { this.project.devices.pop();this.rebuild();throw new Error("Device terminal registration failed: "+JSON.stringify(this.errors)); }
       return normalized;
@@ -205,8 +208,8 @@
       if(policy==="keep"&&dependent.length)throw new Error("Cannot delete device while retaining dependent wires");
       const ids=new Set(dependent);
       this.project.wires=(this.project.wires||[]).filter(w=>!ids.has(w));
-      this.project.devices=(this.project.devices||this.project.components||[]).filter(d=>d.id!==deviceId);
-      if(Array.isArray(this.project.components)&&!Array.isArray(this.project.devices))this.project.components=this.project.components.filter(d=>d.id!==deviceId);
+      if (Array.isArray(this.project.devices)) this.project.devices=this.project.devices.filter(d=>d.id!==deviceId);
+      else if (Array.isArray(this.project.components)) this.project.components=this.project.components.filter(d=>d.id!==deviceId);
       this.rebuild();
       return {deleted:true,removedWires:dependent.map(w=>w.id),blockedWires:[]};
     }
