@@ -88,3 +88,19 @@ html,body{width:100%;max-width:100%;overflow:hidden}
 
 /* Wiring workflow states; preserves the existing workspace and palette. */
 .toolbar button.active{color:var(--text);border-color:var(--amber);background:#2b261b}.pin.selected{fill:var(--amber);stroke:#fff;stroke-width:2.4;filter:url(#glow)}.wire.selected{stroke:var(--amber);stroke-width:4;filter:url(#glow)}.wire-preview{stroke:var(--amber);stroke-width:2.5;stroke-dasharray:7 5;fill:none;pointer-events:none;opacity:.9}.wire-junction{fill:var(--cyan);stroke:#07111f;stroke-width:1.5;pointer-events:none}
+
+/* Readability and responsive overflow safeguards for integrated workspaces. */
+#vpWorkbench,#vpDemoLibrary,#vpPlatformPanel{box-sizing:border-box;max-width:calc(100vw - 12px);max-height:calc(100dvh - 80px)}
+#vpWorkbench *,#vpDemoLibrary *,#vpPlatformPanel *{box-sizing:border-box}
+#vpWorkbench .vpw-body{min-width:0;min-height:0;overflow:hidden}
+#vpWorkbench .vpw-main,#vpWorkbench .vpw-side{min-width:0;overflow:auto;overflow-wrap:anywhere}
+#vpWorkbench .vpw-ladder{white-space:pre-wrap;overflow-wrap:anywhere;word-break:normal;max-width:100%;font-size:clamp(10px,1vw,13px);line-height:1.8}
+#vpWorkbench pre,#vpPlatformPanel pre{white-space:pre-wrap;overflow-wrap:anywhere;word-break:break-word;max-width:100%}
+#vpWorkbench input,#vpWorkbench select,#vpWorkbench textarea,#vpPlatformPanel input,#vpPlatformPanel select,#vpPlatformPanel textarea{max-width:100%;min-width:0}
+#vpWorkbench .vpw-panel,#vpWorkbench .vpw-plc{min-width:0;min-height:0}
+#vpWorkbench .vpw-panel>*,#vpWorkbench .vpw-plc>*{min-width:0}
+#vpWorkbench .vpw-card,#vpWorkbench .vpw-logic-card{overflow-wrap:anywhere}
+#vpWorkbench button,#vpDemoLibrary button,#vpPlatformPanel button{line-height:1.35;white-space:normal}
+@media(min-width:901px) and (max-width:1100px){.mode-tabs{display:flex!important;gap:4px;flex-shrink:0}.brand{min-width:145px}.top-actions{gap:4px}}
+@media(max-width:900px){#vpWorkbench .vpw-body{grid-template-columns:minmax(0,1fr)}#vpWorkbench .vpw-side{max-height:32vh;border-right:0;border-bottom:1px solid #29475f}#vpWorkbench .vpw-main{min-height:0}#vpWorkbench .vpw-panel,#vpWorkbench .vpw-plc{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:760px){.mode-tabs{display:flex;gap:4px}.sim-top{overflow-x:auto}.top-actions{flex-shrink:0}}
