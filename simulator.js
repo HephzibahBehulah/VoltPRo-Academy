@@ -120,7 +120,7 @@ function renderWires(){
  }).join("");
  if(S.wiringMode&&S.wireStart&&S.wirePointer){const a=getPin(S.wireStart);if(a){const route=window.VoltProWiring.routeOrthogonal(a,S.wirePointer,{grid:S.grid});wires.insertAdjacentHTML("beforeend",'<path class="wire-preview" d="'+route.points.map((p,j)=>(j?"L":"M")+p.x+" "+p.y).join(" ")+'"/>')}}
  $$(".wire-bend-handle").forEach(el=>el.onpointerdown=e=>{e.stopPropagation();e.preventDefault();const parts=el.dataset.wireBend.split(":");wireBending={id:parts[0],index:Number(parts[1])};saveHistory()});
- $("[data-wire]").forEach(el=>{
+ $$("[data-wire]").forEach(el=>{
   el.onclick=e=>{e.stopPropagation();const id=el.dataset.wire;if(wiring)wiring.selectWire(id);else{S.selectedWireId=id;S.selected=null;renderCanvas();renderInspector()}log("WIRE "+id+" selected")};
   el.ondblclick=e=>{e.stopPropagation();const wire=S.wires.find(x=>x.id===el.dataset.wire);if(!wire)return;saveHistory();const p=posFromEvent(e),point={x:snap(p.x),y:snap(p.y)};if(e.shiftKey){const existing=S.wires.filter(x=>x!==wire).flatMap(x=>x.junctions||[]).find(j=>Math.abs(Number(j.x)-point.x)<=1&&Math.abs(Number(j.y)-point.y)<=1);const junctionId=existing?.id||"J"+uid();wire.junctions=wire.junctions||[];wire.junctions.push({id:junctionId,x:point.x,y:point.y});wire.bends=wire.bends||[];wire.bends.push(point);render();log("EXPLICIT JUNCTION "+junctionId+" added. Shift-double-click another wire at this point to join it electrically")}else{wire.bends=wire.bends||[];wire.bends.push(point);S.selectedWireId=wire.id;S.selected=null;render();log("WIRE "+wire.id+" bend added. Select it and edit its properties in the inspector.")}};
  });
