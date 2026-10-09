@@ -133,7 +133,7 @@ test("clicking a terminal starts wiring automatically and the next terminal comp
 
 test("component selection keeps the canvas element stable during pointer-down", () => {
   const source = fs.readFileSync(path.join(root, "simulator.js"), "utf8");
-  const start = source.indexOf('$$("[data-id]").forEach(g=>{g.onmousedown=');
+  const start = source.indexOf('$$("[data-id]").forEach(g=>{g.onclick=');
   const end = source.indexOf('$$(".pin").forEach', start);
   const handler = source.slice(start, end);
   assert.ok(start >= 0 && end > start);
