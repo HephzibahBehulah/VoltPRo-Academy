@@ -6,29 +6,33 @@ const root = path.resolve(__dirname, "..");
 
 test("simulator drag updates are frame-throttled and do not rebuild component DOM", () => {
   const source = fs.readFileSync(path.join(root, "simulator.js"), "utf8");
-  const handler = source.match(/svg\\.addEventListener\\("mousemove",[\\s\\S]*?\\);\\nwindow\\.addEventListener\\("mouseup"/);
-  assert.ok(handler, "drag handlers should be present");
-  assert.match(handler[0], /requestAnimationFrame/);
-  assert.match(handler[0], /renderWires\\(\\)/);
-  assert.doesNotMatch(handler[0], /renderCanvas\\(\\)/);
+  const start = source.indexOf('svg.addEventListener("mousemove"');
+  const end = source.indexOf('window.addEventListener("mouseup"', start);
+  assert.ok(start >= 0 && end > start, "drag handlers should be present");
+  const handler = source.slice(start, end);
+  assert.ok(handler.includes("requestAnimationFrame"));
+  assert.ok(handler.includes("renderWires();"));
+  assert.ok(!handler.includes("renderCanvas();"), "dragging must not rebuild the full component DOM");
 });
 
 test("simulator external scripts are deferred for parallel fetch and non-blocking HTML parsing", () => {
   const html = fs.readFileSync(path.join(root, "simulator.html"), "utf8");
-  const scripts = [...html.matchAll(/<script src="[^"]+"><\\/script>/g)];
-  assert.ok(scripts.length > 20, "expected simulator dependency scripts");
-  assert.ok(scripts.every(([tag]) => /\\sdefer>/.test(tag)), "every external simulator script should use defer");
+  const tags = html.split('<script src="').slice(1).map(chunk => chunk.slice(0, chunk.indexOf(">")));
+  assert.ok(tags.length > 20, "expected simulator dependency scripts");
+  assert.ok(tags.every(tag => tag.endsWith(" defer")), "every external simulator script should use defer");
 });
 
 test("service worker does not prefetch the entire asset catalog during installation", () => {
   const source = fs.readFileSync(path.join(root, "service-worker.js"), "utf8");
-  const install = source.slice(source.indexOf('self.addEventListener("install"'), source.indexOf('self.addEventListener("activate"'));
-  assert.match(install, /small application shell/);
-  assert.doesNotMatch(install, /ASSETS\\.map/);
+  const start = source.indexOf('self.addEventListener("install"');
+  const end = source.indexOf('self.addEventListener("activate"');
+  const install = source.slice(start, end);
+  assert.ok(install.includes("small application shell"));
+  assert.ok(!install.includes("ASSETS.map"), "install must not fetch the full asset catalog");
 });
 
 test("component media requests start after page load and run in small batches", () => {
   const source = fs.readFileSync(path.join(root, "platform/component-media.js"), "utf8");
-  assert.match(source, /i\\+=4/);
-  assert.match(source, /setTimeout\\(\\(\\)=>load\\(\\)/);
+  assert.ok(source.includes("i+=4"), "CSV fetch concurrency should be limited to four");
+  assert.ok(source.includes("setTimeout(()=>load()"), "media loading should be delayed until after page load");
 });
