@@ -77,6 +77,7 @@ test("dangling terminals, unsupported domains and malformed routing are rejected
 
 test("net resolution is deterministic and derived, not stored as authority", () => {
   const p = sample();
+  p.simulation.nodeVoltages = { V1: 12 };
   const a = P.resolveNets(p), b = P.resolveNets(JSON.parse(JSON.stringify(p)));
   assert.deepEqual(a, b);
   assert.equal(p.nets.policy, "derived");
