@@ -55,3 +55,34 @@ test("inspector remains visible on medium desktop widths", () => {
   assert.ok(source.includes('.workspace{grid-template-columns:205px minmax(0,1fr) 250px}'));
   assert.ok(source.includes('@media (max-width:900px)'));
 });
+
+
+test("viewport zoom and pan are applied to the rendered layers", () => {
+  const source = fs.readFileSync(path.join(root, "simulator.js"), "utf8");
+  assert.ok(source.includes("function applyViewport()"));
+  assert.ok(source.includes('setAttribute("transform",t)'));
+  assert.ok(source.includes('(e.clientX-r.left-S.pan.x)/S.zoom'));
+});
+
+test("terminal clicks use pointer input and avoid rebuilding the full palette on every render", () => {
+  const source = fs.readFileSync(path.join(root, "simulator.js"), "utf8");
+  assert.ok(source.includes('p.onpointerdown=e=>{e.stopPropagation();e.preventDefault();handlePin(p.dataset.pin)}'));
+  assert.ok(source.includes("paletteRenderKey"));
+  assert.ok(source.includes("if(key!==paletteRenderKey)renderPalette()"));
+});
+
+test("reference symbols render as labels rather than object coercions and MCU workspace is wired", () => {
+  const source = fs.readFileSync(path.join(root, "platform/workbench.js"), "utf8");
+  assert.ok(source.includes("function symbolLabel"));
+  assert.ok(source.includes('else if(b.dataset.mode==="micro")micro()'));
+  assert.ok(source.includes("VoltProMCU?.simulate"));
+});
+
+test("demo library defines 100 documented demo variants and can load them into the schematic", () => {
+  const source = fs.readFileSync(path.join(root, "platform/demo-library.js"), "utf8");
+  assert.ok(source.includes("const demos=templates.flatMap"));
+  assert.ok(source.includes('["Troubleshooting",.8]'));
+  assert.ok(source.includes("window.VoltProDemoLibrary={open,demos:()=>demos.slice(),load:loadDemo}"));
+  const html = fs.readFileSync(path.join(root, "simulator.html"), "utf8");
+  assert.ok(html.includes('platform/demo-library.js'));
+});
