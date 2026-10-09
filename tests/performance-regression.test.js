@@ -130,3 +130,24 @@ test("clicking a terminal starts wiring automatically and the next terminal comp
   assert.ok(source.includes("if(!wiring.active)wiring.begin();wiring.selectTerminal(ref,p)"));
   assert.ok(source.includes('p.onpointerdown=e=>{e.stopPropagation();e.preventDefault();handlePin(p.dataset.pin)}'));
 });
+
+test("component selection keeps the canvas element stable during pointer-down", () => {
+  const source = fs.readFileSync(path.join(root, "simulator.js"), "utf8");
+  const start = source.indexOf('$$("[data-id]").forEach(g=>{g.onmousedown=');
+  const end = source.indexOf('$$(".pin").forEach', start);
+  const handler = source.slice(start, end);
+  assert.ok(start >= 0 && end > start);
+  assert.ok(handler.includes('$$(".component").forEach'));
+  assert.ok(handler.includes("renderInspector()"));
+  assert.ok(!handler.includes("renderCanvas();renderInspector()"), "selection should not rebuild canvas DOM during ordinary pointer-down");
+});
+
+test("wire inspector exposes cable type, colour, cross-section, width and line pattern", () => {
+  const source = fs.readFileSync(path.join(root, "simulator.js"), "utf8");
+  for (const property of ["cableType", "color", "size", "width", "pattern"]) {
+    assert.ok(source.includes('data-wire-prop="' + property + '"'), "missing wire property " + property);
+  }
+  assert.ok(source.includes("stroke-dasharray"));
+  assert.ok(source.includes("wire-bend-handle"));
+  assert.ok(source.includes("if(wireBending)"));
+});
