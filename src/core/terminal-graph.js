@@ -12,7 +12,7 @@
   const clone = value => value == null ? value : JSON.parse(JSON.stringify(value));
   const object = value => value !== null && typeof value === "object" && !Array.isArray(value);
   const validId = value => typeof value === "string" && /^[A-Za-z][A-Za-z0-9_.-]{0,63}$/.test(value);
-  const validLocalId = value => typeof value === "string" && /^[A-Za-z0-9][A-Za-z0-9_.-]{0,63}$/.test(value);
+  const validLocalId = value => typeof value === "string" && (/^[A-Za-z0-9][A-Za-z0-9_.-]{0,63}$/.test(value) || value === "+" || value === "-");
   const DOMAINS = new Set(["dc","ac","ac1","ac3","three-phase","three_phase","control","signal","logic","digital","analog","data","ground","pneumatic","hydraulic","mechanical","thermal","optical","unknown"]);
   const key = (deviceId, terminalId) => {
     if (!validId(deviceId)) throw new Error("Invalid device id: " + deviceId);
