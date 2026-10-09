@@ -119,3 +119,8 @@ body.simulator-page.light .prop input,body.simulator-page.light .prop select,bod
 body.simulator-page.light .console,body.simulator-page.light .calc-panel,body.simulator-page.light .meter{background:#fff!important;color:#17543b!important;border-color:#c1d0df!important}
 
 .wire-bend-handle{fill:var(--amber);stroke:#fff;stroke-width:1.5;cursor:move;pointer-events:all}.wire-bend-handle:hover{r:7;filter:url(#glow)}
+/* Keep the active wire source visible without locking the component. */
+.component.wire-source .body,.component.wire-source .symbol{filter:url(#glow);stroke:#ffbd69!important;stroke-width:2.8!important}
+.component.wire-source .pin{fill:#ffbd69!important;stroke:#fff!important;stroke-width:2!important}
+.component.wire-source{cursor:grab!important}
+.component:active{cursor:grabbing}
