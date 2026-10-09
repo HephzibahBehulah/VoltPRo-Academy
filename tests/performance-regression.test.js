@@ -142,6 +142,13 @@ test("component selection keeps the canvas element stable during pointer-down", 
   assert.ok(!handler.includes("renderCanvas();renderInspector()"), "selection should not rebuild canvas DOM during ordinary pointer-down");
 });
 
+test("new palette components can be placed by click and selected for editing", () => {
+  const source = fs.readFileSync(path.join(root, "simulator.js"), "utf8");
+  assert.ok(source.includes('el.onclick=()=>{if(suppressPaletteClick)return;const r=wrap.getBoundingClientRect();addComponent(el.dataset.type,'));
+  assert.ok(source.includes('g.onclick=e=>{if(e.target.classList.contains("pin"))return;'));
+  assert.ok(source.includes('const c=S.components.find(x=>x.id===S.selected)'));
+});
+
 test("wire inspector exposes cable type, colour, cross-section, width and line pattern", () => {
   const source = fs.readFileSync(path.join(root, "simulator.js"), "utf8");
   for (const property of ["cableType", "color", "size", "width", "pattern"]) {
