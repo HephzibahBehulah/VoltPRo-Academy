@@ -19,6 +19,13 @@
     if (!validLocalId(String(terminalId))) throw new Error("Invalid terminal id: " + terminalId);
     return deviceId + ":" + terminalId;
   };
+  const endpointId = value => {
+    if (typeof value === "string") return value;
+    if (object(value) && value.deviceId != null && value.terminalId != null) {
+      try { return key(String(value.deviceId), String(value.terminalId)); } catch (_) { return ""; }
+    }
+    return "";
+  };
   const terminal = (id, label, x, y, extra = {}) => ({
     id, label: label || id, number: extra.number == null ? null : String(extra.number),
     type: extra.type || "electrical", domain: extra.domain || "dc",
@@ -162,7 +169,7 @@
     resolve(id, localId) { return this.resolveTerminal(id,localId); }
     terminalPosition(id) { const t=this.resolveTerminal(id); return t ? {...t.worldPosition} : null; }
     terminalsForDevice(deviceId) { return Array.from(this.terminals.values()).filter(t=>t.deviceId===deviceId); }
-    findConnectedWires(id) { return (this.project.wires||[]).filter(w=>w.from===id||w.to===id||w.a===id||w.b===id); }
+    findConnectedWires(id) { return (this.project.wires||[]).filter(w=>[w.from,w.to,w.a,w.b].some(endpoint=>endpointId(endpoint)===id)); }
     _refreshConnections() {
       for (const t of this.terminals.values()) t.connectionStatus=this.findConnectedWires(t.id).length ? "connected" : "unconnected";
     }
@@ -170,7 +177,7 @@
       const terminal=this.resolveTerminal(id); if(!terminal) return [];
       const parent=new Map(), find=x=>{if(!parent.has(x))parent.set(x,x);if(parent.get(x)!==x)parent.set(x,find(parent.get(x)));return parent.get(x)};
       for(const t of this.terminals.keys())find(t);
-      for(const w of this.project.wires||[]) { const a=w.from||w.a,b=w.to||w.b;if(this.terminals.has(a)&&this.terminals.has(b)){const ra=find(a),rb=find(b);if(ra!==rb){if(ra<rb)parent.set(rb,ra);else parent.set(ra,rb)}}}
+      for(const w of this.project.wires||[]) { const a=endpointId(w.from??w.a),b=endpointId(w.to??w.b);if(this.terminals.has(a)&&this.terminals.has(b)){const ra=find(a),rb=find(b);if(ra!==rb){if(ra<rb)parent.set(rb,ra);else parent.set(ra,rb)}}}
       const root=find(terminal.id); return Array.from(this.terminals.keys()).filter(k=>find(k)===root).sort();
     }
     validateConnection(fromId,toId,wire={}) { return compatibility(this.resolveTerminal(fromId),this.resolveTerminal(toId),wire); }
@@ -181,9 +188,9 @@
         if(!validId(w.id))errors.push({code:"WIRE_ID_INVALID",wireId:w.id,index:i});
         else if(wireIds.has(w.id))errors.push({code:"DUPLICATE_WIRE_ID",wireId:w.id,index:i});
         wireIds.add(w.id);
-        const a=w.from||w.a,b=w.to||w.b;
-        if(!this.resolveTerminal(a))errors.push({code:"INVALID_TERMINAL_REFERENCE",wireId:w.id,endpoint:"from",terminalId:a});
-        if(!this.resolveTerminal(b))errors.push({code:"INVALID_TERMINAL_REFERENCE",wireId:w.id,endpoint:"to",terminalId:b});
+        const a=endpointId(w.from??w.a),b=endpointId(w.to??w.b);
+        if(!this.resolveTerminal(a))errors.push({code:"INVALID_TERMINAL_REFERENCE",wireId:w.id,endpoint:"from",terminalId:a||w.from||w.a});
+        if(!this.resolveTerminal(b))errors.push({code:"INVALID_TERMINAL_REFERENCE",wireId:w.id,endpoint:"to",terminalId:b||w.to||w.b});
         if(this.resolveTerminal(a)&&this.resolveTerminal(b))errors.push(...this.validateConnection(a,b,w).errors.map(e=>({...e,wireId:w.id})));
       });
       return {valid:errors.length===0,errors};
@@ -207,7 +214,7 @@
     }
     deleteDevice(deviceId, options={}) {
       if(!this.devicesById.has(deviceId))return {deleted:false,removedWires:[],blockedWires:[]};
-      const dependent=(this.project.wires||[]).filter(w=>[w.from||w.a,w.to||w.b].some(id=>typeof id==="string"&&id.startsWith(deviceId+":")));
+      const dependent=(this.project.wires||[]).filter(w=>[w.from??w.a,w.to??w.b].some(endpoint=>endpointId(endpoint).startsWith(deviceId+":")));
       const policy=options.wires || "remove";
       if(policy==="reject"&&dependent.length)return {deleted:false,removedWires:[],blockedWires:dependent.map(w=>w.id)};
       if(policy==="keep"&&dependent.length)throw new Error("Cannot delete device while retaining dependent wires");
@@ -234,5 +241,5 @@
     return engine;
   }
   function endpoint(deviceId,terminalId) { return key(deviceId,String(terminalId)); }
-  return {TerminalEngine,DEFINITIONS,DOMAINS:[...DOMAINS],key,endpoint,definitionFor,terminalPosition,compatibility,build};
+  return {TerminalEngine,DEFINITIONS,DOMAINS:[...DOMAINS],key,endpoint,endpointId,definitionFor,terminalPosition,compatibility,build};
 });
