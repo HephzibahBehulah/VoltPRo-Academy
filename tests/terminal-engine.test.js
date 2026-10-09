@@ -10,7 +10,7 @@ function project(devices = [], wires = []) {
     simulation:{configuration:{mode:"dc"},resultsMetadata:null},extensions:{} };
 }
 function device(id,type,extra={}) {
-  return P.createDevice({id,type,position:{x:100,y:50},rotation:0,...extra});
+  return {id,type,position:{x:100,y:50},rotation:0,...extra};
 }
 function wire(id,from,to,domain="dc") { return {id,from,to,domain,routing:[],electrical:{}}; }
 
@@ -108,9 +108,14 @@ test("delete can be rejected safely when connected wires exist", () => {
 });
 
 test("terminal identities and topology survive canonical project reload", () => {
-  const p=project([device("R1","resistor"),device("R2","resistor")],[wire("W1","R1:2","R2:1")]);
+  const p=project();
+  const engine=T.build(p);
+  engine.createDevice(device("R1","resistor"));
+  engine.createDevice(device("R2","resistor"));
+  p.wires.push(wire("W1","R1:2","R2:1"));
+  engine.updateTopology();
   const loaded=P.deserialize(P.serialize(p));
-  const engine=T.build(loaded);
-  assert.deepEqual(engine.findConnectedNets("R1:2"),["R1:2","R2:1"]);
-  assert.equal(engine.resolveTerminal("R1:2").id,"R1:2");
+  const reloaded=T.build(loaded);
+  assert.deepEqual(reloaded.findConnectedNets("R1:2"),["R1:2","R2:1"]);
+  assert.equal(reloaded.resolveTerminal("R1:2").id,"R1:2");
 });
