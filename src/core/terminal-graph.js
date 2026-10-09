@@ -5,7 +5,7 @@
 (function (root, factory) {
   const api = factory();
   if (typeof module === "object" && module.exports) module.exports = api;
-  if (root) root.VoltProTerminalGraph = api;
+  if (root) { root.VoltProTerminalGraph = api; if (root.window && root.window !== root) root.window.VoltProTerminalGraph = api; }
 })(typeof globalThis !== "undefined" ? globalThis : this, function () {
   "use strict";
 
