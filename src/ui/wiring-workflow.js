@@ -48,6 +48,7 @@
    this.callbacks.onCommit?.(wire);this.active=false;this.start=null;this.pointer=null;this.lastError=null;this.callbacks.onState?.(this.snapshot());return {action:"connected",wire};
   }
   selectWire(id){this.selectedWire=id;this.callbacks.onWireSelect?.(id)}
+  handleKey(event){if(event?.key==="Escape"&&this.active){event.preventDefault?.();this.cancel();return true}if(event?.key==="Delete"&&this.selectedWire){event.preventDefault?.();this.callbacks.onDeleteWire?.(this.selectedWire);return true}return false}
   snapshot(){return {active:this.active,start:this.start,pointer:this.pointer,selectedWire:this.selectedWire,lastError:this.lastError}}
  }
  return {routeOrthogonal,normalizeWire,validateConnection,Controller,pairKey,endpointPair};
