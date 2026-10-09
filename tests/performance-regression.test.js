@@ -118,8 +118,8 @@ test("panel designer spans the workbench and keeps its layout inside the respons
 
 test("wire rendering uses the defined all-elements selector and cannot abort simulator startup", () => {
   const source = fs.readFileSync(path.join(root, "simulator.js"), "utf8");
-  assert.ok(source.includes('$("[data-wire]").forEach(el=>'), "wire interaction binding must use the defined $ helper");
-  assert.ok(!source.includes('$$("[data-wire]")'), "an undefined $$ helper would throw during initial render and disable all simulator workspaces");
+  assert.ok(source.includes('$$("[data-wire]").forEach(el=>'), "wire interaction binding must use the defined $$ helper");
+  assert.ok(!source.includes('$$$("[data-wire]")'), "an undefined $$$ helper would throw during initial render and disable all simulator workspaces");
 });
 
 test("every rendered component, terminal, and wire receives interaction handlers", () => {
@@ -146,7 +146,7 @@ test("clicking a terminal starts wiring automatically and the next terminal comp
 
 test("component selection keeps the canvas element stable during pointer-down", () => {
   const source = fs.readFileSync(path.join(root, "simulator.js"), "utf8");
-  const start = source.indexOf('$$("[data-id]").forEach(g=>{g.onclick=');
+  const start = source.indexOf('comps.querySelectorAll(".component[data-id]").forEach(g=>{g.onclick=');
   const end = source.indexOf('$$(".pin").forEach', start);
   const handler = source.slice(start, end);
   assert.ok(start >= 0 && end > start);
