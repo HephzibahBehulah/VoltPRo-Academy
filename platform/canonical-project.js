@@ -15,7 +15,7 @@
     if (!nonempty(value) || !/^[A-Za-z][A-Za-z0-9_.-]{0,63}$/.test(value)) throw new Error(label + " must match [A-Za-z][A-Za-z0-9_.-]{0,63}");
     return value;
   };
-  const terminalKey = (deviceId, localId) => stableId(deviceId, "device id") + ":" + stableId(localId, "terminal id");
+  const terminalKey = (deviceId, localId) => stableId(deviceId, "device id") + ":" + (nonempty(localId) && /^[A-Za-z0-9][A-Za-z0-9_.-]{0,63}$/.test(localId) ? localId : (() => { throw new Error("terminal id must be a stable local identifier"); })());
   const endpointKey = endpoint => {
     if (typeof endpoint === "string") return endpoint;
     if (object(endpoint) && nonempty(endpoint.deviceId) && nonempty(endpoint.terminalId)) return terminalKey(endpoint.deviceId, endpoint.terminalId);
@@ -93,6 +93,8 @@
       };
     });
     const known = new Set(["format","formatVersion","version","metadata","settings","workspace","workspaceConfig","devices","components","wires","nets","panel","plc","firmware","simulation","faults","history","results","simulationResults","extensions"]);
+    const deviceKnown = new Set(["id","ref","type","model","kind","modelVersion","version","label","position","x","y","rotation","terminals","pins","parameters","props","operatingState","state","extensions","simulation"]);
+    const wireKnown = new Set(["id","from","to","a","b","label","number","colour","color","routing","segments","points","domain","crossSection","cross_section","material","phase","electrical","extensions"]);
     const unknown = {};
     Object.keys(raw).forEach(k => { if (!known.has(k)) unknown[k] = clone(raw[k]); });
     return {
@@ -127,7 +129,7 @@
       const locals = new Set();
       for (const [j, t] of d.terminals.entries()) {
         const tp = p + ".terminals[" + j + "]";
-        if (!object(t) || !nonempty(t.id) || !/^[A-Za-z][A-Za-z0-9_.-]{0,63}$/.test(t.id)) { errors.push({ code: "TERMINAL_ID", path: tp + ".id", message: "Terminal requires a stable local id" }); continue; }
+        if (!object(t) || !nonempty(t.id) || !/^[A-Za-z0-9][A-Za-z0-9_.-]{0,63}$/.test(t.id)) { errors.push({ code: "TERMINAL_ID", path: tp + ".id", message: "Terminal requires a stable local id" }); continue; }
         if (locals.has(t.id)) errors.push({ code: "DUPLICATE_TERMINAL_ID", path: tp + ".id", message: "Duplicate terminal id " + d.id + ":" + t.id });
         locals.add(t.id);
         if (!nonempty(t.type)) errors.push({ code: "TERMINAL_TYPE", path: tp + ".type", message: "Terminal type is required" });
