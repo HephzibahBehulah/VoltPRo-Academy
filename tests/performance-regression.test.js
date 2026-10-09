@@ -86,3 +86,18 @@ test("demo library defines 100 documented demo variants and can load them into t
   const html = fs.readFileSync(path.join(root, "simulator.html"), "utf8");
   assert.ok(html.includes('platform/demo-library.js'));
 });
+
+
+test("toolbar SVG export, library collapse, and grid spacing are wired", () => {
+  const source = fs.readFileSync(path.join(root, "simulator.js"), "utf8");
+  assert.ok(source.includes('svgExport.onclick=exportSVG'));
+  assert.ok(source.includes('workspace?.classList.toggle("palette-hidden"'));
+  assert.ok(source.includes('pat.setAttribute("width",S.grid)'));
+});
+
+test("PLC input switches calculate output state instead of only appending toggle logs", () => {
+  const source = fs.readFileSync(path.join(root, "platform/workbench.js"), "utf8");
+  assert.ok(source.includes("io.q0=io.i0&&!io.i1&&!io.i2"));
+  assert.ok(source.includes('io.q1=io.q0'));
+  assert.ok(source.includes('else if(b.dataset.mode==="plc")plc()'));
+});
