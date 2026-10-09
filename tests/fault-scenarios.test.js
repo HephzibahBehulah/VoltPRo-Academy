@@ -1,0 +1,2 @@
+const test=require('node:test');const assert=require('node:assert/strict');const fs=require('node:fs');const vm=require('node:vm');
+test('fault scenario provides a diagnosis target and symptoms',()=>{const ctx={window:{}};vm.createContext(ctx);vm.runInContext(fs.readFileSync('src/training/fault-scenarios.js','utf8'),ctx);const s=ctx.window.VoltProFaultScenarios.get('DOL-OPEN-HOLD');assert.equal(s.fault.target,'KM1');assert.ok(s.symptoms.length>0);assert.ok(s.expectedDiagnosis.includes('auxiliary'))})

@@ -1,0 +1,4 @@
+const test=require('node:test');const assert=require('node:assert/strict');const fs=require('node:fs');const vm=require('node:vm');
+function load(){const ctx={window:{},structuredClone:global.structuredClone};vm.createContext(ctx);vm.runInContext(fs.readFileSync('src/panel/designer.js','utf8'),ctx);return ctx.window.VoltProPanelDesigner}
+test('panel designer places device on valid DIN rail position',()=>{const p=load().create({rails:[{id:'R1',length:10}]});load().place(p,{id:'KM1',railId:'R1',position:0,railUnits:3});assert.equal(p.items.length,1)});
+test('panel designer rejects devices beyond rail',()=>{const p=load().create({rails:[{id:'R1',length:3}]});assert.throws(()=>load().place(p,{id:'KM1',railId:'R1',position:2,railUnits:3}))})

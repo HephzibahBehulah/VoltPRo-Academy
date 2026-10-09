@@ -42,7 +42,7 @@ Examples evaluated:
 - Repath: MIT-licensed browser mixed-signal simulator with MNA/Newton methods and local execution.
 - SimcirJS: MIT-licensed browser circuit simulator.
 - ngspice-wasm: browser WebAssembly build of ngspice, with the upstream mixed licensing obligations documented by the project.
-- OpenCircuits is free/open source but GPL-3.0, so it is **not automatically suitable for direct code incorporation into VoltPRo's current MIT codebase**.
+- OpenCircuits is free/open source but GPL-3.0, so it is **not automatically suitable for direct code incorporation into VoltPRo's current Apache-2.0 codebase**.
 
 No dependency is copied into VoltPRo merely because it looks useful. Licence compatibility is checked first.
 

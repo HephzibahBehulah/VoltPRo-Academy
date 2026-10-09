@@ -1,0 +1,2 @@
+const test=require('node:test');const assert=require('node:assert/strict');const fs=require('node:fs');const vm=require('node:vm');
+test('ladder editor stores structured rungs and nodes',()=>{const ctx={window:{},structuredClone:global.structuredClone};vm.createContext(ctx);vm.runInContext(fs.readFileSync('src/plc/ladder-editor.js','utf8'),ctx);const l=ctx.window.VoltProLadder,p=l.create();l.addRung(p,[l.node('contact-no','START'),l.node('coil','KM1')]);assert.equal(p.rungs[0].nodes[1].tag,'KM1')})

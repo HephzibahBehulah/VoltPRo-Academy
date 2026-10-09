@@ -1,0 +1,5 @@
+(()=>{'use strict';const M=window.VoltProDeviceModels;
+function energized(d,c){const x=d.state||{}, coil=x.coilVoltage??c.coilVoltage??0, rated=Number(d.parameters?.coilVoltage??d.props?.coilVoltage??24);return x.forced===true||coil>=rated*0.8}
+M.register({id:'contactor',version:'1.0.0',domains:['dc','ac','three-phase','control'],validated:true,replace:true,evaluate(d,c={}){const on=energized(d,c);return {ok:true,state:on?'energized':'deenergized',coil:{energized:on},contacts:[{id:'L1-T1',closed:on,type:'main'},{id:'L2-T2',closed:on,type:'main'},{id:'L3-T3',closed:on,type:'main'},{id:'13-14',closed:on,type:'aux-no'},{id:'21-22',closed:!on,type:'aux-nc'}]}}});
+M.register({id:'relay',version:'1.0.0',domains:['dc','ac','control'],validated:true,replace:true,evaluate(d,c={}){const on=energized(d,c);return {ok:true,state:on?'energized':'deenergized',coil:{energized:on},contacts:[{id:'11-14',closed:on,type:'changeover-no'},{id:'11-12',closed:!on,type:'changeover-nc'}]}}});
+})();
