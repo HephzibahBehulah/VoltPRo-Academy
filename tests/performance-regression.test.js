@@ -40,7 +40,7 @@ test("component media requests start after page load and run in small batches", 
 
 test("wire preview redraws only the wire layer, not all components", () => {
   const source = fs.readFileSync(path.join(root, "simulator.js"), "utf8");
-  assert.ok(source.includes('onPreview:(start,p)=>{S.wirePointer=p;if(!wirePreviewFrame)requestAnimationFrame('));
+  assert.ok(source.includes('onPreview:(start,p)=>{S.wirePointer=p;if(!wirePreviewFrame)wirePreviewFrame=requestAnimationFrame('));
 });
 
 test("common electrical components use recognizable schematic symbols and leads", () => {
