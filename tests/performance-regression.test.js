@@ -115,3 +115,18 @@ test("every rendered component, terminal, and wire receives interaction handlers
   assert.ok(source.includes('$$(".pin").forEach(p=>p.onpointerdown='), "all terminals must be clickable for wiring and selection");
   assert.ok(source.includes('$$("[data-wire]").forEach(w=>w.onclick='), "all wires must be selectable");
 });
+
+
+test("arrow keys move the selected component on the grid and preserve text-field editing", () => {
+  const source = fs.readFileSync(path.join(root, "simulator.js"), "utf8");
+  assert.ok(source.includes('["ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].includes(e.key)'));
+  assert.ok(source.includes('const step=S.grid*(e.shiftKey?5:1)'));
+  assert.ok(source.includes("if(!e.repeat)saveHistory()"));
+  assert.ok(source.includes('/^(INPUT|TEXTAREA|SELECT)$/.test(target.tagName)'));
+});
+
+test("clicking a terminal starts wiring automatically and the next terminal completes it", () => {
+  const source = fs.readFileSync(path.join(root, "simulator.js"), "utf8");
+  assert.ok(source.includes("if(!wiring.active)wiring.begin();wiring.selectTerminal(ref,p)"));
+  assert.ok(source.includes('p.onpointerdown=e=>{e.stopPropagation();e.preventDefault();handlePin(p.dataset.pin)}'));
+});
