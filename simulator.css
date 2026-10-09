@@ -117,3 +117,5 @@ body.simulator-page.light .component .symbol-label{fill:#087ea4!important}
 body.simulator-page.light .pin{fill:#087ea4!important;stroke:#f8fbff!important}
 body.simulator-page.light .prop input,body.simulator-page.light .prop select,body.simulator-page.light #componentSearch,body.simulator-page.light .toolbar input{background:#fff!important;color:#15273a!important;border-color:#c1d0df!important}
 body.simulator-page.light .console,body.simulator-page.light .calc-panel,body.simulator-page.light .meter{background:#fff!important;color:#17543b!important;border-color:#c1d0df!important}
+
+.wire-bend-handle{fill:var(--amber);stroke:#fff;stroke-width:1.5;cursor:move;pointer-events:all}.wire-bend-handle:hover{r:7;filter:url(#glow)}
