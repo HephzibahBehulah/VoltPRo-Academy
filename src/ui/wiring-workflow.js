@@ -22,6 +22,12 @@
   const compact=orthogonal.filter((p,i)=>!i||p.x!==orthogonal[i-1].x||p.y!==orthogonal[i-1].y);
   return {points:compact,segments:compact.slice(1).map((p,i)=>({x1:compact[i].x,y1:compact[i].y,x2:p.x,y2:p.y,orientation:compact[i].x===p.x?"v":"h"}))};
  }
+ function electricalWires(wires=[]){
+  const normalized=wires.map((w,i)=>normalizeWire(w,i)), byJunction=new Map(), links=[];
+  normalized.forEach((w,i)=>(w.junctions||[]).forEach(j=>{if(!j||!j.id)return;const id=String(j.id);if(!byJunction.has(id))byJunction.set(id,[]);byJunction.get(id).push(i)}));
+  for(const [junctionId,indices] of byJunction){const unique=[...new Set(indices)];if(unique.length<2)continue;const anchor=normalized[unique[0]];for(const i of unique.slice(1)){const other=normalized[i];if(anchor.a!==other.a)links.push({id:"JUNCTION:"+junctionId+":"+i,a:anchor.a,b:other.a,route:"electrical-junction",junctionId,synthetic:true})}}
+  return normalized.concat(links);
+ }
  function normalizeWire(w,index=0){
   const [a,b]=endpointPair(w);
   return {...w,id:String(w.id||"W"+String(index+1).padStart(3,"0")),a,b,route:"orthogonal",bends:Array.isArray(w.bends)?w.bends.map(p=>({x:Number(p.x),y:Number(p.y)})):[],junctions:Array.isArray(w.junctions)?w.junctions.map(j=>({...j})):[]};
@@ -51,5 +57,5 @@
   handleKey(event){if(event?.key==="Escape"&&this.active){event.preventDefault?.();this.cancel();return true}if(event?.key==="Delete"&&this.selectedWire){event.preventDefault?.();this.callbacks.onDeleteWire?.(this.selectedWire);return true}return false}
   snapshot(){return {active:this.active,start:this.start,pointer:this.pointer,selectedWire:this.selectedWire,lastError:this.lastError}}
  }
- return {routeOrthogonal,normalizeWire,validateConnection,Controller,pairKey,endpointPair};
+ return {routeOrthogonal,normalizeWire,electricalWires,validateConnection,Controller,pairKey,endpointPair};
 });
