@@ -64,10 +64,9 @@
         terminals: terminalsFor({ ...d, type }),
         parameters: clone(d.parameters || d.props || {}),
         operatingState: clone(d.operatingState || d.state || {}),
-        extensions: clone(d.extensions || {})
+        extensions: { ...(clone(d.extensions || {})), preservedUnknownFields: { ...(d.extensions?.preservedUnknownFields || {}), ...Object.fromEntries(Object.entries(d).filter(([k]) => !deviceKnown.has(k))) } }
       };
     });
-    const terminalsByDevice = new Map(devices.map(d => [d.id, d.terminals]));
     const resolveLegacyEndpoint = (endpoint) => {
       if (typeof endpoint !== "string") return endpointKey(endpoint);
       const match = endpoint.match(/^([^:]+):(\d+)$/);
@@ -89,7 +88,7 @@
         routing: clone(w.routing || w.segments || w.points || []),
         domain: w.domain || "dc",
         electrical: { crossSection: w.crossSection ?? w.cross_section ?? null, material: w.material ?? null, phase: w.phase ?? null },
-        extensions: clone(w.extensions || {})
+        extensions: { ...(clone(w.extensions || {})), preservedUnknownFields: { ...(w.extensions?.preservedUnknownFields || {}), ...Object.fromEntries(Object.entries(w).filter(([k]) => !wireKnown.has(k))) } }
       };
     });
     const known = new Set(["format","formatVersion","version","metadata","settings","workspace","workspaceConfig","devices","components","wires","nets","panel","plc","firmware","simulation","faults","history","results","simulationResults","extensions"]);
