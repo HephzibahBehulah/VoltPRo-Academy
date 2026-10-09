@@ -109,6 +109,12 @@ test("component terminal hit targets render above wire strokes", () => {
 });
 
 
+test("wire rendering uses the defined all-elements selector and cannot abort simulator startup", () => {
+  const source = fs.readFileSync(path.join(root, "simulator.js"), "utf8");
+  assert.ok(source.includes('$("[data-wire]").forEach(el=>'), "wire interaction binding must use the defined $ helper");
+  assert.ok(!source.includes('$$("[data-wire]")'), "an undefined $$ helper would throw during initial render and disable all simulator workspaces");
+});
+
 test("every rendered component, terminal, and wire receives interaction handlers", () => {
   const source = fs.readFileSync(path.join(root, "simulator.js"), "utf8");
   assert.ok(source.includes('$$("[data-id]").forEach(g=>{'), "all components must be selectable and draggable");
