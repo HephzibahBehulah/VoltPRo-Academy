@@ -345,3 +345,98 @@
 @media (prefers-reduced-motion: reduce) {
   .academy-page *, .simulator-page *, .engineering-page * { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
 }
+
+/* High-visibility Cyber Deck pass: intentionally stronger contrast from the original navy UI. */
+.academy-page, .simulator-page, .engineering-page {
+  background-color:#03050d!important;
+  background-image:
+    radial-gradient(ellipse at 8% 8%,rgba(0,208,255,.19),transparent 29%),
+    radial-gradient(ellipse at 94% 12%,rgba(139,92,246,.2),transparent 31%),
+    radial-gradient(ellipse at 52% 100%,rgba(0,255,170,.055),transparent 42%),
+    linear-gradient(135deg,#03050d 0%,#070b18 48%,#050714 100%)!important;
+}
+.academy-page::before,.simulator-page::before,.engineering-page::before {
+  opacity:.23;
+  background-size:36px 36px;
+  background-image:linear-gradient(rgba(76,233,255,.13) 1px,transparent 1px),linear-gradient(90deg,rgba(76,233,255,.13) 1px,transparent 1px);
+  mask-image:linear-gradient(to bottom,black,transparent 96%);
+}
+.academy-page .topbar,.simulator-page .sim-top,.engineering-page header {
+  background:linear-gradient(100deg,rgba(3,8,20,.98),rgba(10,17,39,.96) 58%,rgba(23,12,46,.94))!important;
+  border-bottom:1px solid rgba(76,233,255,.42)!important;
+  box-shadow:0 8px 35px rgba(0,0,0,.28),0 1px 0 rgba(76,233,255,.08);
+}
+.academy-page .brand-mark,.simulator-page .brand .mark,.engineering-page .brand>span {
+  background:linear-gradient(135deg,#36f4ff 0%,#4f8cff 48%,#bb76ff 100%)!important;
+  box-shadow:0 0 0 1px rgba(255,255,255,.12),0 0 32px rgba(76,233,255,.34)!important;
+}
+.academy-page .view .hero {
+  position:relative;overflow:hidden;
+  background:
+    radial-gradient(ellipse at 88% 0%,rgba(145,80,255,.25),transparent 38%),
+    radial-gradient(ellipse at 0% 100%,rgba(0,218,255,.14),transparent 42%),
+    linear-gradient(125deg,rgba(10,27,53,.98),rgba(5,12,28,.98) 68%,rgba(12,13,36,.98))!important;
+  border:1px solid rgba(76,233,255,.48)!important;
+  box-shadow:0 22px 55px rgba(0,0,0,.32),0 0 35px rgba(76,233,255,.075),inset 0 1px rgba(255,255,255,.07)!important;
+}
+.academy-page .view .hero::after {
+  content:"";position:absolute;right:-80px;top:-145px;width:280px;height:280px;border:1px solid rgba(76,233,255,.28);border-radius:50%;
+  box-shadow:0 0 0 22px rgba(76,233,255,.035),0 0 0 48px rgba(167,139,250,.04),0 0 0 78px rgba(76,233,255,.025);pointer-events:none;
+}
+.academy-page .view .hero h1,.academy-page .view .hero h2 {
+  color:#f5fbff!important;text-shadow:0 0 34px rgba(76,233,255,.22)!important;
+}
+.academy-page .view .stat,.academy-page .view .card,.academy-page .view article,
+.academy-page .view .module,.academy-page .view .quiz-card,.academy-page .view .lab-card,
+.academy-page .view .catalog-item,.academy-page .view .rule {
+  background:linear-gradient(145deg,rgba(13,25,49,.97),rgba(5,12,27,.97))!important;
+  border:1px solid rgba(93,144,196,.32)!important;
+}
+.academy-page .view .stat strong,.academy-page .view .pill {text-shadow:0 0 18px rgba(76,233,255,.12)}
+.academy-page .view .stat.accent {
+  background:linear-gradient(135deg,rgba(0,190,220,.17),rgba(17,24,57,.96) 65%,rgba(107,63,175,.16))!important;
+  border-color:rgba(76,233,255,.4)!important;
+}
+.academy-page .view .btn.primary,.academy-page .view button.primary {
+  background:linear-gradient(105deg,#45edff,#8dffe0)!important;color:#03111c!important;
+  border:0!important;box-shadow:0 0 24px rgba(76,233,255,.2)!important;
+}
+.academy-page .sidebar {
+  background:linear-gradient(180deg,rgba(4,8,20,.99),rgba(7,10,25,.98))!important;
+  border-right-color:rgba(76,233,255,.34)!important;
+}
+.academy-page .nav-item.active {
+  background:linear-gradient(100deg,rgba(0,220,255,.19),rgba(101,91,255,.12))!important;
+  border-color:rgba(76,233,255,.42)!important;
+  box-shadow:inset 3px 0 #4ce9ff,0 0 24px rgba(76,233,255,.075)!important;
+}
+.simulator-page .palette,.simulator-page .inspector {
+  background:linear-gradient(180deg,rgba(4,9,22,.99),rgba(7,12,27,.98))!important;
+}
+.simulator-page .toolbar {
+  background:linear-gradient(90deg,rgba(5,13,29,.99),rgba(12,15,37,.98))!important;
+  border-bottom:1px solid rgba(76,233,255,.3)!important;
+}
+.simulator-page .canvas-wrap {
+  background-color:#040713!important;
+  background-image:radial-gradient(ellipse at 50% 45%,rgba(0,142,255,.16),transparent 56%),radial-gradient(ellipse at 90% 5%,rgba(141,92,246,.09),transparent 35%)!important;
+}
+.simulator-page .canvas-wrap::after {
+  content:"";position:absolute;inset:0;pointer-events:none;opacity:.3;
+  background:linear-gradient(135deg,transparent 49.8%,rgba(76,233,255,.045) 50%,transparent 50.2%);
+}
+.simulator-page .panel-title {color:#63f1ff!important;text-shadow:0 0 18px rgba(76,233,255,.2)!important}
+.simulator-page .toolbar .primary {background:linear-gradient(105deg,#45edff,#8dffe0)!important;color:#03111c!important}
+.engineering-page .grid article {
+  background:linear-gradient(145deg,rgba(14,26,52,.98),rgba(5,11,25,.98))!important;
+  border-color:rgba(91,143,198,.38)!important;
+}
+.engineering-page .grid article h2 {color:#eff8ff}
+.engineering-page .hero {
+  border-color:rgba(76,233,255,.48)!important;
+  box-shadow:0 20px 55px rgba(0,0,0,.32),0 0 34px rgba(76,233,255,.07)!important;
+}
+.academy-page a:focus-visible,.academy-page button:focus-visible,.simulator-page button:focus-visible,.engineering-page button:focus-visible {
+  outline:2px solid #63f1ff!important;outline-offset:3px;
+}
+@media(max-width:640px){.academy-page .view .hero::after{right:-170px;opacity:.65}}
