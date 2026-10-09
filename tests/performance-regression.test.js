@@ -36,3 +36,22 @@ test("component media requests start after page load and run in small batches", 
   assert.ok(source.includes("i+=4"), "CSV fetch concurrency should be limited to four");
   assert.ok(source.includes("setTimeout(()=>load()"), "media loading should be delayed until after page load");
 });
+
+
+test("wire preview redraws only the wire layer, not all components", () => {
+  const source = fs.readFileSync(path.join(root, "simulator.js"), "utf8");
+  assert.ok(source.includes('onPreview:(start,p)=>{S.wirePointer=p;renderWires()}'));
+});
+
+test("common electrical components use recognizable schematic symbols and leads", () => {
+  const source = fs.readFileSync(path.join(root, "simulator.js"), "utf8");
+  assert.ok(source.includes('if(c.type==="resistor") return line(-55,0,-34,0)+path("M-34 0'));
+  assert.ok(source.includes('if(c.type==="lamp") return line(-55,0,-23,0)+circle(23)+path("M-15 -15 L15 15'));
+  assert.ok(source.includes('if(c.type==="battery"||c.type==="acsource")'));
+});
+
+test("inspector remains visible on medium desktop widths", () => {
+  const source = fs.readFileSync(path.join(root, "simulator.css"), "utf8");
+  assert.ok(source.includes('.workspace{grid-template-columns:205px minmax(0,1fr) 250px}'));
+  assert.ok(source.includes('@media (max-width:900px)'));
+});
