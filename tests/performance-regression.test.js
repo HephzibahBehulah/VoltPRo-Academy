@@ -109,6 +109,13 @@ test("component terminal hit targets render above wire strokes", () => {
 });
 
 
+test("panel designer spans the workbench and keeps its layout inside the responsive modal", () => {
+  const source = fs.readFileSync(path.join(root, "platform/workbench.js"), "utf8");
+  assert.ok(source.includes('class="vpw-main" style="grid-column:1 / -1;min-width:0"'));
+  assert.ok(source.includes(".vpw-rail{position:relative;min-height:320px"));
+  assert.ok(source.includes("overflow:auto;padding:22px"));
+});
+
 test("wire rendering uses the defined all-elements selector and cannot abort simulator startup", () => {
   const source = fs.readFileSync(path.join(root, "simulator.js"), "utf8");
   assert.ok(source.includes('$("[data-wire]").forEach(el=>'), "wire interaction binding must use the defined $ helper");
@@ -117,7 +124,7 @@ test("wire rendering uses the defined all-elements selector and cannot abort sim
 
 test("every rendered component, terminal, and wire receives interaction handlers", () => {
   const source = fs.readFileSync(path.join(root, "simulator.js"), "utf8");
-  assert.ok(source.includes('$$("[data-id]").forEach(g=>{'), "all components must be selectable and draggable");
+  assert.ok(source.includes('comps.querySelectorAll(".component[data-id]").forEach(g=>{'), "component handlers must be scoped to actual schematic components");
   assert.ok(source.includes('$$(".pin").forEach(p=>p.onpointerdown='), "all terminals must be clickable for wiring and selection");
   assert.ok(source.includes('$$("[data-wire]").forEach(el=>{') && source.includes("el.onclick=e=>"), "all wires must be selectable");
 });
