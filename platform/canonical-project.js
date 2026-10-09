@@ -52,6 +52,10 @@
     if (sourceVersion > VERSION && raw.format === FORMAT) throw new Error("Unsupported future canonical project version: " + sourceVersion);
     const legacy = Array.isArray(raw.components) && !Array.isArray(raw.devices);
     const rawDevices = Array.isArray(raw.devices) ? raw.devices : (Array.isArray(raw.components) ? raw.components : []);
+    const known = new Set(["format","formatVersion","version","metadata","settings","workspace","workspaceConfig","devices","components","wires","nets","panel","plc","firmware","simulation","faults","history","results","simulationResults","extensions"]);
+    const deviceKnown = new Set(["id","ref","type","model","kind","modelVersion","version","label","position","x","y","rotation","terminals","pins","parameters","props","operatingState","state","extensions","simulation"]);
+    const wireKnown = new Set(["id","from","to","a","b","label","number","colour","color","routing","segments","points","domain","crossSection","cross_section","material","phase","electrical","extensions"]);
+
     const devices = rawDevices.map((d, i) => {
       if (!object(d)) throw new Error("Device at index " + i + " must be an object");
       const id = d.id || d.ref || "D" + String(i + 1).padStart(3, "0");
@@ -91,9 +95,6 @@
         extensions: { ...(clone(w.extensions || {})), preservedUnknownFields: { ...(w.extensions?.preservedUnknownFields || {}), ...Object.fromEntries(Object.entries(w).filter(([k]) => !wireKnown.has(k))) } }
       };
     });
-    const known = new Set(["format","formatVersion","version","metadata","settings","workspace","workspaceConfig","devices","components","wires","nets","panel","plc","firmware","simulation","faults","history","results","simulationResults","extensions"]);
-    const deviceKnown = new Set(["id","ref","type","model","kind","modelVersion","version","label","position","x","y","rotation","terminals","pins","parameters","props","operatingState","state","extensions","simulation"]);
-    const wireKnown = new Set(["id","from","to","a","b","label","number","colour","color","routing","segments","points","domain","crossSection","cross_section","material","phase","electrical","extensions"]);
     const unknown = {};
     Object.keys(raw).forEach(k => { if (!known.has(k)) unknown[k] = clone(raw[k]); });
     return {
