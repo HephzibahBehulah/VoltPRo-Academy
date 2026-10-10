@@ -75,7 +75,7 @@ test("primary destinations are consistent across the practical and engineering p
     assert.match(page, /aria-label="Primary destinations"/);
     assert.match(page, /href="index\\.html"/);
     assert.match(page, /href="simulator\\.html"/);
-    assert.match(page, /href="academy-workbench\\.html"/);
   }
   assert.match(workbench, /href="engineering\\.html"/);
+  assert.match(engineering, /href="academy-workbench\\.html"/);
 });
