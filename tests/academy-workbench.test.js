@@ -69,8 +69,9 @@ test("primary destinations are consistent across the practical and engineering p
   const engineering = read("engineering.html");
   for (const page of [workbench, engineering]) {
     assert.match(page, /aria-label="Primary destinations"/);
-    assert.match(page, /href="index\.html"/);
-    assert.match(page, /href="simulator\.html"/);
-    assert.match(page, /href="engineering\.html"/);
+    assert.match(page, /href="index\\.html"/);
+    assert.match(page, /href="simulator\\.html"/);
+    assert.match(page, /href="academy-workbench\\.html"/);
   }
+  assert.match(workbench, /href="engineering\\.html"/);
 });
