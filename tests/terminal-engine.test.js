@@ -56,6 +56,16 @@ test("duplicate device and terminal identities are reported", () => {
   assert.ok(engine.errors.some(e=>e.code==="DUPLICATE_TERMINAL"));
 });
 
+test("three-pole circuit breaker exposes six phase-matched terminals and three independent pole paths", () => {
+  const p=project([device("Q1","circuit-breaker-3p")]), engine=T.build(p);
+  assert.equal(engine.terminalsForDevice("Q1").length,6);
+  for(const id of ["L1","L2","L3","T1","T2","T3"]) assert.ok(engine.resolveTerminal("Q1:"+id), "missing terminal "+id);
+  const paths=engine.internalPaths("Q1");
+  assert.deepEqual(paths.map(x=>x.id),["breaker-pole-1","breaker-pole-2","breaker-pole-3"]);
+  assert.deepEqual(paths.map(x=>[x.from,x.to,x.phase]),[["L1","T1","L1"],["L2","T2","L2"],["L3","T3","L3"]]);
+  assert.equal(T.build(project([device("Q2","mcb-3p")])).terminalsForDevice("Q2").length,6);
+});
+
 test("contactor has independently addressable coil, main and auxiliary paths", () => {
   const p=project([device("KM1","contactor")]), engine=T.build(p);
   for(const id of ["A1","A2","L1","T1","L2","T2","L3","T3","13","14","21","22"])
