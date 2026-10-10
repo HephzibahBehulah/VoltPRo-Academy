@@ -14,6 +14,7 @@
 <link rel="stylesheet" href="voltpro-hb-theme.css?v=20261010a">
 <link rel="stylesheet" href="voltpro-identity.css?v=20261010b">
 <link rel="manifest" href="pwa.webmanifest">
+<link rel="stylesheet" href="voltpro-navigation-dashboard.css?v=20261010a">
 </head>
 <body class="academy-page">
 <div id="app" class="app-shell">
@@ -22,18 +23,55 @@
     <div class="student-mini"><div class="avatar">HB</div><div><strong id="studentName">Student</strong><small>Electrical Apprentice</small></div></div>
     <nav class="nav" aria-label="Main navigation">
       <button class="nav-item active" data-view="dashboard"><span>⌂</span>Dashboard</button>
-      <button class="nav-item" data-view="learn"><span>▣</span>Learn</button>
-      <button class="nav-item" data-view="safety"><span>⚠</span>Safety</button>
-      <button class="nav-item" data-view="labs"><span>⌘</span>Virtual Labs</button>
-      <a class="nav-item" href="simulator.html" style="text-decoration:none"><span>⚡</span>VoltPRo Simulator</a>
-      <a class="nav-item" href="engineering.html" style="text-decoration:none"><span>∑</span>Engineering Tools</a>
-      <button class="nav-item" data-view="quiz"><span>✓</span>Assessments</button>
-      <button class="nav-item" data-view="reference"><span>☷</span>Reference</button>
+
+      <details class="nav-group" open>
+        <summary class="nav-group-title">Learn &amp; Reference</summary>
+        <div class="nav-group-items">
+          <button class="nav-item" data-view="learn"><span>▣</span>Learn</button>
+          <button class="nav-item" data-view="quiz"><span>✓</span>Assessments</button>
+          <button class="nav-item" data-view="exam"><span>🎓</span>Exam Simulation</button>
+          <button class="nav-item" data-view="reference"><span>☷</span>Reference</button>
+        </div>
+      </details>
+
+      <details class="nav-group">
+        <summary class="nav-group-title">Safety &amp; Security</summary>
+        <div class="nav-group-items">
+          <button class="nav-item" data-view="safety"><span>⚠</span>Safety</button>
+          <button class="nav-item" data-view="labs"><span>⌘</span>Virtual Labs</button>
+        </div>
+      </details>
+
+      <details class="nav-group">
+        <summary class="nav-group-title">Engineering &amp; Simulation</summary>
+        <div class="nav-group-items">
+          <a class="nav-item" href="simulator.html"><span>⚡</span>VoltPRo Simulator</a>
+          <a class="nav-item" href="engineering.html"><span>∑</span>Engineering Tools</a>
+          <button class="nav-item" data-view="tools"><span>🧰</span>Tools &amp; Equipment</button>
+        </div>
+      </details>
+
+      <details class="nav-group">
+        <summary class="nav-group-title">AI &amp; Operations</summary>
+        <div class="nav-group-items">
+          <button class="nav-item" data-view="tutor"><span>🤖</span>AI Tutor</button>
+          <button class="nav-item" data-view="ar"><span>📷</span>Apprentice AR</button>
+        </div>
+      </details>
+
+      <details class="nav-group">
+        <summary class="nav-group-title">External</summary>
+        <div class="nav-group-items">
+          <a class="nav-item" href="https://hephzibahbehulah.com/"><span>↗</span>HB Professional Portfolio</a>
+          <a class="nav-item" href="https://github.com/HephzibahBehulah"><span>⌘</span>GitHub</a>
+          <a class="nav-item" href="https://www.linkedin.com/in/isaacoluwoleadigun"><span>in</span>LinkedIn</a>
+        </div>
+      </details>
     </nav>
     <div class="vp-ecosystem-links" aria-label="Hephzibah Behulah ecosystem">
-      <a href="https://hephzibahbehulah.com/" target="_blank" rel="noopener noreferrer">HB / PROFESSIONAL PORTFOLIO ↗</a>
-      <a href="https://github.com/HephzibahBehulah" target="_blank" rel="noopener noreferrer">GITHUB ↗</a>
-      <a href="https://www.linkedin.com/in/isaacoluwoleadigun" target="_blank" rel="noopener noreferrer">LINKEDIN ↗</a>
+      <a href="https://hephzibahbehulah.com/" rel="noopener noreferrer">HB / PROFESSIONAL PORTFOLIO ↗</a>
+      <a href="https://github.com/HephzibahBehulah" rel="noopener noreferrer">GITHUB ↗</a>
+      <a href="https://www.linkedin.com/in/isaacoluwoleadigun" rel="noopener noreferrer">LINKEDIN ↗</a>
     </div>
     <div class="sidebar-bottom">
       <div class="progress-mini"><div><span>Academy progress</span><strong id="sideProgress">0%</strong></div><div class="track"><i id="sideProgressBar"></i></div></div>
@@ -53,7 +91,13 @@
       </div>
     </header>
 
-    <section class="hb-identity-node" aria-labelledby="hbIdentityTitle">
+
+
+    <div id="toast" class="toast" role="status"></div>
+    <div id="view" class="view"></div>
+  <details class="hb-identity-disclosure" id="hbProfileDetails">
+    <summary><span>HEPHZIBAH BEHULAH / IDENTITY &amp; CAPABILITIES</span><small>Expand profile details</small><b>OPEN +</b></summary>
+  <section class="hb-identity-node" aria-labelledby="hbIdentityTitle">
       <div class="hb-id-topline">
         <span>IDENTITY NODE <strong>/ PROFILE-01</strong></span>
         <span class="hb-id-status">PUBLIC PROFILE · ONLINE</span>
@@ -67,11 +111,11 @@
           <p class="hb-id-disciplines">ENGINEERING <b>→</b> SOFTWARE <b>→</b> DATA <b>→</b> CYBER INTELLIGENCE</p>
           <p class="hb-id-summary">An electronics and electrical engineering professional developing a practical path through automation, software, data analytics and cybersecurity. This portfolio is a live map of projects, experiments, learning and systems thinking.</p>
           <nav class="hb-id-links" aria-label="Hephzibah Behulah profile links">
-            <a class="hb-id-primary" href="https://hephzibahbehulah.com/#tree" target="_blank" rel="noopener noreferrer">ENTER INTELLIGENCE TREE ↓</a>
-            <a href="https://github.com/HephzibahBehulah" target="_blank" rel="noopener noreferrer">GITHUB ↗</a>
-            <a href="https://www.linkedin.com/in/isaacoluwoleadigun" target="_blank" rel="noopener noreferrer">LINKEDIN ↗</a>
-            <a href="https://hephzibahbehulah.com/cyber-os/" target="_blank" rel="noopener noreferrer">OPEN CYBER OS ↗</a>
-            <a href="https://hephzibahbehulah.com/about.html" target="_blank" rel="noopener noreferrer">FULL STORY →</a>
+            <a class="hb-id-primary" href="https://hephzibahbehulah.com/#tree" rel="noopener noreferrer">ENTER INTELLIGENCE TREE ↓</a>
+            <a href="https://github.com/HephzibahBehulah" rel="noopener noreferrer">GITHUB ↗</a>
+            <a href="https://www.linkedin.com/in/isaacoluwoleadigun" rel="noopener noreferrer">LINKEDIN ↗</a>
+            <a href="https://hephzibahbehulah.com/cyber-os/" rel="noopener noreferrer">OPEN CYBER OS ↗</a>
+            <a href="https://hephzibahbehulah.com/about.html" rel="noopener noreferrer">FULL STORY →</a>
           </nav>
         </article>
 
@@ -104,15 +148,13 @@
           </div>
         </aside>
       </div>
-      <div class="hb-id-bottom"><span>LIVE DATA CHANNEL / <strong>PUBLIC GITHUB PORTFOLIO</strong> · <a href="https://github.com/HephzibahBehulah" target="_blank" rel="noopener noreferrer" style="color:#54e7ff;text-decoration:none">OPEN REPOSITORIES ↗</a></span><span>HB / SYSTEMS · INTELLIGENCE · SECURITY</span></div>
+      <div class="hb-id-bottom"><span>LIVE DATA CHANNEL / <strong>PUBLIC GITHUB PORTFOLIO</strong> · <a href="https://github.com/HephzibahBehulah" rel="noopener noreferrer" style="color:#54e7ff;text-decoration:none">OPEN REPOSITORIES ↗</a></span><span>HB / SYSTEMS · INTELLIGENCE · SECURITY</span></div>
     </section>
-
-    <div id="toast" class="toast" role="status"></div>
-    <div id="view" class="view"></div>
+  </details>
   </main>
 </div>
 <dialog id="lessonDialog"><div id="lessonModal"></div></dialog>
-<script src="script.js"></script>
+<script src="script.js?v=20261010a"></script>
 <script src="voltpro-assistant.js?v=20261010a" defer></script>
 <script>if("serviceWorker" in navigator){navigator.serviceWorker.register("service-worker.js").catch(()=>{})}</script>
 </body>
