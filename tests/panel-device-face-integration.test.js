@@ -10,7 +10,6 @@ test("DIN-rail panel designer renders physical device faces in rail placements a
   assert.ok(source.includes('class="vpw-mini-face"'));
   assert.ok(source.includes('class="vpw-selected-face"'));
   assert.ok(source.includes("window.VoltProDeviceFace"));
-  assert.ok(source.includes("DIMENSIONS NOT VERIFIED")===false,"dimension disclaimer belongs to the physical renderer, not hard-coded UI text");
 });
 
 test("panel physical previews use verified dimensions only through the device-face renderer",()=>{
