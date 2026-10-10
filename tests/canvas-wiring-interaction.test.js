@@ -17,8 +17,11 @@ test('component body cancels a pending wire and continues into pointer drag setu
   assert.doesNotMatch(handler, /if\(wiring\?\.active\)\{[^}]*return/);
 });
 
-test('pin starts wiring through a separate pointer handler', () => {
-  assert.match(source, /\$\$\("\.pin"\)\.forEach\(p=>p\.onpointerdown=e=>\{e\.stopPropagation\(\);e\.preventDefault\(\);handlePin\(p\.dataset\.pin\)\}\)/);
+test('pin pointer interaction supports direct drag-to-connect and click-to-connect', () => {
+  assert.match(source, /dragWire=\{start:p\.dataset\.pin,pointerId:e\.pointerId,startX:e\.clientX,startY:e\.clientY,moved:false\}/);
+  assert.match(source, /if\(gesture\.moved&&wiring\?\.active&&wiring\.start\)/);
+  assert.match(source, /handlePin\(target\.dataset\.pin\)/);
+  assert.match(source, /handlePin\(p\.dataset\.pin\)/);
 });
 
 test('Escape, right-click, and blank-canvas click cancel an active wire', () => {
@@ -82,7 +85,8 @@ test('toolbar wire menu exists', () => {
  assert.ok(html.includes('id="wireMenuBtn" type="button" aria-haspopup="true"'));
  assert.ok(source.includes('function setWireMenu(open)'));
  assert.ok(source.includes('...S.wireStyle'));
- assert.match(source, /\["#wireBtn","#wireMenuBtn"\]\.forEach\(q=>\{\s*const button=\$\(q\);\s*if\(button\)button\.addEventListener\("click",e=>\{e\.preventDefault\(\);e\.stopPropagation\(\);setWireMenu\(wireMenu\?\.hidden\)\}\);\s*\}\)/);
+ assert.match(source, /if\(wireButton\)wireButton\.addEventListener\("click",e=>\{e\.preventDefault\(\);e\.stopPropagation\(\);toggleWireDrawing\(\)\}\)/);
+ assert.match(source, /if\(wireMenuButton\)wireMenuButton\.addEventListener\("click",e=>\{e\.preventDefault\(\);e\.stopPropagation\(\);setWireMenu\(wireMenu\?\.hidden\)\}\)/);
  assert.ok(!source.includes("earlyWireButton"));
  assert.ok(!source.includes("earlyWireMenuButton"));
  assert.match(source, /if\(startWireBtn\)startWireBtn\.addEventListener\("click",toggleWireDrawing\)/);
