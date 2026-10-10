@@ -169,3 +169,11 @@
  .simulator-page .vp-brand-product>small,.engineering-page .vp-brand-product>small{max-width:125px;font-size:6px;line-height:1.35}
  .engineering-page .vp-brand-lockup{max-width:65vw}
 }
+
+
+/* Public external-reference controls shared by the floating assistant on every workspace. */
+.vp-bot-external{display:flex;align-items:center;gap:8px;padding:8px 14px;color:var(--vp-hb-muted,#91a6bf);font-size:11px;border-top:1px solid rgba(86,207,225,.1)}
+.vp-bot-external input{accent-color:var(--vp-hb-cyan,#35d5ff)}
+.vp-bot-sources{display:flex;flex-wrap:wrap;gap:6px;padding:0 12px 10px}
+.vp-bot-sources a{display:inline-block;border:1px solid rgba(86,207,225,.22);border-radius:8px;padding:6px 8px;color:var(--vp-hb-cyan,#35d5ff);font-size:11px;text-decoration:none}
+.vp-bot-sources a:hover{border-color:var(--vp-hb-cyan,#35d5ff)}
