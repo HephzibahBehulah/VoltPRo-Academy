@@ -7,7 +7,7 @@
 if(window.VoltProAcademyExpansionLoaded)return;
 window.VoltProAcademyExpansionLoaded=true;
 const VLABS=[
-["lab-series","Series Circuit Voltage","Circuits","Foundation","A 12 V source feeds two series resistors of 2 Ω and 4 Ω. Find total current.","0.5 A","Rtotal = 6 Ω; I = U/R = 12/6 = 2 A.","The correct current is 2 A. In a series circuit, resistances add."],
+["lab-series","Series Circuit Voltage","Circuits","Foundation","A 12 V source feeds two series resistors of 2 Ω and 4 Ω. Find total current.","2 A","Rtotal = 6 Ω; I = U/R = 12/6 = 2 A.","The correct current is 2 A. In a series circuit, resistances add."],
 ["lab-parallel","Parallel Branch Reasoning","Circuits","Foundation","Two 12 Ω resistors are connected in parallel across an ideal 12 V source. Find total current.","2 A","Each branch draws 1 A; branch currents add to 2 A.","Equivalent resistance is 6 Ω, so I = 12/6 = 2 A."],
 ["lab-power","Power and Energy","Calculations","Foundation","A 60 W lamp operates for 5 hours. Find the energy used in Wh.","300 Wh","E = P × t = 60 W × 5 h.","Energy is 300 Wh or 0.3 kWh."],
 ["lab-divider","Voltage Divider","Electronics","Intermediate","A 12 V source feeds 1 kΩ and 2 kΩ in series. What voltage is across the 2 kΩ resistor?","8 V","Vout = 12 × 2/(1+2) = 8 V.","The divider output is measured across the 2 kΩ resistor."],
