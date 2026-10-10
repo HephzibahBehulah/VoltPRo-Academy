@@ -28,3 +28,8 @@
 @media(max-width:600px){#vpCircuitDesigner{right:10px;bottom:12px}#vpCircuitDesigner .vp-cd-panel{right:0;bottom:52px;max-height:75vh}}
 
 .symbol-style-control{display:inline-flex;align-items:center;gap:6px;font-size:10px;color:var(--muted,#9eafbf);white-space:nowrap}.symbol-style-control select{max-width:145px;border:1px solid var(--border,#33485a);border-radius:6px;background:var(--panel,#111c27);color:var(--text,#e5edf5);padding:6px 7px;font:inherit}
+
+#vpCircuitDesigner .vp-cd-component{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:5px 0;border-bottom:1px solid #20313f}
+#vpCircuitDesigner .vp-cd-component-name{min-width:0;overflow-wrap:anywhere}
+#vpCircuitDesigner .vp-cd-device-face{flex:0 0 48px;width:48px;height:60px;overflow:hidden;border:1px solid #344a5b;border-radius:5px;background:#e8edf2}
+#vpCircuitDesigner .vp-cd-device-face svg{display:block;width:100%;height:100%}
