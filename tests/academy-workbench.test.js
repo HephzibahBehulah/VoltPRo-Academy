@@ -48,6 +48,6 @@ test("simulator links to the workbench and supports its project handoff", () => 
 
 test("colour console accepts standard HEX lengths but not five-digit HEX", () => {
   const js = read("academy-workbench.js");
-  assert.match(js, /\{3\}\|\[0-9a-f\]\{4\}\|\[0-9a-f\]\{6\}\|\[0-9a-f\]\{8\}/i);
+  assert.match(js, /\[0-9a-f\]\{3\}\|\[0-9a-f\]\{4\}\|\[0-9a-f\]\{6\}\|\[0-9a-f\]\{8\}/i);
   assert.match(js, /Invalid or incomplete HEX \/ RGB/);
 });
