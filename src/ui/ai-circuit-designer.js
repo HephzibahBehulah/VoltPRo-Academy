@@ -50,7 +50,7 @@ const boot=()=>{
   draft=planner.plan(prompt.value,draft);
   if(!draft.recognized){status.textContent=draft.error||"This circuit request is not supported by the current planner.";status.dataset.state="invalid";preview.hidden=true;warnings.replaceChildren();insert.disabled=true;return}
   try{
-   const runtime=window.VoltPRoV5Runtime,graph=window.VoltProTerminalGraph;
+   const runtime=window.VoltProV5Runtime,graph=window.VoltProTerminalGraph;
    if(!runtime||!graph)throw new Error("Topology validation modules are unavailable.");
    const adapted=runtime.adapt({components:draft.components,wires:draft.wires});
    lastValidation=graph.build(adapted).validateTopology();
