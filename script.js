@@ -203,6 +203,7 @@ function expandedSettings(){
 function saveExpandedName(){state.student=document.getElementById("nameInput2").value.trim()||"Student";save();render();toast("Profile saved")}
 function switchLanguage(){state.language=state.language==="DE"?"EN":"DE";save();render()}
 function expandedRender(){
+ document.querySelectorAll(".nav-group").forEach(function(g){if(g.querySelector('.nav-item[data-view="'+state.view+'"]'))g.open=true});
  document.querySelectorAll(".nav-item[data-view]").forEach(function(b){b.classList.toggle("active",b.dataset.view===state.view)});
  document.getElementById("studentName").textContent=state.student;
  const map={dashboard:dashboard,learn:learn,safety:safety,labs:renderExpandedLabs,quiz:quiz,exam:expandedExam,reference:expandedReference,tools:expandedTools,tutor:expandedTutor,ar:expandedAR,settings:expandedSettings};
