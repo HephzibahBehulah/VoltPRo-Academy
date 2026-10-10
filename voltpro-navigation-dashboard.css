@@ -60,3 +60,12 @@
  .academy-page .view .card{padding:12px}
  .academy-page .nav-group>summary{padding:10px}
 }
+/* Keep the professional identity profile available without pushing the dashboard down. */
+.academy-page .hb-identity-disclosure{width:100%;max-width:1480px;margin:0 auto;padding:0 clamp(14px,2vw,26px) 18px}
+.academy-page .hb-identity-disclosure>summary{list-style:none;display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:12px 14px;border:1px solid rgba(86,207,225,.18);border-radius:11px;background:rgba(8,15,27,.76);color:var(--vp-hb-text);cursor:pointer;font-size:11px;font-weight:800;letter-spacing:.06em}
+.academy-page .hb-identity-disclosure>summary::-webkit-details-marker{display:none}
+.academy-page .hb-identity-disclosure>summary small{margin-left:auto;color:var(--vp-hb-muted);font-weight:500;letter-spacing:0}
+.academy-page .hb-identity-disclosure>summary b{color:var(--vp-hb-cyan);font:700 12px/1 "JetBrains Mono",monospace}
+.academy-page .hb-identity-disclosure[open]>summary{border-radius:11px 11px 0 0}
+.academy-page .hb-identity-disclosure .hb-identity-node{width:100%;max-width:none;margin:0;border:1px solid rgba(86,207,225,.18);border-top:0;border-radius:0 0 11px 11px}
+@media(max-width:760px){.academy-page .hb-identity-disclosure{padding-inline:10px}.academy-page .hb-identity-disclosure>summary{gap:8px}.academy-page .hb-identity-disclosure>summary small{margin-left:0}}
