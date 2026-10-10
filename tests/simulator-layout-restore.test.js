@@ -18,10 +18,10 @@ test('simulator layout restoration stylesheet loads after the visual theme layer
 test('top navigation and toolbar keep controls readable and horizontally reachable', () => {
   assert.match(layout, /\.sim-top\s*\{[^}]*flex-flow:\s*row nowrap/s);
   assert.match(layout, /\.sim-top\s*\{[^}]*overflow-x:\s*auto/s);
-  assert.match(layout, /\.top-actions button,\s*\.simulator-page \.top-actions a\s*\{[^}]*white-space:\s*nowrap/s);
+  assert.match(layout, /\.simulator-page \.top-actions button,\s*\.simulator-page \.top-actions a\s*\{[^}]*white-space:\s*nowrap/s);
   assert.match(layout, /\.toolbar\s*\{[^}]*flex-flow:\s*row nowrap/s);
   assert.match(layout, /\.toolbar\s*\{[^}]*overflow-x:\s*auto/s);
-  assert.match(layout, /\.top-actions button,\s*\.simulator-page \.top-actions a\s*\{[^}]*display:\s*inline-flex/s);
+  assert.match(layout, /\.simulator-page \.top-actions button,\s*\.simulator-page \.top-actions a\s*\{[^}]*display:\s*inline-flex/s);
 });
 
 test('component category tabs cannot shrink into unreadable fragments', () => {
