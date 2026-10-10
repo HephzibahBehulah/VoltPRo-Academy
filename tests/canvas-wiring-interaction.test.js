@@ -70,7 +70,7 @@ test('wire inspector exposes AWG and metric cross-section with synchronized appr
   assert.ok(source.includes('data-wire-prop="size"'));
   assert.ok(source.includes('Drawing thickness only. It does not calculate current capacity or electrical safety.'));
   const html = fs.readFileSync(path.join(__dirname, '..', 'simulator.html'), 'utf8');
-  assert.ok(html.includes('simulator.js?v=20261010n'));
+  assert.ok(html.includes('simulator.js?v=20261010o'));
   assert.ok(html.includes('simulator.css?v=20261010f'));
 });
 
@@ -82,9 +82,16 @@ test('toolbar wire menu exists', () => {
  assert.ok(html.includes('id="wireMenuBtn" type="button" aria-haspopup="true"'));
  assert.ok(source.includes('function setWireMenu(open)'));
  assert.ok(source.includes('...S.wireStyle'));
- assert.match(source, /earlyWireButton\.addEventListener\("click",e=>\{e\.preventDefault\(\);e\.stopPropagation\(\);setWireMenu\(earlyWireMenu\.hidden\)\}\)/);
- assert.match(source, /earlyWireMenuButton\.addEventListener\("click",e=>\{e\.preventDefault\(\);e\.stopPropagation\(\);setWireMenu\(earlyWireMenu\.hidden\)\}\)/);
- assert.ok(source.includes('startWireBtn.onclick=toggleWireDrawing;'));
+ assert.match(source, /\["#wireBtn","#wireMenuBtn"\]\.forEach\(q=>\{\s*const button=\$\(q\);\s*if\(button\)button\.addEventListener\("click",e=>\{e\.preventDefault\(\);e\.stopPropagation\(\);setWireMenu\(wireMenu\?\.hidden\)\}\);\s*\}\)/);
+ assert.ok(!source.includes("earlyWireButton"));
+ assert.ok(!source.includes("earlyWireMenuButton"));
+ assert.match(source, /if\(startWireBtn\)startWireBtn\.addEventListener\("click",toggleWireDrawing\)/);
+ assert.match(source, /document\.addEventListener\("click",e=>\{if\(wireTool&&!wireTool\.contains\(e\.target\)\)setWireMenu\(false\)\}\)/);
+ assert.match(source, /document\.addEventListener\("keydown",e=>\{if\(e\.key==="Escape"&&wireMenu&&!wireMenu\.hidden\)\{setWireMenu\(false\)\}\}\)/);
+ assert.match(source, /if\(wireColor\)wireColor\.addEventListener\("input"/);
+ assert.match(source, /if\(wireCableType\)wireCableType\.addEventListener\("change"/);
+ assert.match(source, /if\(wireSize\)wireSize\.addEventListener\("change"/);
+ assert.match(source, /if\(wireGauge\)wireGauge\.addEventListener\("change"/);
  assert.match(source, /const b=\$\("#startWireBtn"\);if\(b\)\{b\.classList\.toggle\("active",s\.active\);b\.setAttribute\("aria-pressed",String\(s\.active\)\)\}/);
  assert.match(source, /\["#wireBtn","#wireMenuBtn"\]\.forEach\(q=>\{const b=\$\(q\);if\(b\)b\.setAttribute\("aria-expanded",String\(open\)\)\}\)/);
  assert.match(workflow, /if\(was\)this\.callbacks\.onCancel\?\.\(\)/);
