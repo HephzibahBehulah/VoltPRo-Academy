@@ -1,6 +1,6 @@
 (()=>{"use strict";
 const C={voltage:12,current:0,resistance:1000};
-const S={version:1,mode:"schematic",components:[],wires:[],selected:null,selectedWireId:null,wireStart:null,wirePointer:null,wiringMode:false,running:false,zoom:1,pan:{x:0,y:0},grid:20,history:[],future:[],meter:"voltage",theme:"dark",symbolStyle:"iec",wireStyle:{color:"#65d8ff",cableType:"standard",size:"1.5",gauge:"16",width:2.5}};
+const S={version:1,mode:"schematic",components:[],wires:[],selected:null,selectedWireId:null,wireStart:null,wirePointer:null,wiringMode:false,running:false,zoom:1,pan:{x:0,y:0},grid:20,history:[],future:[],meter:"voltage",theme:"dark",symbolStyle:localStorage.getItem("voltpro-symbol-style")||"iec",wireStyle:{color:"#65d8ff",cableType:"standard",size:"1.5",gauge:"16",width:2.5}};
 const defs={
  battery:{cat:"Power",name:"DC Source",symbol:"V",pins:2,props:{voltage:12},unit:"V",res:0},
  resistor:{cat:"Passive",name:"Resistor",symbol:"R",pins:2,props:{resistance:1000},unit:"Ω"},
@@ -80,7 +80,7 @@ function symbol(c){
  const path=d=>'<path class="symbol" d="'+d+'"/>';
  const circle=(r)=>'<circle class="symbol" r="'+r+'"/>';
  const text=(s,y=4)=>'<text class="symbol-label" y="'+y+'" text-anchor="middle">'+esc(s)+'</text>';
- if(S.symbolStyle==="terminal-blocks") return '<rect class="symbol device-block" x="-32" y="-30" width="64" height="60" rx="4"/>'+text(d.symbol||d.name.slice(0,2))+'<text class="symbol-label" y="43" text-anchor="middle">'+esc(d.name)+'</text>';
+ if(S.symbolStyle==="terminal-blocks") return '<rect class="symbol device-block" x="-32" y="-30" width="64" height="60" rx="4"/>'+text(d.symbol||d.name.slice(0,2));
  if(S.symbolStyle==="simplified") return '<rect class="symbol" x="-20" y="-14" width="40" height="28" rx="3"/>'+text(d.symbol||d.name.slice(0,1));
  if(c.type==="battery"||c.type==="acsource") return line(-55,0,-25,0)+line(25,0,55,0)+circle(25)+text("+",-4)+text("−",13);
  if(c.type==="resistor") return line(-55,0,-30,0)+'<rect class="symbol" x="-30" y="-10" width="60" height="20"/>'+line(30,0,55,0);
