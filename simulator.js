@@ -36,7 +36,14 @@ const defs={
  wirelabel:{cat:"Panel",name:"Wire Label",symbol:"LBL",pins:1,props:{label:"101"}}
 };
 window.S=S; window.defs=defs;
-const $=q=>document.querySelector(q), $$=q=>[...document.querySelectorAll(q)];
+const $=q=>document.querySelector(q), $=q=>[...document.querySelectorAll(q)];
+// Bind the Wire dropdown immediately, before the rest of the simulator initializes.
+// This keeps the settings menu clickable even if a later optional control fails to initialize.
+const earlyWireButton=$("#wireBtn"),earlyWireMenu=$("#wireMenu"),earlyWireTool=document.querySelector(".wire-tool");
+if(earlyWireButton&&earlyWireMenu){
+ earlyWireButton.addEventListener("click",e=>{e.preventDefault();e.stopPropagation();const open=earlyWireMenu.hidden;earlyWireMenu.hidden=!open;earlyWireButton.setAttribute("aria-expanded",String(open));});
+ document.addEventListener("click",e=>{if(earlyWireTool&&!earlyWireTool.contains(e.target)){earlyWireMenu.hidden=true;earlyWireButton.setAttribute("aria-expanded","false");}});
+}
 const svg=$("#canvas"), comps=$("#components"), wires=$("#wires"), labels=$("#labels"), selg=$("#selection"), wrap=$("#canvasWrap");
 const wiring=window.VoltProWiring?new window.VoltProWiring.Controller({
  getWires:()=>S.wires,nextId:()=>"W"+uid(),
