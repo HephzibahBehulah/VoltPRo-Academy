@@ -5,14 +5,14 @@ const path = require('node:path');
 const source = fs.readFileSync(path.join(__dirname, '..', 'simulator.js'), 'utf8');
 const workflow = fs.readFileSync(path.join(__dirname, '..', 'src', 'ui', 'wiring-workflow.js'), 'utf8');
 
-test('component body cancels a pending wire and continues into drag setup', () => {
-  const start = source.indexOf('g.onmousedown=e=>');
+test('component body cancels a pending wire and continues into pointer drag setup', () => {
+  const start = source.indexOf('g.onpointerdown=e=>');
   const end = source.indexOf('g.ondblclick=', start);
-  assert.notEqual(start, -1, 'component body mousedown handler exists');
+  assert.notEqual(start, -1, 'component body pointer handler exists');
   const handler = source.slice(start, end);
-  assert.match(handler, /if\(e\.target\.classList\.contains\("pin"\)\)return/);
+  assert.match(handler, /if\(e\.target\.classList\.contains\("pin"\)\|\|e\.button!==0\)return/);
   assert.match(handler, /if\(wiring\?\.active\)wiring\.cancel\(\)/);
-  assert.match(handler, /dragging=\{id:S\.selected,start:posFromEvent\(e\)/);
+  assert.match(handler, /dragging=\{id,start:posFromEvent\(e\),orig:\{\.\.\.c\},pointerId:e\.pointerId/);
   assert.ok(handler.indexOf('wiring.cancel()') < handler.indexOf('dragging='));
   assert.doesNotMatch(handler, /if\(wiring\?\.active\)\{[^}]*return/);
 });
