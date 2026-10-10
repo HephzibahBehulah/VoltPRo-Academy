@@ -241,7 +241,18 @@ function setWireMenu(open){
  const isOpen=Boolean(open);
  wireMenu.hidden=!isOpen;
  ["#wireBtn","#wireMenuBtn"].forEach(q=>{const b=$(q);if(b)b.setAttribute("aria-expanded",String(isOpen))});
- if(isOpen)syncWireMenu();
+ if(isOpen){
+  const anchor=$("#wireMenuBtn")?.getBoundingClientRect();
+  if(anchor){
+   const menuWidth=Math.min(300,window.innerWidth-16);
+   const menuHeight=Math.min(560,window.innerHeight-24);
+   wireMenu.style.left=Math.max(8,Math.min(anchor.left,window.innerWidth-menuWidth-8))+"px";
+   wireMenu.style.top=Math.max(8,Math.min(anchor.bottom+8,window.innerHeight-menuHeight-8))+"px";
+   wireMenu.style.width=menuWidth+"px";
+   wireMenu.style.maxHeight=menuHeight+"px";
+  }
+  syncWireMenu();
+ }
 }
 function toggleWireDrawing(){
  if(wiring){if(wiring.active)wiring.cancel();else wiring.begin();}
