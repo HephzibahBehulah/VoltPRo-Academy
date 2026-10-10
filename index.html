@@ -26,7 +26,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css?v=20261009c">
 <link rel="stylesheet" href="cyber-theme.css?v=20261009c">
-<link rel="stylesheet" href="voltpro-hb-theme.css?v=20261010a">
+<link rel="stylesheet" href="voltpro-hb-theme.css?v=20261010d">
 <link rel="stylesheet" href="voltpro-identity.css?v=20261010b">
 <link rel="manifest" href="pwa.webmanifest">
 <link rel="stylesheet" href="voltpro-navigation-dashboard.css?v=20261010d">
@@ -46,49 +46,40 @@
       <details class="nav-group" open>
         <summary class="nav-group-title">Learn &amp; Reference</summary>
         <div class="nav-group-items">
-          <button class="nav-item" data-view="learn"><span>▣</span>Learn</button>
-          <button class="nav-item" data-view="quiz"><span>✓</span>Assessments</button>
-          <button class="nav-item" data-view="exam"><span>🎓</span>Exam Simulation</button>
-          <button class="nav-item" data-view="reference"><span>☷</span>Reference</button>
+          <button class="nav-item" data-view="learn"><span>▣</span>Learning Path</button>
+          <button class="nav-item" data-view="quiz"><span>✓</span>Knowledge Checks</button>
+          <button class="nav-item" data-view="exam"><span>🎓</span>Exam Practice</button>
+          <button class="nav-item" data-view="reference"><span>☷</span>Reference Library</button>
         </div>
       </details>
 
       <details class="nav-group">
-        <summary class="nav-group-title">Safety &amp; Security</summary>
+        <summary class="nav-group-title">Safety &amp; Practical Learning</summary>
         <div class="nav-group-items">
-          <button class="nav-item" data-view="safety"><span>⚠</span>Safety</button>
+          <button class="nav-item" data-view="safety"><span>⚠</span>Safety &amp; Standards</button>
           <button class="nav-item" data-view="labs"><span>⌘</span>Virtual Labs</button>
+          <a class="nav-item" href="academy-workbench.html"><span>⌁</span>Practical Workbench</a>
+          <button class="nav-item" data-view="tools"><span>🧰</span>Tools &amp; Equipment</button>
+          <button class="nav-item" data-view="ar"><span>◉</span>Component Learning</button>
         </div>
       </details>
 
       <details class="nav-group">
-        <summary class="nav-group-title">Engineering &amp; Simulation</summary>
+        <summary class="nav-group-title">Engineering</summary>
         <div class="nav-group-items">
           <a class="nav-item" href="simulator.html"><span>⚡</span>VoltPRo Simulator</a>
           <a class="nav-item" href="engineering.html"><span>∑</span>Engineering Tools</a>
-          <a class="nav-item" href="academy-workbench.html"><span>⌁</span>Academy Workbench</a>
-          <button class="nav-item" data-view="tools"><span>🧰</span>Tools &amp; Equipment</button>
         </div>
       </details>
 
       <details class="nav-group">
-        <summary class="nav-group-title">AI &amp; Operations</summary>
+        <summary class="nav-group-title">Assistance</summary>
         <div class="nav-group-items">
           <button class="nav-item" data-view="tutor"><span>🤖</span>AI Tutor</button>
-          <button class="nav-item" data-view="ar"><span>📷</span>Apprentice AR</button>
-        </div>
-      </details>
-
-      <details class="nav-group">
-        <summary class="nav-group-title">External</summary>
-        <div class="nav-group-items">
-          <a class="nav-item" href="https://hephzibahbehulah.com/"><span>↗</span>HB Professional Portfolio</a>
-          <a class="nav-item" href="https://github.com/HephzibahBehulah"><span>⌘</span>GitHub</a>
-          <a class="nav-item" href="https://www.linkedin.com/in/isaacoluwoleadigun"><span>in</span>LinkedIn</a>
         </div>
       </details>
     </nav>
-    <div class="vp-ecosystem-links" aria-label="Hephzibah Behulah ecosystem">
+    <div class="vp-ecosystem-links" aria-label="External links — Hephzibah Behulah">
       <a href="https://hephzibahbehulah.com/" rel="noopener noreferrer">HB / PROFESSIONAL PORTFOLIO ↗</a>
       <a href="https://github.com/HephzibahBehulah" rel="noopener noreferrer">GITHUB ↗</a>
       <a href="https://www.linkedin.com/in/isaacoluwoleadigun" rel="noopener noreferrer">LINKEDIN ↗</a>
@@ -174,8 +165,8 @@
   </main>
 </div>
 <dialog id="lessonDialog"><div id="lessonModal"></div></dialog>
-<script src="script.js?v=20261010b"></script>
-<script src="voltpro-assistant.js?v=20261010a" defer></script>
+<script src="script.js?v=20261010c"></script>
+<script src="voltpro-assistant.js?v=20261010b" defer></script>
 <script>if("serviceWorker" in navigator){navigator.serviceWorker.register("service-worker.js").catch(()=>{})}</script>
 </body>
 </html>
