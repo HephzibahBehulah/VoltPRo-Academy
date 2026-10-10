@@ -3,7 +3,7 @@ const MODULE=18,WIDTH=600,HEIGHT=400;
 const clone=x=>structuredClone(x);
 function create(spec={}){
  const rails=Array.isArray(spec.rails)&&spec.rails.length?clone(spec.rails):[{id:"R1",label:"DIN rail 1",length:18,y:92}];
- return {width:Number(spec.width)||WIDTH,height:Number(spec.height)||HEIGHT,enclosure:{label:"Main distribution board",ipRating:"IP40",...(spec.enclosure||{})},rails,items:Array.isArray(spec.items)?clone(spec.items):[],ducts:Array.isArray(spec.ducts)?clone(spec.ducts):[],terminalStrips:Array.isArray(spec.terminalStrips)?clone(spec.terminalStrips):[]};
+ return {width:Number(spec.width)||WIDTH,height:Number(spec.height)||HEIGHT,enclosure:{label:"Main distribution board",ipRating:"IP40",...(spec.enclosure||{})},rails,items:Array.isArray(spec.items)?clone(spec.items):[],ducts:Array.isArray(spec.ducts)?clone(spec.ducts):[],terminalStrips:Array.isArray(spec.terminalStrips)?clone(spec.terminalStrips):[],excludedComponentIds:Array.isArray(spec.excludedComponentIds)?clone(spec.excludedComponentIds):[]};
 }
 function normalizeItem(item,index=0){
  const width=Math.max(MODULE,Math.ceil(Number(item.width)||MODULE));
