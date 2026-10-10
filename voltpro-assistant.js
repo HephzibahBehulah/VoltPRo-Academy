@@ -126,7 +126,7 @@ NAVIGATION POLICY: avoid duplicate content ownership. Simulator = build/simulate
       });
       if (response.ok) {
         const data = await response.json();
-        if (data && typeof data.answer === "string" && data.answer.trim()) answer = data.answer.trim();
+        if (data && typeof data.answer === "string" && data.answer.trim()) { answer = data.answer.trim(); responseMode = "ai"; }
       }
     } catch (_) {}
     if (!answer) answer = localAnswer(q);
