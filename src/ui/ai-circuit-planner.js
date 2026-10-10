@@ -77,6 +77,21 @@
     const q=String(prompt||"").toLowerCase().replace(/[–—]/g,"-").trim();
     if(!q)return {recognized:false,error:"Enter a circuit description first.",components:[],wires:[],warnings:[]};
     if(previous&&/\badd\b.*\bswitch\b/.test(q)&&previous.template==="battery-resistor-lamp")return plan("battery switched lamp circuit");
+    if(previous&&previous.recognized){
+      const updated=clone(previous);let changed=false;
+      const voltageMatch=q.match(/\\b(\\d+(?:\\.\\d+)?)\\s*v\\b/);
+      if(voltageMatch){
+        const sources=updated.components.filter(c=>["battery","threephase","controlsource"].includes(c.type));
+        const target=/\\bcontrol\\b/.test(q)?sources.find(c=>c.type==="controlsource"):(sources.length===1?sources[0]:null);
+        if(target){target.props=target.props||{};target.props.voltage=Number(voltageMatch[1]);changed=true;}
+      }
+      const resistanceMatch=q.match(/\\b(\\d+(?:\\.\\d+)?)\\s*(?:ohms?|Ω)/);
+      if(resistanceMatch){
+        const resistor=updated.components.find(c=>c.type==="resistor");
+        if(resistor){resistor.props=resistor.props||{};resistor.props.resistance=Number(resistanceMatch[1]);changed=true;}
+      }
+      if(changed){updated.prompt=String(prompt);updated.followup=true;return updated;}
+    }
     let key=null;
     if(/\b(motor starter|starter circuit)\b|\bcontactor\b.*\bmotor\b|\bmotor\b.*\bcontactor\b/.test(q))key="three-phase-motor-starter";
     else if((/\bthree[- ]phase\b|\b3[- ]phase\b|\b400\s*v\b/.test(q))&&/\b(breaker|mcb|protection)\b/.test(q))key="three-phase-breaker";
