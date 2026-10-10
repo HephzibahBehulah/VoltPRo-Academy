@@ -235,7 +235,7 @@ function checkOpenFaultLab(){
  const selected=document.querySelector('input[name="openFaultNext"]:checked'),out=document.getElementById("labFaultFeedback");if(!out)return;
  out.textContent=selected&&selected.value==="safe"?"Correct. Establish a safe state, record the symptom, inspect available information, then let a qualified person choose appropriate tests.":"Not safe. Do not bypass protection or replace wiring without evidence. Start with safe state and structured observation.";
 }
-function finishExpandedLab(id){state.labDone=state.labDone||[];if(!state.labDone.includes(id))state.labDone.push(id);save();lessonDialog.close();renderExpandedLabs();toast("Lab completed")}
+
 
 function meterChoice(btn,mode){document.querySelectorAll(".meter-sim button").forEach(function(b){b.classList.remove("selected")});btn.classList.add("selected");document.getElementById("meterResult").textContent=mode==="A"?"Current measurement requires the correct circuit method. Never connect a current input directly across a voltage source.":"Mode "+mode+" selected. Confirm terminals, CAT rating, range and method before measuring."}
 function finishExpandedLab(id){state.labDone=state.labDone||[];if(!state.labDone.includes(id))state.labDone.push(id);save();lessonDialog.close();renderExpandedLabs();toast("Lab completed")}
