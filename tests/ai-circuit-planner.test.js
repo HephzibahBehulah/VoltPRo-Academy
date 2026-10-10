@@ -47,3 +47,20 @@ test("a simple follow-up request can add a switch to the current simple draft", 
   assert.equal(updated.components.some(c=>c.type==="switch"),true);
   assert.equal(validateDraft(updated).valid,true);
 });
+
+test("follow-up edits change an existing low-voltage source without rebuilding the design", () => {
+  const first=planner.plan("Build a 5 V battery LED circuit with a 330 ohm resistor");
+  const updated=planner.plan("Change it to 12 V",first);
+  assert.equal(updated.template,first.template);
+  assert.equal(updated.components.find(c=>c.type==="battery").props.voltage,12);
+  assert.equal(updated.wires.length,first.wires.length);
+  assert.equal(validateDraft(updated).valid,true);
+});
+
+test("follow-up edits change resistor values in the existing draft", () => {
+  const first=planner.plan("Build a battery LED circuit with a 330 ohm resistor");
+  const updated=planner.plan("Change the resistor to 220 ohms",first);
+  assert.equal(updated.components.find(c=>c.type==="resistor").props.resistance,220);
+  assert.equal(updated.components.length,first.components.length);
+  assert.equal(validateDraft(updated).valid,true);
+});
