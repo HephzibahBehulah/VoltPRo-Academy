@@ -55,7 +55,11 @@ test("colour console accepts standard HEX lengths but not five-digit HEX", () =>
 test("simulator toolbar is organised into task groups without duplicate workbench shortcuts", () => {
   const html = read("simulator.html");
   assert.match(html, /role="toolbar" aria-label="Simulator controls"/);
-  for (const id of ["runBtn", "stopBtn", "undoBtn", "redoBtn", "deleteBtn", "wireBtn", "wireMenuBtn", "paletteBtn", "fitBtn"]) {
+  const header = html.slice(html.indexOf('<header class="sim-top"'), html.indexOf("</header>"));
+  for (const id of ["newBtn", "saveBtn", "loadBtn", "exportBtn", "pngBtn"]) {
+    assert.doesNotMatch(header, new RegExp('id="' + id + '"'));
+  }
+  for (const id of ["runBtn", "stopBtn", "undoBtn", "redoBtn", "deleteBtn", "wireBtn", "wireMenuBtn", "paletteBtn", "fitBtn", "newBtn", "saveBtn", "loadBtn", "exportBtn", "pngBtn"]) {
     assert.match(html, new RegExp('id="' + id + '"'));
   }
   assert.equal((html.match(/href="academy-workbench\.html"/g) || []).length, 1);
