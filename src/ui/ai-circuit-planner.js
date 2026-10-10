@@ -78,13 +78,13 @@
     if(!q)return {recognized:false,error:"Enter a circuit description first.",components:[],wires:[],warnings:[]};
     if(previous&&previous.recognized){
       const updated=clone(previous);let changed=false;
-      const voltageMatch=q.match(/\\b(\\d+(?:\\.\\d+)?)\\s*v\\b/);
+      const voltageMatch=q.match(/\b(\d+(?:\.\d+)?)\s*v\b/);
       if(voltageMatch){
         const sources=updated.components.filter(c=>["battery","threephase","controlsource"].includes(c.type));
-        const target=/\\bcontrol\\b/.test(q)?sources.find(c=>c.type==="controlsource"):(sources.length===1?sources[0]:null);
+        const target=/\bcontrol\b/.test(q)?sources.find(c=>c.type==="controlsource"):(sources.length===1?sources[0]:null);
         if(target){target.props=target.props||{};target.props.voltage=Number(voltageMatch[1]);changed=true;}
       }
-      const resistanceMatch=q.match(/\\b(\\d+(?:\\.\\d+)?)\\s*(?:ohms?|Ω)/);
+      const resistanceMatch=q.match(/\b(\d+(?:\.\d+)?)\s*(?:ohms?|Ω)/);
       if(resistanceMatch){
         const resistor=updated.components.find(c=>c.type==="resistor");
         if(resistor){resistor.props=resistor.props||{};resistor.props.resistance=Number(resistanceMatch[1]);changed=true;}
