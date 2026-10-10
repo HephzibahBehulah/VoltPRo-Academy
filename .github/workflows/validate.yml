@@ -32,12 +32,17 @@ jobs:
           test -s engineering.js
           test -s voltpro-assistant.js
           test -s voltpro-hb-theme.css
+          test -s voltpro-identity.css
+          test -s assets/hb-logo.svg
           test -s pwa.webmanifest
           test -s service-worker.js
           grep -q 'simulator.js' simulator.html
           grep -q 'simulator.css' simulator.html
           grep -q 'voltpro-engine.js' simulator.html
           grep -q 'voltpro-hb-theme.css' index.html
+          grep -q 'voltpro-identity.css' index.html
+          grep -q 'hb-identity-node' index.html
+          grep -q 'assets/hb-logo.svg' index.html
           grep -q 'voltpro-assistant.js' index.html
           grep -q 'voltpro-assistant.js' simulator.html
           grep -q 'voltpro-assistant.js' engineering.html
