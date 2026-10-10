@@ -76,6 +76,7 @@
   function plan(prompt,previous){
     const q=String(prompt||"").toLowerCase().replace(/[–—]/g,"-").trim();
     if(!q)return {recognized:false,error:"Enter a circuit description first.",components:[],wires:[],warnings:[]};
+    if(previous&&/\\badd\\b.*\\bswitch\\b/.test(q)&&previous.template==="battery-resistor-lamp")return plan("battery switched lamp circuit");
     let key=null;
     else if((/three[- ]phase|3[- ]phase|400\s*v/.test(q))&&/(breaker|mcb|protection|motor)/.test(q)&&/motor/.test(q))key="three-phase-motor-starter";
     else if((/three[- ]phase|3[- ]phase|400\s*v/.test(q))&&/(breaker|mcb|protection|motor)/.test(q))&&/motor/.test(q))key="three-phase-motor-starter";
