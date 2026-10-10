@@ -10,7 +10,7 @@ function runtime(defs = {}) {
   vm.runInNewContext(fs.readFileSync(path.join(__dirname, "../platform/v5-runtime.js"), "utf8"), {
     window, structuredClone, Map, String, Number, Array, Boolean, Object
   });
-  return window.VoltPRoV5Runtime;
+  return window.VoltProV5Runtime;
 }
 
 test("legacy numeric pins adapt to stable model terminal IDs", () => {
