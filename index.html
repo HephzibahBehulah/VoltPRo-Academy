@@ -14,6 +14,7 @@
 <link rel="stylesheet" href="voltpro-hb-theme.css?v=20261010a">
 <link rel="stylesheet" href="voltpro-identity.css?v=20261010b">
 <link rel="manifest" href="pwa.webmanifest">
+<link rel="stylesheet" href="voltpro-navigation-dashboard.css?v=20261010a">
 </head>
 <body class="academy-page">
 <div id="app" class="app-shell">
@@ -22,18 +23,55 @@
     <div class="student-mini"><div class="avatar">HB</div><div><strong id="studentName">Student</strong><small>Electrical Apprentice</small></div></div>
     <nav class="nav" aria-label="Main navigation">
       <button class="nav-item active" data-view="dashboard"><span>⌂</span>Dashboard</button>
-      <button class="nav-item" data-view="learn"><span>▣</span>Learn</button>
-      <button class="nav-item" data-view="safety"><span>⚠</span>Safety</button>
-      <button class="nav-item" data-view="labs"><span>⌘</span>Virtual Labs</button>
-      <a class="nav-item" href="simulator.html" style="text-decoration:none"><span>⚡</span>VoltPRo Simulator</a>
-      <a class="nav-item" href="engineering.html" style="text-decoration:none"><span>∑</span>Engineering Tools</a>
-      <button class="nav-item" data-view="quiz"><span>✓</span>Assessments</button>
-      <button class="nav-item" data-view="reference"><span>☷</span>Reference</button>
+
+      <details class="nav-group" open>
+        <summary class="nav-group-title">Learn &amp; Reference</summary>
+        <div class="nav-group-items">
+          <button class="nav-item" data-view="learn"><span>▣</span>Learn</button>
+          <button class="nav-item" data-view="quiz"><span>✓</span>Assessments</button>
+          <button class="nav-item" data-view="exam"><span>🎓</span>Exam Simulation</button>
+          <button class="nav-item" data-view="reference"><span>☷</span>Reference</button>
+        </div>
+      </details>
+
+      <details class="nav-group">
+        <summary class="nav-group-title">Safety &amp; Security</summary>
+        <div class="nav-group-items">
+          <button class="nav-item" data-view="safety"><span>⚠</span>Safety</button>
+          <button class="nav-item" data-view="labs"><span>⌘</span>Virtual Labs</button>
+        </div>
+      </details>
+
+      <details class="nav-group">
+        <summary class="nav-group-title">Engineering &amp; Simulation</summary>
+        <div class="nav-group-items">
+          <a class="nav-item" href="simulator.html"><span>⚡</span>VoltPRo Simulator</a>
+          <a class="nav-item" href="engineering.html"><span>∑</span>Engineering Tools</a>
+          <button class="nav-item" data-view="tools"><span>🧰</span>Tools &amp; Equipment</button>
+        </div>
+      </details>
+
+      <details class="nav-group">
+        <summary class="nav-group-title">AI &amp; Operations</summary>
+        <div class="nav-group-items">
+          <button class="nav-item" data-view="tutor"><span>🤖</span>AI Tutor</button>
+          <button class="nav-item" data-view="ar"><span>📷</span>Apprentice AR</button>
+        </div>
+      </details>
+
+      <details class="nav-group">
+        <summary class="nav-group-title">External</summary>
+        <div class="nav-group-items">
+          <a class="nav-item" href="https://hephzibahbehulah.com/"><span>↗</span>HB Professional Portfolio</a>
+          <a class="nav-item" href="https://github.com/HephzibahBehulah"><span>⌘</span>GitHub</a>
+          <a class="nav-item" href="https://www.linkedin.com/in/isaacoluwoleadigun"><span>in</span>LinkedIn</a>
+        </div>
+      </details>
     </nav>
     <div class="vp-ecosystem-links" aria-label="Hephzibah Behulah ecosystem">
-      <a href="https://hephzibahbehulah.com/" target="_blank" rel="noopener noreferrer">HB / PROFESSIONAL PORTFOLIO ↗</a>
-      <a href="https://github.com/HephzibahBehulah" target="_blank" rel="noopener noreferrer">GITHUB ↗</a>
-      <a href="https://www.linkedin.com/in/isaacoluwoleadigun" target="_blank" rel="noopener noreferrer">LINKEDIN ↗</a>
+      <a href="https://hephzibahbehulah.com/" rel="noopener noreferrer">HB / PROFESSIONAL PORTFOLIO ↗</a>
+      <a href="https://github.com/HephzibahBehulah" rel="noopener noreferrer">GITHUB ↗</a>
+      <a href="https://www.linkedin.com/in/isaacoluwoleadigun" rel="noopener noreferrer">LINKEDIN ↗</a>
     </div>
     <div class="sidebar-bottom">
       <div class="progress-mini"><div><span>Academy progress</span><strong id="sideProgress">0%</strong></div><div class="track"><i id="sideProgressBar"></i></div></div>
@@ -53,59 +91,7 @@
       </div>
     </header>
 
-    <section class="hb-identity-node" aria-labelledby="hbIdentityTitle">
-      <div class="hb-id-topline">
-        <span>IDENTITY NODE <strong>/ PROFILE-01</strong></span>
-        <span class="hb-id-status">PUBLIC PROFILE · ONLINE</span>
-        <span>PORTFOLIO CHANNEL / OPEN</span>
-      </div>
-      <div class="hb-id-layout">
-        <article class="hb-id-main">
-          <img class="hb-id-logo" src="assets/hb-logo.svg" alt="Hephzibah Behulah HB engineering intelligence logo" width="520" height="150">
-          <p class="hb-id-kicker">HB\CORE · OPERATOR PROFILE // SYSTEMS THINKER</p>
-          <h2 class="hb-id-name" id="hbIdentityTitle">Building technology<br>from the <em>physical layer upward.</em></h2>
-          <p class="hb-id-disciplines">ENGINEERING <b>→</b> SOFTWARE <b>→</b> DATA <b>→</b> CYBER INTELLIGENCE</p>
-          <p class="hb-id-summary">An electronics and electrical engineering professional developing a practical path through automation, software, data analytics and cybersecurity. This portfolio is a live map of projects, experiments, learning and systems thinking.</p>
-          <nav class="hb-id-links" aria-label="Hephzibah Behulah profile links">
-            <a class="hb-id-primary" href="https://hephzibahbehulah.com/#tree" target="_blank" rel="noopener noreferrer">ENTER INTELLIGENCE TREE ↓</a>
-            <a href="https://github.com/HephzibahBehulah" target="_blank" rel="noopener noreferrer">GITHUB ↗</a>
-            <a href="https://www.linkedin.com/in/isaacoluwoleadigun" target="_blank" rel="noopener noreferrer">LINKEDIN ↗</a>
-            <a href="https://hephzibahbehulah.com/cyber-os/" target="_blank" rel="noopener noreferrer">OPEN CYBER OS ↗</a>
-            <a href="https://hephzibahbehulah.com/about.html" target="_blank" rel="noopener noreferrer">FULL STORY →</a>
-          </nav>
-        </article>
 
-        <aside class="hb-id-console" aria-label="Identity matrix and capability profile">
-          <div class="hb-id-console-head"><span>HB@INTEL:~ <strong>IDENTITY MATRIX</strong></span><span>● LINK ACTIVE</span></div>
-          <div class="hb-id-console-body">
-            <div class="hb-id-terminal-line"><code>$ whoami</code><span class="hb-id-value">Hephzibah Behulah</span></div>
-            <div class="hb-id-terminal-line"><code>$ background</code><span>electronics → automation → software</span></div>
-            <div class="hb-id-terminal-line"><code>$ focus</code><span>cybersecurity · data · Python · OSINT</span></div>
-            <div class="hb-id-terminal-line"><code>$ method</code><span>observe → research → build → test → document</span></div>
-            <div class="hb-id-terminal-line"><code>$ ethics</code><span>legal · authorised · privacy-aware</span></div>
-            <div class="hb-id-rule"></div>
-            <div class="hb-id-terminal-line"><code>NODE STATUS</code><span class="hb-id-value">OPERATIONAL</span></div>
-            <div class="hb-id-terminal-line"><code>PROFILE MODE</code><span>PUBLIC</span></div>
-            <p class="hb-id-cap-title">CAPABILITY MATRIX <span style="color:#54e7ff">/ HB-04</span></p>
-            <div class="hb-id-capabilities">
-              <div class="hb-id-cap"><b>01 / ENGINEERING</b><span>Electronics · electrical systems · automation</span></div>
-              <div class="hb-id-cap"><b>02 / SOFTWARE</b><span>Python · SQL · web · Git · Linux</span></div>
-              <div class="hb-id-cap"><b>03 / DATA</b><span>Analytics · Power BI · ML · structured insight</span></div>
-              <div class="hb-id-cap"><b>04 / SECURITY</b><span>Cybersecurity · OSINT · AI security</span></div>
-            </div>
-            <div class="hb-id-build">
-              <div class="hb-id-build-label"><span>BUILD PROTOCOL</span><span>SYS-THINK / 01</span></div>
-              <div class="hb-id-build-flow"><span>OBSERVE</span><i>→</i><span>RESEARCH</span><i>→</i><span>BUILD</span><i>→</i><span>TEST</span><i>→</i><span>DOCUMENT</span><i>→</i><span>SECURE</span></div>
-            </div>
-            <div class="hb-id-build">
-              <div class="hb-id-build-label"><span>WORKING MODEL</span><span>PHYSICAL → DIGITAL</span></div>
-              <div class="hb-id-build-flow"><span>HARDWARE</span><i>↓</i><span>ELECTRONICS + AUTOMATION</span><i>↓</i><span>PROGRAMMING</span><i>↓</i><span>DATA + SYSTEMS SECURITY</span><i>↓</i><span>SECURE, USEFUL TECHNOLOGY</span></div>
-            </div>
-          </div>
-        </aside>
-      </div>
-      <div class="hb-id-bottom"><span>LIVE DATA CHANNEL / <strong>PUBLIC GITHUB PORTFOLIO</strong> · <a href="https://github.com/HephzibahBehulah" target="_blank" rel="noopener noreferrer" style="color:#54e7ff;text-decoration:none">OPEN REPOSITORIES ↗</a></span><span>HB / SYSTEMS · INTELLIGENCE · SECURITY</span></div>
-    </section>
 
     <div id="toast" class="toast" role="status"></div>
     <div id="view" class="view"></div>
