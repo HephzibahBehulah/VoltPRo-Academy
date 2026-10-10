@@ -124,3 +124,19 @@ body.simulator-page.light .console,body.simulator-page.light .calc-panel,body.si
 .component.wire-source .pin{fill:#ffbd69!important;stroke:#fff!important;stroke-width:2!important}
 .component.wire-source{cursor:grab!important}
 .component:active{cursor:grabbing}
+
+/* Simulation state: unmistakable colours distinguish running from stopped. */
+.toolbar #runBtn{background:#102238;color:var(--muted);border:1px solid #31516d;transition:background .16s,border-color .16s,box-shadow .16s,color .16s}
+.toolbar #runBtn.is-running{background:#0b4a32;color:#eafff4;border:1px solid #3be28e;box-shadow:0 0 0 1px #3be28e55,0 0 14px #20c97745}
+.toolbar #stopBtn{border-color:#633541;color:#ff9da5}
+.toolbar #stopBtn.is-stopped{background:#541d29;color:#fff0f1;border-color:#ff6574;box-shadow:0 0 0 1px #ff657455}
+.status{display:inline-flex;align-items:center;gap:8px;padding:7px 10px;border:1px solid #294258;border-radius:999px;background:#0b1a29;min-width:116px;justify-content:center}
+.status-dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:#ff6574;box-shadow:0 0 0 3px #ff657422;flex:0 0 auto}
+.status[data-state="running"]{color:#8dffc1;border-color:#2e9d6c;background:#09291d}
+.status[data-state="running"] .status-dot{background:#3be28e;box-shadow:0 0 0 3px #3be28e25,0 0 10px #3be28e99}
+.status[data-state="error"]{color:#ff9da5;border-color:#a43c4c;background:#35141b}
+.status[data-state="error"] .status-dot{background:#ff6574;box-shadow:0 0 0 3px #ff657425,0 0 10px #ff657499}
+.status-label{white-space:nowrap}
+body.simulator-page.light .status{background:#edf3f8;border-color:#b7c8d8;color:#9d2936}
+body.simulator-page.light .status[data-state="running"]{background:#e1f8ec;border-color:#4aaf7c;color:#146c40}
+body.simulator-page.light .status[data-state="error"]{background:#fff0f1;border-color:#d96a78;color:#9d2936}
