@@ -145,3 +145,27 @@
  .vp-bot-window.open {animation:none}
  .vp-bot-launcher,.academy-page .sidebar {transition:none}
 }
+
+/* Consistent owner-to-product identity across the Academy, Simulator, and Engineering Tools. */
+.vp-brand-lockup{display:flex;align-items:center;gap:10px;min-width:0;color:inherit;text-decoration:none}
+.vp-brand-lockup>img{display:block;flex:0 0 auto;width:112px;height:auto;max-height:34px;object-fit:contain;object-position:left center}
+.vp-brand-divider{display:block;align-self:stretch;width:1px;min-height:31px;background:linear-gradient(180deg,rgba(86,207,225,.55),rgba(167,139,250,.2))}
+.vp-brand-product{display:grid;gap:3px;min-width:0}
+.vp-brand-product>b{color:var(--vp-hb-text,#e7edf4);font-size:15px;line-height:1.15;letter-spacing:-.02em}
+.vp-brand-product>small{color:var(--vp-hb-cyan,#56cfe1);font:700 7px/1.5 "JetBrains Mono",monospace;letter-spacing:.07em;overflow-wrap:anywhere}
+.vp-brand-lockup:focus-visible{outline:2px solid var(--vp-hb-cyan,#56cfe1);outline-offset:3px;border-radius:6px}
+.simulator-page .vp-brand-lockup{flex:0 0 auto}
+.simulator-page .vp-brand-lockup .vp-brand-product>b{font-size:16px}
+.engineering-page .vp-brand-lockup{max-width:min(55vw,460px)}
+.engineering-page .vp-brand-lockup .vp-brand-product>b{font-size:16px}
+@media(max-width:900px){
+ .simulator-page .vp-brand-lockup>img,.engineering-page .vp-brand-lockup>img{width:88px}
+ .simulator-page .vp-brand-product>small,.engineering-page .vp-brand-product>small{font-size:6px;letter-spacing:.035em}
+}
+@media(max-width:560px){
+ .simulator-page .vp-brand-lockup{gap:7px}
+ .simulator-page .vp-brand-lockup>img,.engineering-page .vp-brand-lockup>img{width:76px}
+ .simulator-page .vp-brand-product>b,.engineering-page .vp-brand-product>b{font-size:13px}
+ .simulator-page .vp-brand-product>small,.engineering-page .vp-brand-product>small{max-width:125px;font-size:6px;line-height:1.35}
+ .engineering-page .vp-brand-lockup{max-width:65vw}
+}

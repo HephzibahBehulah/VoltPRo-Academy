@@ -2,14 +2,30 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="VoltPRo Simulator — browser-based electrical and electronics simulation lab.">
-<meta name="theme-color" content="#07111f"><title>VoltPRo Simulator</title>
-<link rel="stylesheet" href="simulator.css?v=20261010f"><link rel="stylesheet" href="cyber-theme.css?v=20261010c"><link rel="stylesheet" href="voltpro-hb-theme.css?v=20261010b"><link rel="stylesheet" href="simulator-layout-restore.css?v=20261010a"><link rel="manifest" href="pwa.webmanifest">
+<meta name="description" content="VoltPRo Simulator by Hephzibah Behulah — a browser-based electrical and electronics learning and simulation workspace.">
+<meta name="author" content="Hephzibah Behulah"><meta name="theme-color" content="#080b10">
+<link rel="canonical" href="https://hephzibahbehulah.github.io/Hephzibah-VoltPRo/simulator.html">
+<link rel="icon" href="icons/voltpro-192.svg" type="image/svg+xml">
+<meta property="og:type" content="website"><meta property="og:site_name" content="Hephzibah Behulah · VoltPRo Academy">
+<meta property="og:title" content="VoltPRo Simulator — by Hephzibah Behulah">
+<meta property="og:description" content="Build electrical circuits, explore components and investigate circuit behaviour in the browser.">
+<meta property="og:url" content="https://hephzibahbehulah.github.io/Hephzibah-VoltPRo/simulator.html">
+<meta property="og:image" content="https://hephzibahbehulah.github.io/Hephzibah-VoltPRo/assets/voltpro-social-card.svg">
+<meta property="og:image:alt" content="VoltPRo Academy by Hephzibah Behulah">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="VoltPRo Simulator — by Hephzibah Behulah">
+<meta name="twitter:description" content="Build circuits and investigate electrical behaviour in the browser.">
+<meta name="twitter:image" content="https://hephzibahbehulah.github.io/Hephzibah-VoltPRo/assets/voltpro-social-card.svg">
+<title>VoltPRo Simulator | By Hephzibah Behulah</title>
+<link rel="stylesheet" href="simulator.css?v=20261010f"><link rel="stylesheet" href="cyber-theme.css?v=20261010c"><link rel="stylesheet" href="voltpro-hb-theme.css?v=20261010c"><link rel="stylesheet" href="simulator-layout-restore.css?v=20261010a"><link rel="manifest" href="pwa.webmanifest">
 </head>
 <body class="simulator-page">
 <div class="sim-app">
 <header class="sim-top">
-  <div class="brand"><span class="mark">V</span><div><b>VoltPRo</b><small>SIMULATOR LAB</small></div></div>
+  <a class="brand vp-brand-lockup" href="index.html" aria-label="VoltPRo Academy by Hephzibah Behulah">
+    <img src="assets/hb-logo.svg" alt="Hephzibah Behulah" width="112" height="33">
+    <span class="vp-brand-divider" aria-hidden="true"></span>
+    <span class="vp-brand-product"><b>VoltPRo</b><small>SIMULATOR · BY HEPHZIBAH BEHULAH</small></span>
+  </a>
   <div class="mode-tabs">
     <button class="mode active" data-mode="schematic">Schematic</button><button class="mode" data-mode="panel">Panel</button><button class="mode" data-mode="plc">PLC Logic</button><button class="mode" data-mode="micro">Microcontroller</button><button class="mode" data-mode="reference">Reference</button>
   </div>
@@ -45,7 +61,7 @@
 Educational simulation only.</pre>
  </aside>
 </main>
-<footer class="sim-footer"><span>VoltPRo Academy · Open Source</span><span id="engineInfo">DC educational engine · local-only</span><span>Educational use — verify real installations against current standards and manufacturer data.</span></footer>
+<footer class="sim-footer"><span>VoltPRo Academy · Open Source · by Hephzibah Behulah</span><span id="engineInfo">DC educational engine · local-only</span><span>Educational use — verify real installations against current standards and manufacturer data.</span></footer>
 </div>
 <input type="file" id="fileInput" accept=".voltpro,.json" hidden>
 <script src="engine/voltpro-engine.js" defer></script><script src="src/core/contracts.js" defer></script><script src="src/core/terminal-graph.js" defer></script><script src="src/core/net-resolver.js" defer></script><script src="src/core/commands.js" defer></script><script src="src/core/wire-data.js" defer></script><script src="src/simulation/model-registry.js" defer></script><script src="src/simulation/core-models.js" defer></script><script src="src/simulation/state-machine.js" defer></script><script src="src/simulation/contact-models.js" defer></script><script src="src/simulation/control-models.js" defer></script><script src="src/simulation/actuator-models.js" defer></script><script src="src/simulation/protection-models.js" defer></script><script src="src/simulation/overload-model.js" defer></script><script src="src/simulation/three-phase.js" defer></script><script src="src/simulation/motor-model.js" defer></script><script src="src/simulation/faults.js" defer></script><script src="src/simulation/measurement.js" defer></script><script src="src/simulation/state-store.js" defer></script><script src="src/rendering/symbols.js" defer></script><script src="src/rendering/device-face.js" defer></script><script src="src/rendering/panel-footprint.js" defer></script><script src="src/rendering/wire-router.js" defer></script><script src="src/ui/wiring-workflow.js?v=20261009c" defer></script><script src="src/rendering/net-visuals.js" defer></script><script src="src/cad/commands.js" defer></script><script src="src/ui/component-library.js" defer></script><script src="src/ui/ribbon.js" defer></script><script src="src/ui/inspector.js" defer></script><script src="src/project/io.js" defer></script><script src="src/panel/designer.js" defer></script><script src="src/panel/accessories.js" defer></script><script src="src/documentation/schedules.js" defer></script><script src="src/plc/ladder-editor.js" defer></script><script src="src/plc/runtime.js" defer></script><script src="src/plc/integration.js" defer></script><script src="src/engineering/calculations.js" defer></script><script src="src/instruments/instruments.js" defer></script><script src="src/training/challenges.js" defer></script><script src="src/training/fault-scenarios.js" defer></script><script src="src/training/dol-runtime.js" defer></script><script src="src/validation/acceptance.js" defer></script><script src="src/validation/performance.js" defer></script><script src="src/validation/provenance.js" defer></script><script src="src/platform/capabilities.js" defer></script><script src="platform/v5-runtime.js" defer></script><script src="platform/project-format.js" defer></script><script src="platform/challenge-engine.js" defer></script><script src="platform/tutorial-engine.js" defer></script><script src="platform/fault-engine.js" defer></script><script src="platform/digital-engine.js" defer></script><script src="platform/mcu-engine.js" defer></script><script src="platform/engineering.js" defer></script><script src="platform/bom.js" defer></script><script src="platform/plugin-loader.js" defer></script><script src="platform/panel.js" defer></script><script src="platform/component-info.js" defer></script><script src="platform/documentation.js" defer></script><script src="platform/workbench.js?v=20261010a" defer></script><script src="platform/demo-library.js?v=20261009a" defer></script><script src="platform/component-media.js" defer></script><script src="platform/component-registry.js" defer></script><script src="platform/ui.js?v=20261009i" defer></script><script src="simulator.js?v=20261010n" defer></script><script src="platform/v5-hook.js" defer></script><script>if("serviceWorker" in navigator){navigator.serviceWorker.register("service-worker.js").catch(()=>{})}</script>
