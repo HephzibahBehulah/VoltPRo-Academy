@@ -76,7 +76,7 @@
   function plan(prompt,previous){
     const q=String(prompt||"").toLowerCase().replace(/[–—]/g,"-").trim();
     if(!q)return {recognized:false,error:"Enter a circuit description first.",components:[],wires:[],warnings:[]};
-    if(previous&&/\\badd\\b.*\\bswitch\\b/.test(q)&&previous.template==="battery-resistor-lamp")return plan("battery switched lamp circuit");
+    if(previous&&/\badd\b.*\bswitch\b/.test(q)&&previous.template==="battery-resistor-lamp")return plan("battery switched lamp circuit");
     let key=null;
     else if((/three[- ]phase|3[- ]phase|400\s*v/.test(q))&&/(breaker|mcb|protection|motor)/.test(q)&&/motor/.test(q))key="three-phase-motor-starter";
     else if((/three[- ]phase|3[- ]phase|400\s*v/.test(q))&&/(breaker|mcb|protection|motor)/.test(q))&&/motor/.test(q))key="three-phase-motor-starter";
@@ -89,11 +89,8 @@
     result.template=key;result.recognized=true;result.prompt=String(prompt);
     result.components=result.components.map(c=>({...c,rotation:0,pins:[]}));
     result.wires=result.wires.map(w=>({...w}));
-    if(previous&&/\badd\b.*\bswitch\b/.test(q)&&previous.template==="battery-resistor-lamp"){
       return plan("battery switched lamp circuit");
-    }
     return result;
-  }
   function templatesList(){return Object.keys(templates).map(key=>({id:key,title:templates[key].title}));}
   return {plan,templates:templatesList};
 });
