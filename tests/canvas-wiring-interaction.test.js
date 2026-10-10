@@ -73,3 +73,11 @@ test('wire inspector exposes AWG and metric cross-section with synchronized appr
   assert.ok(html.includes('simulator.js?v=20261010i'));
   assert.ok(html.includes('simulator.css?v=20261010e'));
 });
+
+
+test('toolbar wire menu exists', () => {
+ const html = fs.readFileSync(path.join(__dirname, '..', 'simulator.html'), 'utf8');
+ assert.ok(html.includes('id="wireMenu" class="wire-menu" hidden'));
+ assert.ok(source.includes('function setWireMenu(open)'));
+ assert.ok(source.includes('...S.wireStyle'));
+});
