@@ -12,7 +12,7 @@ function validateDraft(draft) {
   vm.runInNewContext(fs.readFileSync(path.join(__dirname,"../platform/v5-runtime.js"),"utf8"), {
     window, structuredClone, Map, String, Number, Array, Boolean, Object
   });
-  return T.build(window.VoltPRoV5Runtime.adapt({components:draft.components,wires:draft.wires})).validateTopology();
+  return T.build(window.VoltProV5Runtime.adapt({components:draft.components,wires:draft.wires})).validateTopology();
 }
 
 test("planner creates a reviewable low-voltage LED circuit", () => {
