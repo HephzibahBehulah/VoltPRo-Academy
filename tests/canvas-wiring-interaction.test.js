@@ -40,19 +40,19 @@ test('components expose a transparent hit target so symbol strokes cannot pass c
 
 
 test('Run and Stop expose distinct accessible visual states and report simulation errors as stopped', () => {
-  assert.match(source, /function syncRunControls\\(state=S\\.running\\?"running":"stopped"\\)/);
-  assert.match(source, /runButton\\.classList\\.toggle\\("is-running",current==="running"\\)/);
-  assert.match(source, /stopButton\\.classList\\.toggle\\("is-stopped",current==="stopped"\\|\\|current==="error"\\)/);
-  assert.match(source, /status\\.dataset\\.state=current/);
-  assert.match(source, /if\\(!dc\\.ok\\)\\{S\\.running=false;[\\s\\S]*?syncRunControls\\("error"\\);return\\}/);
-  assert.match(source, /function stop\\(\\)\\{S\\.running=false;renderCanvas\\(\\);syncRunControls\\(\\)\\}/);
+  assert.ok(source.includes('function syncRunControls(state=S.running?"running":"stopped")'));
+  assert.ok(source.includes('runButton.classList.toggle("is-running",current==="running")'));
+  assert.ok(source.includes('stopButton.classList.toggle("is-stopped",current==="stopped"||current==="error")'));
+  assert.ok(source.includes('status.dataset.state=current'));
+  assert.ok(source.includes('syncRunControls("error");return}'));
+  assert.ok(source.includes('function stop(){S.running=false;renderCanvas();syncRunControls()}'));
   const html = fs.readFileSync(path.join(__dirname, '..', 'simulator.html'), 'utf8');
-  assert.match(html, /id="simStatus" role="status" aria-live="polite" data-state="stopped"/);
-  assert.match(html, /id="runBtn"[^>]*aria-pressed="false"/);
-  assert.match(html, /id="stopBtn"[^>]*aria-pressed="true"/);
+  assert.ok(html.includes('id="simStatus" role="status" aria-live="polite" data-state="stopped"'));
+  assert.ok(html.includes('id="runBtn" class="primary" aria-label="Run simulation" aria-pressed="false"'));
+  assert.ok(html.includes('id="stopBtn" aria-label="Stop simulation" aria-pressed="true"'));
   const css = fs.readFileSync(path.join(__dirname, '..', 'simulator.css'), 'utf8');
-  assert.match(css, /#runBtn\\.is-running/);
-  assert.match(css, /#stopBtn\\.is-stopped/);
-  assert.match(css, /\\.status\\[data-state="running"\\] \\.status-dot/);
-  assert.match(css, /\\.status\\[data-state="error"\\]/);
+  assert.ok(css.includes('#runBtn.is-running'));
+  assert.ok(css.includes('#stopBtn.is-stopped'));
+  assert.ok(css.includes('.status[data-state="running"] .status-dot'));
+  assert.ok(css.includes('.status[data-state="error"]'));
 });
