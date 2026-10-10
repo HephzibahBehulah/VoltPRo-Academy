@@ -46,5 +46,5 @@ test("Existing sidebar menu remains unchanged and expansion is not a new navigat
   assert.ok(nav.includes('data-view="reference"'));
   assert.ok(nav.includes('data-view="tools"'));
   assert.ok(!nav.includes("academy-content-expansion"));
-  assert.equal((nav.match(/data-view=/g) || []).length, 9);
+  assert.equal((nav.match(/data-view=/g) || []).length, 10);
 });
