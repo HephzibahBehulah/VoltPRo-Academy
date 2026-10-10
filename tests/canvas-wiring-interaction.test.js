@@ -56,3 +56,20 @@ test('Run and Stop expose distinct accessible visual states and report simulatio
   assert.ok(css.includes('.status[data-state="running"] .status-dot'));
   assert.ok(css.includes('.status[data-state="error"]'));
 });
+
+
+test('wire inspector exposes AWG and metric cross-section with synchronized approximate conversions', () => {
+  assert.ok(source.includes('const AWG_MM2={24:0.205,22:0.326,20:0.518,18:0.823,16:1.31,14:2.08,12:3.31,10:5.26,8:8.37,6:13.3,4:21.2,2:33.6}'));
+  assert.ok(source.includes('function nearestAwg(size)'));
+  assert.ok(source.includes('function nearestMetricSize(gauge)'));
+  assert.ok(source.includes('data-wire-prop="gauge"'));
+  assert.ok(source.includes('wire.gauge=String(v);wire.size=nearestMetricSize(v)'));
+  assert.ok(source.includes('wire.size=String(v);wire.gauge=String(nearestAwg(v))'));
+  assert.ok(source.includes('data-wire-prop="color" type="color"'));
+  assert.ok(source.includes('data-wire-prop="cableType"'));
+  assert.ok(source.includes('data-wire-prop="size"'));
+  assert.ok(source.includes('Drawing thickness only. It does not calculate current capacity or electrical safety.'));
+  const html = fs.readFileSync(path.join(__dirname, '..', 'simulator.html'), 'utf8');
+  assert.ok(html.includes('simulator.js?v=20261010i'));
+  assert.ok(html.includes('simulator.css?v=20261010e'));
+});
