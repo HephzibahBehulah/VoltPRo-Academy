@@ -27,7 +27,8 @@ function move(panel,id,changes){
 }
 function remove(panel,id){const i=panel.items.findIndex(x=>x.id===id);if(i>=0)panel.items.splice(i,1);return panel}
 function addRail(panel,spec={}){const id=String(spec.id||"R"+(panel.rails.length+1));if(panel.rails.some(r=>r.id===id))throw Error("Duplicate rail id: "+id);panel.rails.push({id,label:spec.label||"DIN rail "+(panel.rails.length+1),length:Math.max(1,Math.min(72,Number(spec.length)||18)),y:Number(spec.y)||92+panel.rails.length*110});return panel}
-function validate(panel){
+function validate(panelOrItems,legacyRails){
+ const panel=Array.isArray(panelOrItems)?{items:panelOrItems,rails:Array.isArray(legacyRails)?legacyRails:[{id:"R1",length:18}]}:(panelOrItems||create());
  const errors=[],warnings=[],ids=new Set();
  for(const r of panel.rails||[]){if(!r.id||ids.has(r.id))errors.push("Rail IDs must be unique.");ids.add(r.id);if(!Number.isFinite(Number(r.length))||Number(r.length)<1)errors.push((r.id||"Rail")+" has an invalid length.")}
  const occupied=new Map(),itemIds=new Set();
