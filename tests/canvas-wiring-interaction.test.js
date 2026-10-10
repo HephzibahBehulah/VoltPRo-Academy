@@ -78,11 +78,14 @@ test('wire inspector exposes AWG and metric cross-section with synchronized appr
 test('toolbar wire menu exists', () => {
  const html = fs.readFileSync(path.join(__dirname, '..', 'simulator.html'), 'utf8');
  assert.ok(html.includes('id="wireMenu" class="wire-menu" hidden'));
- assert.ok(html.includes('id="wireBtn" type="button" aria-pressed="false"'));
+ assert.ok(html.includes('id="wireBtn" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="wireMenu"'));
  assert.ok(html.includes('id="wireMenuBtn" type="button" aria-haspopup="true"'));
  assert.ok(source.includes('function setWireMenu(open)'));
  assert.ok(source.includes('...S.wireStyle'));
- assert.match(source, /earlyWireButton\.addEventListener\("click",e=>\{e\.preventDefault\(\);e\.stopPropagation\(\);toggleWireDrawing\(\)\}\)/);
+ assert.match(source, /earlyWireButton\.addEventListener\("click",e=>\{e\.preventDefault\(\);e\.stopPropagation\(\);setWireMenu\(earlyWireMenu\.hidden\)\}\)/);
  assert.match(source, /earlyWireMenuButton\.addEventListener\("click",e=>\{e\.preventDefault\(\);e\.stopPropagation\(\);setWireMenu\(earlyWireMenu\.hidden\)\}\)/);
  assert.ok(source.includes('startWireBtn.onclick=toggleWireDrawing;'));
+ assert.match(source, /const b=\$\("#startWireBtn"\);if\(b\)\{b\.classList\.toggle\("active",s\.active\);b\.setAttribute\("aria-pressed",String\(s\.active\)\)\}/);
+ assert.match(source, /\["#wireBtn","#wireMenuBtn"\]\.forEach\(q=>\{const b=\$\(q\);if\(b\)b\.setAttribute\("aria-expanded",String\(open\)\)\}\)/);
+ assert.match(workflow, /if\(was\)this\.callbacks\.onCancel\?\.\(\)/);
 });
