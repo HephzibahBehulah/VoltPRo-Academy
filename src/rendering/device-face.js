@@ -4,7 +4,7 @@ const number=value=>Number.isFinite(Number(value))&&Number(value)>0?Number(value
 function face(device={},options={}){
  const name=esc(device.ref||device.id||'DEV'),type=String(device.type||'device').toLowerCase(),label=esc(device.label||device.name||device.type||'Device');
  const supplied=Array.isArray(device.terminals)&&device.terminals.length?device.terminals:(window.VoltProTerminalGraph?.definitionFor?.(type)?.terminals||[]);
- const terminal=(t,i)=>esc(t.number||t.label||t.id||String(i+1));
+ const terminal=(t,i)=>esc(t.label||t.id||t.number||String(i+1));
  const dims=device.dimensions||device.manufacturerDimensions||{};
  const verified=dims.verified===true&&number(dims.width)&&number(dims.height);
  const dimensionText=verified?('W '+number(dims.width)+' × H '+number(dims.height)+' mm'):'DIMENSIONS NOT VERIFIED';
