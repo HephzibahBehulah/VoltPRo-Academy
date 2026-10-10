@@ -41,7 +41,7 @@ const $=q=>document.querySelector(q), $$=q=>[...document.querySelectorAll(q)];
 // This keeps the settings menu clickable even if a later optional control fails to initialize.
 const earlyWireButton=$("#wireBtn"),earlyWireMenu=$("#wireMenu"),earlyWireTool=document.querySelector(".wire-tool");
 if(earlyWireButton&&earlyWireMenu){
- earlyWireButton.addEventListener("click",e=>{e.preventDefault();e.stopPropagation();const open=earlyWireMenu.hidden;earlyWireMenu.hidden=!open;earlyWireButton.setAttribute("aria-expanded",String(open));});
+ earlyWireButton.addEventListener("click",e=>{e.preventDefault();e.stopImmediatePropagation();const open=earlyWireMenu.hidden;earlyWireMenu.hidden=!open;earlyWireButton.setAttribute("aria-expanded",String(open));if(open&&S.wireStyle){const c=$("#wireColor"),t=$("#wireCableType"),z=$("#wireSize"),g=$("#wireGauge");if(c)c.value=S.wireStyle.color;if(t)t.value=S.wireStyle.cableType;if(z)z.value=S.wireStyle.size;if(g)g.value=S.wireStyle.gauge;}});
  document.addEventListener("click",e=>{if(earlyWireTool&&!earlyWireTool.contains(e.target)){earlyWireMenu.hidden=true;earlyWireButton.setAttribute("aria-expanded","false");}});
 }
 const svg=$("#canvas"), comps=$("#components"), wires=$("#wires"), labels=$("#labels"), selg=$("#selection"), wrap=$("#canvasWrap");
