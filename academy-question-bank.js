@@ -71,7 +71,7 @@ function renderExam(){
  const h='<div class="hero" style="margin-bottom:18px"><div><span class="eyebrow">EXAM PRACTICE · ORIGINAL PRACTICE, NOT AN OFFICIAL EXAM</span><h2>Exam-style practice</h2><p>Use the generated calculation drills to practise methods, then verify formal exam requirements using current official guidance.</p></div><div class="stat"><small>Recorded answers</small><strong>'+count.toLocaleString()+'</strong></div></div>'+pageHtml("exam")+'<div class="safety-gate"><b>Assessment note</b><p>Generated questions are parameterized practice drills, not individually authored or officially validated IHK/HWK questions, exam papers, qualification evidence or certification.</p></div>';
  layout("Exam Practice",h);
 }
-window.vpxMillionFilter=function(k,which,value){filters[k][which]=value;filters[k].page=0;if(which==="search")filters[k].page=filters[k].page; k==="quiz"?renderQuiz():renderExam();};
+window.vpxMillionFilter=function(k,which,value){filters[k][which]=value;if(which!=="search")filters[k].page=0; k==="quiz"?renderQuiz():renderExam();};
 window.vpxMillionGo=function(k,page){filters[k].page=Math.max(0,page);k==="quiz"?renderQuiz():renderExam();};
 window.vpxMillionAnswer=function(k,id,n){
  const answersKey=k==="quiz"?"quiz":"exam";state[answersKey]=state[answersKey]||{};if(state[answersKey][id]!==undefined)return;
