@@ -3,9 +3,24 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="VoltPRo Academy — electrical engineering, software, data and cyber intelligence by Hephzibah Behulah.">
+<meta name="description" content="VoltPRo Academy by Hephzibah Behulah: a practical browser-based environment for electrical engineering, electronics, automation learning and simulation.">
+<meta name="author" content="Hephzibah Behulah">
 <meta name="theme-color" content="#080b10">
-<title>VoltPRo Academy | Hephzibah Behulah — Identity Node</title>
+<meta name="color-scheme" content="dark">
+<link rel="canonical" href="https://hephzibahbehulah.github.io/Hephzibah-VoltPRo/">
+<link rel="icon" href="icons/voltpro-192.svg" type="image/svg+xml">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Hephzibah Behulah · VoltPRo Academy">
+<meta property="og:title" content="VoltPRo Academy — by Hephzibah Behulah">
+<meta property="og:description" content="Build circuits, explore electrical systems, learn automation and practise engineering concepts in the browser.">
+<meta property="og:url" content="https://hephzibahbehulah.github.io/Hephzibah-VoltPRo/">
+<meta property="og:image" content="https://hephzibahbehulah.github.io/Hephzibah-VoltPRo/assets/voltpro-social-card.svg">
+<meta property="og:image:alt" content="VoltPRo Academy by Hephzibah Behulah — engineering learning and simulation">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="VoltPRo Academy — by Hephzibah Behulah">
+<meta name="twitter:description" content="A practical browser-based environment for electrical engineering, electronics, automation learning and simulation.">
+<meta name="twitter:image" content="https://hephzibahbehulah.github.io/Hephzibah-VoltPRo/assets/voltpro-social-card.svg">
+<title>VoltPRo Academy | By Hephzibah Behulah</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
@@ -14,12 +29,16 @@
 <link rel="stylesheet" href="voltpro-hb-theme.css?v=20261010a">
 <link rel="stylesheet" href="voltpro-identity.css?v=20261010b">
 <link rel="manifest" href="pwa.webmanifest">
-<link rel="stylesheet" href="voltpro-navigation-dashboard.css?v=20261010a">
+<link rel="stylesheet" href="voltpro-navigation-dashboard.css?v=20261010d">
 </head>
 <body class="academy-page">
 <div id="app" class="app-shell">
   <aside class="sidebar" id="sidebar">
-    <div class="brand"><div class="brand-mark">V</div><div><span class="eyebrow">ACADEMY</span><h1>VoltPRo</h1></div></div>
+    <a class="brand brand-lockup" href="./" aria-label="VoltPRo Academy by Hephzibah Behulah — home">
+      <img class="brand-hb-logo" src="assets/hb-logo.svg" alt="Hephzibah Behulah" width="156" height="45">
+      <span class="brand-divider" aria-hidden="true"></span>
+      <span class="brand-product"><span class="eyebrow">ENGINEERING LEARNING PLATFORM</span><strong>VoltPRo <em>Academy</em></strong><small>By Hephzibah Behulah</small></span>
+    </a>
     <div class="student-mini"><div class="avatar">HB</div><div><strong id="studentName">Student</strong><small>Electrical Apprentice</small></div></div>
     <nav class="nav" aria-label="Main navigation">
       <button class="nav-item active" data-view="dashboard"><span>⌂</span>Dashboard</button>
@@ -82,7 +101,7 @@
   <main class="main">
     <header class="topbar">
       <button class="mobile-menu" id="mobileMenu" aria-label="Open menu">☰</button>
-      <div class="crumb"><span>VoltPRo Academy</span><b>/</b><strong id="pageTitle">Dashboard</strong></div>
+      <div class="crumb"><span>VoltPRo Academy</span><b>/</b><strong id="pageTitle">Dashboard</strong><small class="topbar-byline">BY HEPHZIBAH BEHULAH</small></div>
       <div class="top-actions">
         <label class="search"><span>⌕</span><input id="globalSearch" placeholder="Search lessons, tools, terms..." autocomplete="off"></label>
         <button class="icon-btn" id="languageBtn" title="Language">DE</button>
@@ -154,7 +173,7 @@
   </main>
 </div>
 <dialog id="lessonDialog"><div id="lessonModal"></div></dialog>
-<script src="script.js?v=20261010a"></script>
+<script src="script.js?v=20261010b"></script>
 <script src="voltpro-assistant.js?v=20261010a" defer></script>
 <script>if("serviceWorker" in navigator){navigator.serviceWorker.register("service-worker.js").catch(()=>{})}</script>
 </body>
