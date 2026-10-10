@@ -10,7 +10,7 @@ The simulator's AI Circuit Designer is currently a deterministic, template-backe
 - Three-phase source connected phase-by-phase to a three-pole circuit breaker.
 - Three-phase motor-starter topology draft with a three-pole breaker, contactor, motor, 24 V control source and normally-open start pushbutton.
 
-The user receives a preview with component faces, terminal-to-terminal connections, topology validation and warnings. Nothing is inserted into the canvas until the user confirms. Unsupported requests do not produce an insertable draft.
+The user receives a preview with component faces, terminal-to-terminal connections, topology validation and warnings. Nothing is inserted into the canvas until the user confirms. Supported follow-up prompts can update an existing simple draft (for example, changing a single DC source voltage or resistor value, or adding a switch to a simple series circuit). Ambiguous edits that cannot be safely mapped to a single component are not applied. Unsupported requests do not produce an insertable draft.
 
 ## Electrical model boundaries
 
@@ -22,7 +22,7 @@ A topology-valid design is not necessarily simulation-ready. The current legacy 
 
 - IEC-style schematic symbols are the default.
 - Terminal-block and simplified symbol views are selectable in the simulator toolbar.
-- Device-face previews show terminal labels for known multi-terminal devices.
+- Device-face previews show terminal labels for known multi-terminal devices in the AI review panel and the DIN-rail Panel Designer, including a larger selected-device preview.
 - Manufacturer dimensions are shown only when metadata explicitly marks both dimensions as verified. Otherwise the face is labelled `DIMENSIONS NOT VERIFIED`.
 
 Catalogue-only or generic geometry must not be presented as manufacturer-certified. Verify part-specific dimensions, ratings, terminal numbering and installation constraints against the exact manufacturer's documentation and applicable standards.
