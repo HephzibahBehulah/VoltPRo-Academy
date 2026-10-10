@@ -152,7 +152,19 @@ function showTool(i){
  lessonDialog.showModal();
 }
 function expandedTutor(){
- layout("AI Tutor",'<section class="grid2"><div class="card"><span class="eyebrow">LEARNING ASSISTANT</span><h2>Ask VoltPRo Tutor</h2><p class="muted">A local rule-based tutor for the Academy knowledge base. It explains concepts and safety principles but does not authorize real work.</p><div id="chatLog" class="chat-log"><div class="chat tutor">Ask about voltage, Ohm’s law, RCD, MCB, PE, multimeters, troubleshooting or the five safety rules.</div></div><div class="chat-input"><input id="tutorInput" placeholder="Ask a question..."><button class="btn primary" onclick="askTutorExpanded()">Ask</button></div></div><div class="card">'+head("Suggested topics","beginner → advanced")+["Explain voltage simply","Calculate with Ohm's law","What does PE mean?","How does an RCD work?","How should I approach a fault?","What should I check before measuring?"].map(function(x){return '<div class="catalog-item"><strong>'+x+'</strong><span class="pill">ASK</span></div>'}).join("")+'</div></section>');
+ const suggestions=["Explain Ohm’s law","What belongs in the VoltPRo Simulator?","Where are the fault scenarios and challenges?","How do I calculate voltage drop?","Explain the five safety rules","Search external sources for IEC 60364 overview"];
+ layout("AI Tutor",'<section class="grid2"><div class="card"><span class="eyebrow">PROJECT-AWARE LEARNING ASSISTANT</span><h2>Ask VoltPRo Tutor</h2><p class="muted">The tutor can use VoltPRo’s project map, lessons, labs, simulator and engineering workspaces. Enable external lookup to retrieve public reference summaries. Safety-critical answers still require qualified review and current official documents.</p><label class="check"><input id="tutorExternal" type="checkbox"><span><b>Search external sources</b><br><span class="muted">Fetch public Wikipedia reference results and show source links when available.</span></span></label><div id="chatLog" class="chat-log" aria-live="polite"><div class="chat tutor">I can explain the Academy, help choose the right workspace, answer electrical theory questions and look up public reference material.</div></div><form class="chat-input" onsubmit="event.preventDefault();askTutorExpanded()"><input id="tutorInput" placeholder="Ask about VoltPRo or electrical engineering…" autocomplete="off" aria-label="Ask VoltPRo Tutor"><button class="btn primary" id="tutorAskBtn" type="submit">Ask</button></form></div><div class="card">'+head("Suggested questions","project → practice")+suggestions.map(function(x){return '<button type="button" class="catalog-item tutor-suggestion" onclick="useTutorSuggestion(this)" style="width:100%;font:inherit;color:inherit;text-align:left"><strong>'+x+'</strong><span class="pill">ASK</span></button>'}).join("")+'<div class="safety-gate" style="margin-top:14px"><b>Source and safety policy</b><p>External snippets are references, not instructions. Verify current standards with the issuing organisation. The tutor cannot approve live work, certify an installation or infer component ratings from an image.</p></div></div></section>');
+ if(Array.isArray(state.tutorLog)&&state.tutorLog.length){renderTutorLog()}
+}
+function useTutorSuggestion(button){const input=document.getElementById("tutorInput");if(input){input.value=button.querySelector("strong").textContent;askTutorExpanded()}}
+function renderTutorLog(){
+ const log=document.getElementById("chatLog");if(!log)return;
+ log.innerHTML=(state.tutorLog||[]).map(function(x){
+   const body='<div class="chat '+(x.role==="user"?"user":"tutor")+'">'+esc(x.text)+'</div>';
+   const sources=Array.isArray(x.sources)&&x.sources.length?'<div class="tutor-sources">'+x.sources.map(function(s){return '<a href="'+esc(s.url)+'" target="_blank" rel="noopener noreferrer">'+esc(s.title||s.url)+'</a>'}).join("")+'</div>':"";
+   return body+sources;
+ }).join("");
+ log.scrollTop=log.scrollHeight;
 }
 function tutorReply(q){
  const s=q.toLowerCase();
@@ -166,10 +178,23 @@ function tutorReply(q){
  if(s.includes("fault")||s.includes("fehler"))return "Use a safe diagnostic sequence: establish safe state → observe → inspect documentation and visible connections → form a hypothesis → choose an appropriate test → verify the result.";
  return "I can explain electrical foundations, formulas, tools, safety and troubleshooting. Try a more specific question.";
 }
-function askTutorExpanded(){
- const e=document.getElementById("tutorInput"),q=e.value.trim();if(!q)return;
- state.tutorLog=state.tutorLog||[];state.tutorLog.push({role:"user",text:q});state.tutorLog.push({role:"tutor",text:tutorReply(q)});state.tutorLog=state.tutorLog.slice(-10);save();
- const log=document.getElementById("chatLog");log.innerHTML=state.tutorLog.map(function(x){return '<div class="chat '+x.role+'">'+esc(x.text)+'</div>'}).join("");e.value="";
+async function askTutorExpanded(){
+ const e=document.getElementById("tutorInput"),q=e&&e.value.trim();if(!q)return;
+ const button=document.getElementById("tutorAskBtn"),external=!!document.getElementById("tutorExternal")?.checked;
+ e.value="";if(button)button.disabled=true;
+ state.tutorLog=state.tutorLog||[];state.tutorLog.push({role:"user",text:q});
+ state.tutorLog.push({role:"tutor",text:"Looking through project knowledge…"});
+ renderTutorLog();
+ const pending=state.tutorLog.length-1;
+ let result=null;
+ try{
+   if(window.VoltProAssistant&&typeof window.VoltProAssistant.ask==="function")result=await window.VoltProAssistant.ask(q,{external});
+ }catch(_){}
+ if(!result||!result.answer)result={answer:tutorReply(q),sources:[]};
+ state.tutorLog[pending]={role:"tutor",text:result.answer,sources:result.sources||[]};
+ state.tutorLog=state.tutorLog.slice(-12);save();renderTutorLog();
+ if(button)button.disabled=false;
+ if(e)e.focus();
 }
 function expandedExam(){
  const answered=Object.keys(state.exam||{}).length;
