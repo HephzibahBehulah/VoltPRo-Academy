@@ -77,7 +77,7 @@
     const q=String(prompt||"").toLowerCase().replace(/[–—]/g,"-").trim();
     if(!q)return {recognized:false,error:"Enter a circuit description first.",components:[],wires:[],warnings:[]};
     let key=null;
-    if(/motor starter|starter circuit|contactor.*motor|motor.*contactor/.test(q))key="three-phase-motor-starter";
+    else if((/three[- ]phase|3[- ]phase|400\s*v/.test(q))&&/(breaker|mcb|protection|motor)/.test(q)&&/motor/.test(q))key="three-phase-motor-starter";
     else if((/three[- ]phase|3[- ]phase|400\s*v/.test(q))&&/(breaker|mcb|protection|motor)/.test(q))&&/motor/.test(q))key="three-phase-motor-starter";
     else if((/three[- ]phase|3[- ]phase|400\s*v/.test(q))&&/(breaker|mcb)/.test(q))key="three-phase-breaker";
     else if(/\bled\b/.test(q)&&/(battery|resistor|circuit|light|power|build|make|create|design)/.test(q))key="battery-led-resistor";
