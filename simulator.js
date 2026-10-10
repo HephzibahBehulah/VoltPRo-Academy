@@ -42,14 +42,14 @@ const $=q=>document.querySelector(q), $$=q=>[...document.querySelectorAll(q)];
 const earlyWireButton=$("#wireBtn"),earlyWireMenuButton=$("#wireMenuBtn"),earlyWireMenu=$("#wireMenu"),earlyWireTool=document.querySelector(".wire-tool");
 function toggleWireDrawing(){if(wiring){if(wiring.active)wiring.cancel();else wiring.begin()}else{S.wiringMode=!S.wiringMode;S.wireStart=null;renderCanvas()}setWireMenu(false);syncWireMenu()}
 if(earlyWireButton&&earlyWireMenu){
- earlyWireButton.addEventListener("click",e=>{e.preventDefault();e.stopPropagation();toggleWireDrawing()});
+ earlyWireButton.addEventListener("click",e=>{e.preventDefault();e.stopPropagation();setWireMenu(earlyWireMenu.hidden)});
  if(earlyWireMenuButton)earlyWireMenuButton.addEventListener("click",e=>{e.preventDefault();e.stopPropagation();setWireMenu(earlyWireMenu.hidden)});
  document.addEventListener("click",e=>{if(earlyWireTool&&!earlyWireTool.contains(e.target))setWireMenu(false)});
 }
 const svg=$("#canvas"), comps=$("#components"), wires=$("#wires"), labels=$("#labels"), selg=$("#selection"), wrap=$("#canvasWrap");
 const wiring=window.VoltProWiring?new window.VoltProWiring.Controller({
  getWires:()=>S.wires,nextId:()=>"W"+uid(),
- onState:s=>{S.wiringMode=s.active;S.wireStart=s.start;S.wirePointer=s.pointer;if(svg)svg.style.cursor=s.active?"crosshair":"default";const b=$("#wireBtn");if(b){b.classList.toggle("active",s.active);b.setAttribute("aria-pressed",String(s.active))}renderCanvas()},
+ onState:s=>{S.wiringMode=s.active;S.wireStart=s.start;S.wirePointer=s.pointer;if(svg)svg.style.cursor=s.active?"crosshair":"default";const b=$("#startWireBtn");if(b){b.classList.toggle("active",s.active);b.setAttribute("aria-pressed",String(s.active))}renderCanvas()},
  onStart:(ref,pos)=>{S.selected=ref.split(":")[0];S.wirePointer=pos||null;log("WIRE START "+ref+" · select a destination terminal or press Escape");renderCanvas()},
  onPreview:(start,p)=>{S.wirePointer=p;if(!wirePreviewFrame)wirePreviewFrame=requestAnimationFrame(()=>{wirePreviewFrame=0;renderWires()})},
  onCommit:w=>{saveHistory();S.wires.push(window.VoltProWiring.normalizeWire({...w,...S.wireStyle,bends:w.bends||[],junctions:w.junctions||[]},S.wires.length));render();log("WIRE "+w.id+" CONNECTED "+w.a+" → "+w.b)},
@@ -216,8 +216,8 @@ window.addEventListener("pointerup",e=>{if(wireBending){wireBending=null;render(
 $("#componentSearch").oninput=e=>{search=e.target.value;renderPalette()};$("#runBtn").onclick=run;$("#stopBtn").onclick=stop;$("#newBtn").onclick=()=>{if(confirm("Start a new project?")){saveHistory();S.components=[];S.wires=[];S.selected=null;render();}};$("#saveBtn").onclick=()=>{localStorage.setItem("voltpro-project",serialize());toast("Project saved locally")};$("#loadBtn").onclick=()=>$("#fileInput").click();$("#fileInput").onchange=e=>{const f=e.target.files[0];if(f)f.text().then(loadProject).catch(x=>alert(x.message))};$("#exportBtn").onclick=()=>download("voltpro-project.voltpro",serialize(),"application/json");$("#deleteBtn").onclick=()=>{if(S.selectedWireId){deleteWire(S.selectedWireId);return}if(S.selected)$("#removeBtn").click()};
 const wireMenu=$("#wireMenu"),wireTool=document.querySelector(".wire-tool"),wireColor=$("#wireColor"),wireCableType=$("#wireCableType"),wireSize=$("#wireSize"),wireGauge=$("#wireGauge"),startWireBtn=$("#startWireBtn");
 function syncWireMenu(){if(!wireMenu)return;wireColor.value=S.wireStyle.color;wireCableType.value=S.wireStyle.cableType;wireSize.value=S.wireStyle.size;wireGauge.value=S.wireStyle.gauge;startWireBtn.textContent=wiring?.active?"Cancel wire drawing":"Start drawing wires"}
-function setWireMenu(open){if(!wireMenu)return;wireMenu.hidden=!open;const b=$("#wireMenuBtn");if(b)b.setAttribute("aria-expanded",String(open));if(open)syncWireMenu()}
-// The early listener above is the single source of truth for opening/closing the menu.
+function setWireMenu(open){if(!wireMenu)return;wireMenu.hidden=!open;["#wireBtn","#wireMenuBtn"].forEach(q=>{const b=$(q);if(b)b.setAttribute("aria-expanded",String(open))});if(open)syncWireMenu()}
+// Both Wire controls open the settings menu; only the in-menu action starts or cancels drawing.
 wireColor.oninput=()=>{S.wireStyle.color=wireColor.value};
 wireCableType.onchange=()=>{S.wireStyle.cableType=wireCableType.value;const colors={standard:"#65d8ff",flexible:"#ffbd69",control:"#b99cff","protective-earth":"#61df9a",neutral:"#8aa8ff"};S.wireStyle.color=colors[wireCableType.value]||S.wireStyle.color;syncWireMenu()};
 wireSize.onchange=()=>{S.wireStyle.size=wireSize.value;S.wireStyle.gauge=String(nearestAwg(wireSize.value));syncWireMenu()};

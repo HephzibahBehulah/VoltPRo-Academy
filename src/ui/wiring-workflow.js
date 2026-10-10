@@ -43,7 +43,7 @@
  class Controller{
   constructor(callbacks={}){this.callbacks=callbacks;this.active=false;this.start=null;this.pointer=null;this.selectedWire=null;this.lastError=null}
   begin(){this.active=true;this.start=null;this.pointer=null;this.lastError=null;this.callbacks.onState?.(this.snapshot())}
-  cancel(){const was=this.active||this.start!==null;this.active=false;this.start=null;this.pointer=null;this.callbacks.onCancel?.();this.callbacks.onState?.(this.snapshot());return was}
+  cancel(){const was=this.active||this.start!==null;this.active=false;this.start=null;this.pointer=null;if(was)this.callbacks.onCancel?.();this.callbacks.onState?.(this.snapshot());return was}
   pointerMove(point){if(!this.active||!this.start)return;this.pointer={x:Number(point.x),y:Number(point.y)};this.callbacks.onPreview?.(this.start,this.pointer)}
   selectTerminal(ref,position){
    if(!this.active){this.callbacks.onTerminalSelect?.(ref);return {action:"select"}}
