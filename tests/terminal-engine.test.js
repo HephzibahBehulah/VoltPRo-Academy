@@ -56,6 +56,16 @@ test("duplicate device and terminal identities are reported", () => {
   assert.ok(engine.errors.some(e=>e.code==="DUPLICATE_TERMINAL"));
 });
 
+test("three-pole circuit breaker exposes six phase-matched terminals and three independent pole paths", () => {
+  const p=project([device("Q1","circuit-breaker-3p")]), engine=T.build(p);
+  assert.equal(engine.terminalsForDevice("Q1").length,6);
+  for(const id of ["L1","L2","L3","T1","T2","T3"]) assert.ok(engine.resolveTerminal("Q1:"+id), "missing terminal "+id);
+  const paths=engine.internalPaths("Q1");
+  assert.deepEqual(paths.map(x=>x.id),["breaker-pole-1","breaker-pole-2","breaker-pole-3"]);
+  assert.deepEqual(paths.map(x=>[x.from,x.to,x.phase]),[["Q1:L1","Q1:T1","L1"],["Q1:L2","Q1:T2","L2"],["Q1:L3","Q1:T3","L3"]]);
+  assert.equal(T.build(project([device("Q2","mcb-3p")])).terminalsForDevice("Q2").length,6);
+});
+
 test("contactor has independently addressable coil, main and auxiliary paths", () => {
   const p=project([device("KM1","contactor")]), engine=T.build(p);
   for(const id of ["A1","A2","L1","T1","L2","T2","L3","T3","13","14","21","22"])
@@ -132,4 +142,22 @@ test("terminal identities and topology survive canonical project reload", () => 
   const reloaded=T.build(loaded);
   assert.deepEqual(reloaded.findConnectedNets("R1:2"),["R1:2","R2:1"]);
   assert.equal(reloaded.resolveTerminal("R1:2").id,"R1:2");
+});
+
+test("three-phase source, contactor and control terminals preserve domains and phase identity", () => {
+  const p=project([
+    device("PS1","threephase"),device("QF1","circuit-breaker-3p"),
+    device("KM1","contactor"),device("M1","motor"),
+    device("CS1","controlsource"),device("PB1","pushbutton-no")
+  ]);
+  const engine=T.build(p);
+  assert.equal(engine.resolveTerminal("PS1:L1").domain,"ac3");
+  assert.equal(engine.resolveTerminal("QF1:T2").phase,"L2");
+  assert.equal(engine.resolveTerminal("KM1:L3").phase,"L3");
+  assert.equal(engine.resolveTerminal("M1:W1").phase,"L3");
+  assert.equal(engine.resolveTerminal("CS1:PLUS").domain,"control");
+  assert.equal(engine.resolveTerminal("PB1:13").domain,"control");
+  const mismatch=T.compatibility(engine.resolveTerminal("PS1:L1"),engine.resolveTerminal("QF1:L2"));
+  assert.equal(mismatch.valid,false);
+  assert.ok(mismatch.errors.some(e=>e.code==="PHASE_MISMATCH"));
 });

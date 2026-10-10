@@ -40,22 +40,26 @@
     resistor: { terminals:[terminal("1","1",-20,0,{number:"1"}),terminal("2","2",20,0,{number:"2"})], paths:[path("resistance","1","2","resistive")] },
     lamp: { terminals:[terminal("1","L",-20,0,{direction:"input"}),terminal("2","N",20,0,{direction:"output"})], paths:[path("lamp-load","1","2","load")] },
     switch: { terminals:[terminal("1","1",-20,0),terminal("2","2",20,0)], paths:[path("switch-contact","1","2","switchable",{stateKey:"closed"})] },
-    "pushbutton-no": { terminals:[terminal("13","13",-20,0,{number:"13"}),terminal("14","14",20,0,{number:"14"})], paths:[path("no-contact","13","14","switchable",{stateKey:"pressed",closedWhen:true})] },
-    "pushbutton-nc": { terminals:[terminal("21","21",-20,0,{number:"21"}),terminal("22","22",20,0,{number:"22"})], paths:[path("nc-contact","21","22","switchable",{stateKey:"pressed",closedWhen:false})] },
+    "pushbutton-no": { terminals:[terminal("13","13",-20,0,{number:"13",domain:"control"}),terminal("14","14",20,0,{number:"14",domain:"control"})], paths:[path("no-contact","13","14","switchable",{stateKey:"pressed",closedWhen:true,domain:"control"})] },
+    "pushbutton-nc": { terminals:[terminal("21","21",-20,0,{number:"21",domain:"control"}),terminal("22","22",20,0,{number:"22",domain:"control"})], paths:[path("nc-contact","21","22","switchable",{stateKey:"pressed",closedWhen:false,domain:"control"})] },
     fuse: { terminals:[terminal("1","1",-20,0),terminal("2","2",20,0)], paths:[path("fuse-link","1","2","protective",{stateKey:"intact"})] },
     "circuit-breaker": { terminals:[terminal("1","LINE",-20,0),terminal("2","LOAD",20,0)], paths:[path("breaker-contact","1","2","switchable",{stateKey:"closed"})] },
+    "circuit-breaker-3p": { terminals:[
+      terminal("L1","L1",-24,-12,{number:"1",domain:"ac3",phase:"L1"}), terminal("L2","L2",-24,0,{number:"3",domain:"ac3",phase:"L2"}), terminal("L3","L3",-24,12,{number:"5",domain:"ac3",phase:"L3"}),
+      terminal("T1","T1",24,-12,{number:"2",domain:"ac3",phase:"L1"}), terminal("T2","T2",24,0,{number:"4",domain:"ac3",phase:"L2"}), terminal("T3","T3",24,12,{number:"6",domain:"ac3",phase:"L3"})
+    ], paths:[path("breaker-pole-1","L1","T1","switchable",{stateKey:"closed",phase:"L1"}),path("breaker-pole-2","L2","T2","switchable",{stateKey:"closed",phase:"L2"}),path("breaker-pole-3","L3","T3","switchable",{stateKey:"closed",phase:"L3"})] },
     contactor: { terminals:[
       terminal("A1","A1",-24,-22,{domain:"control",direction:"input"}),terminal("A2","A2",24,-22,{domain:"control",direction:"output"}),
-      terminal("L1","L1",-24,-6,{number:"1"}),terminal("T1","T1",24,-6,{number:"2"}),
-      terminal("L2","L2",-24,6,{number:"3"}),terminal("T2","T2",24,6,{number:"4"}),
-      terminal("L3","L3",-24,18,{number:"5"}),terminal("T3","T3",24,18,{number:"6"}),
+      terminal("L1","L1",-24,-6,{number:"1",domain:"ac3",phase:"L1"}),terminal("T1","T1",24,-6,{number:"2",domain:"ac3",phase:"L1"}),
+      terminal("L2","L2",-24,6,{number:"3",domain:"ac3",phase:"L2"}),terminal("T2","T2",24,6,{number:"4",domain:"ac3",phase:"L2"}),
+      terminal("L3","L3",-24,18,{number:"5",domain:"ac3",phase:"L3"}),terminal("T3","T3",24,18,{number:"6",domain:"ac3",phase:"L3"}),
       terminal("13","13",-24,30,{number:"13",domain:"control"}),terminal("14","14",24,30,{number:"14",domain:"control"}),
       terminal("21","21",-24,42,{number:"21",domain:"control"}),terminal("22","22",24,42,{number:"22",domain:"control"})
     ], paths:[
       path("coil","A1","A2","coil",{domain:"control"}),
-      path("main-1","L1","T1","switchable",{stateKey:"energized",closedWhen:true}),
-      path("main-2","L2","T2","switchable",{stateKey:"energized",closedWhen:true}),
-      path("main-3","L3","T3","switchable",{stateKey:"energized",closedWhen:true}),
+      path("main-1","L1","T1","switchable",{stateKey:"energized",closedWhen:true,phase:"L1"}),
+      path("main-2","L2","T2","switchable",{stateKey:"energized",closedWhen:true,phase:"L2"}),
+      path("main-3","L3","T3","switchable",{stateKey:"energized",closedWhen:true,phase:"L3"}),
       path("aux-no-13-14","13","14","switchable",{stateKey:"energized",closedWhen:true,domain:"control"}),
       path("aux-nc-21-22","21","22","switchable",{stateKey:"energized",closedWhen:false,domain:"control"})
     ]},
@@ -64,19 +68,22 @@
       terminal("11","11",-24,0,{domain:"control"}),terminal("12","12",24,0,{domain:"control"}),terminal("14","14",24,12,{domain:"control"}),
       terminal("21","21",-24,24,{domain:"control"}),terminal("22","22",24,24,{domain:"control"}),terminal("24","24",24,36,{domain:"control"})
     ], paths:[path("coil","A1","A2","coil",{domain:"control"}),path("changeover-1-nc","11","12","switchable",{stateKey:"energized",closedWhen:false,domain:"control"}),path("changeover-1-no","11","14","switchable",{stateKey:"energized",closedWhen:true,domain:"control"}),path("changeover-2-nc","21","22","switchable",{stateKey:"energized",closedWhen:false,domain:"control"}),path("changeover-2-no","21","24","switchable",{stateKey:"energized",closedWhen:true,domain:"control"})] },
-    motor: { terminals:["U1","V1","W1","U2","V2","W2","PE"].map((id,i)=>terminal(id,id,i%2?-20:20,Math.floor(i/2)*14-21,{domain:id==="PE"?"ground":"ac3",phase:({U1:"L1",V1:"L2",W1:"L3",U2:"L1",V2:"L2",W2:"L3"})[id]||null,polarity:id==="PE"?"protective-earth":null})), paths:[path("phase-U","U1","U2","motor-winding",{phase:"L1"}),path("phase-V","V1","V2","motor-winding",{phase:"L2"}),path("phase-W","W1","W2","motor-winding",{phase:"L3"})] },
+    ground: { terminals:[terminal("PE","PE",0,0,{domain:"ground",polarity:"protective-earth"})], paths:[] },
+    threephase: { terminals:[terminal("L1","L1",-24,-12,{domain:"ac3",phase:"L1"}),terminal("L2","L2",-24,0,{domain:"ac3",phase:"L2"}),terminal("L3","L3",-24,12,{domain:"ac3",phase:"L3"})], paths:[] },
+    motor: { terminals:[terminal("U1","U1",-24,-12,{domain:"ac3",phase:"L1"}),terminal("V1","V1",-24,0,{domain:"ac3",phase:"L2"}),terminal("W1","W1",-24,12,{domain:"ac3",phase:"L3"}),terminal("U2","U2",24,-12,{domain:"ac3",phase:"L1"}),terminal("V2","V2",24,0,{domain:"ac3",phase:"L2"}),terminal("W2","W2",24,12,{domain:"ac3",phase:"L3"}),terminal("PE","PE",0,24,{domain:"ground",polarity:"protective-earth"})], paths:[path("phase-U","U1","U2","motor-winding",{phase:"L1"}),path("phase-V","V1","V2","motor-winding",{phase:"L2"}),path("phase-W","W1","W2","motor-winding",{phase:"L3"})] },
     transformer: { terminals:[terminal("P1","P1",-24,-12,{domain:"ac"}),terminal("P2","P2",-24,12,{domain:"ac"}),terminal("S1","S1",24,-12,{domain:"ac"}),terminal("S2","S2",24,12,{domain:"ac"})], paths:[path("primary","P1","P2","transformer-winding"),path("secondary","S1","S2","transformer-winding")] },
     "terminal-block": { terminals:[terminal("1","1",-20,0),terminal("2","2",20,0)], paths:[path("through-terminal","1","2","passive")] },
     sensor: { terminals:[terminal("V+","V+",-20,-12,{domain:"control",polarity:"positive"}),terminal("0V","0V",-20,12,{domain:"ground",polarity:"negative"}),terminal("OUT","OUT",20,0,{domain:"signal",direction:"output"})], paths:[] },
     "plc-input": { terminals:[terminal("COM","COM",-20,0,{domain:"control"}),terminal("I0","I0",20,0,{domain:"digital",direction:"input"})], paths:[] },
     "plc-output": { terminals:[terminal("COM","COM",-20,0,{domain:"control"}),terminal("Q0","Q0",20,0,{domain:"digital",direction:"output"})], paths:[] },
     "measurement-instrument": { terminals:[terminal("COM","COM",-20,0,{domain:"dc",polarity:"negative"}),terminal("V","V",20,0,{domain:"dc",polarity:"positive"}),terminal("A","A",0,20,{domain:"dc"})], paths:[] },
+    controlsource: { terminals:[terminal("PLUS","+",-20,0,{domain:"control",polarity:"positive"}),terminal("MINUS","−",20,0,{domain:"control",polarity:"negative"})], paths:[path("control-source","PLUS","MINUS","voltage-source",{domain:"control"})] },
     battery: { terminals:[terminal("PLUS","+",-20,0,{polarity:"positive"}),terminal("MINUS","−",20,0,{polarity:"negative"})], paths:[path("source","PLUS","MINUS","voltage-source")] }
   };
 
   function definitionFor(type) {
     const normalized = String(type || "").toLowerCase().replace(/[_ ]+/g,"-");
-    const aliases = { pushbutton:"pushbutton-no", contactor3p:"contactor", motor3phase:"motor", "circuitbreaker":"circuit-breaker", "terminalblock":"terminal-block", "plc-input-module":"plc-input", "plc-output-module":"plc-output", sensor:"sensor", lamp:"lamp", voltmeter:"measurement-instrument", ammeter:"measurement-instrument", multimeter:"measurement-instrument" };
+    const aliases = { pushbutton:"pushbutton-no", contactor3p:"contactor", motor3phase:"motor", "circuitbreaker":"circuit-breaker", mcb3p:"circuit-breaker-3p", "3-pole-mcb":"circuit-breaker-3p", "mcb-3p":"circuit-breaker-3p", "terminalblock":"terminal-block", "plc-input-module":"plc-input", "plc-output-module":"plc-output", sensor:"sensor", lamp:"lamp", voltmeter:"measurement-instrument", ammeter:"measurement-instrument", multimeter:"measurement-instrument" };
     const def = DEFINITIONS[aliases[normalized] || normalized];
     return def ? clone(def) : null;
   }
@@ -117,6 +124,7 @@
       const types = new Set([a.type,b.type]);
       if ((types.has("mechanical") && types.has("electrical")) || (types.has("optical") && types.has("electrical"))) errors.push({code:"TERMINAL_TYPE_MISMATCH",message:"Incompatible terminal types"});
       if (a.polarity && b.polarity && a.polarity !== b.polarity && !wire.allowPolarityReversal) errors.push({code:"POLARITY_MISMATCH",message:"Terminal polarity mismatch"});
+      if (a.phase && b.phase && a.phase !== b.phase) errors.push({code:"PHASE_MISMATCH",message:"Terminal phases do not match: "+a.phase+" / "+b.phase});
       if (a.direction === "input" && b.direction === "input" && a.domain !== "dc" && a.domain !== "ac") errors.push({code:"DIRECTION_MISMATCH",message:"Two input-only terminals cannot be connected"});
     }
     return {valid:errors.length===0,errors};
