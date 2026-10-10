@@ -36,7 +36,7 @@ const defs={
  wirelabel:{cat:"Panel",name:"Wire Label",symbol:"LBL",pins:1,props:{label:"101"}}
 };
 window.S=S; window.defs=defs;
-const $=q=>document.querySelector(q), $=q=>[...document.querySelectorAll(q)];
+const $=q=>document.querySelector(q), $$=q=>[...document.querySelectorAll(q)];
 // Bind the Wire dropdown immediately, before the rest of the simulator initializes.
 // This keeps the settings menu clickable even if a later optional control fails to initialize.
 const earlyWireButton=$("#wireBtn"),earlyWireMenu=$("#wireMenu"),earlyWireTool=document.querySelector(".wire-tool");
