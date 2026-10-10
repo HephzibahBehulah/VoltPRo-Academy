@@ -83,6 +83,7 @@
     else if(/\bled\b/.test(q)&&/(battery|resistor|circuit|light|power|build|make|create|design)/.test(q))key="battery-led-resistor";
     else if(/switch|pushbutton/.test(q)&&/(lamp|light|battery|circuit|build|make|create|design)/.test(q))key="battery-switch-lamp";
     else if(/battery|resistor|lamp|light|simple dc|series circuit/.test(q))key="battery-resistor-lamp";
+    if(!key&&previous&&/\\badd\\b.*\\bswitch\\b/.test(q)&&previous.template==="battery-resistor-lamp")key="battery-switch-lamp";
     if(!key)return {recognized:false,error:"I could not safely map that request to a supported template. Try a low-voltage LED circuit, a switched lamp, a three-phase breaker, or a three-phase motor-starter topology draft.",components:[],wires:[],warnings:[]};
     const result=clone(templates[key]);
     result.template=key;result.recognized=true;result.prompt=String(prompt);
