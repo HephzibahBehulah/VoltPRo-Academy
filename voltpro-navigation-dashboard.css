@@ -98,3 +98,18 @@
 .academy-page .brand-lockup:focus-visible{outline:2px solid var(--vp-hb-cyan);outline-offset:3px;border-radius:8px}
 @media(max-width:1050px){.academy-page .topbar-byline{display:none}}
 @media(max-width:760px){.academy-page .brand-hb-logo{width:156px}.academy-page .brand-lockup{padding-bottom:14px}}
+
+/* Compact public-facing project overview: explain the product and its owner before progress metrics. */
+.academy-page .vp-public-overview{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:14px 24px;align-items:center;margin:14px 0;padding:17px 19px;border:1px solid rgba(86,207,225,.18);border-radius:14px;background:linear-gradient(115deg,rgba(16,25,37,.96),rgba(12,18,30,.86))}
+.academy-page .vp-overview-copy{min-width:0}
+.academy-page .vp-overview-kicker{display:block;margin-bottom:6px;color:var(--vp-hb-cyan);font:700 9px/1.5 "JetBrains Mono",monospace;letter-spacing:.14em}
+.academy-page .vp-overview-copy h3{margin:0 0 6px;color:var(--vp-hb-text);font-size:clamp(16px,1.7vw,21px);line-height:1.2;letter-spacing:-.025em}
+.academy-page .vp-overview-copy p{margin:0;color:var(--vp-hb-muted);font-size:11px;line-height:1.7}
+.academy-page .vp-overview-capabilities{display:grid;gap:7px;min-width:0}
+.academy-page .vp-overview-capabilities>div{display:flex;align-items:center;gap:10px;min-width:0;padding:8px 10px;border:1px solid rgba(86,207,225,.1);border-radius:8px;background:rgba(86,207,225,.025)}
+.academy-page .vp-overview-capabilities b{flex:0 0 24px;color:var(--vp-hb-cyan);font:700 9px/1.5 "JetBrains Mono",monospace}
+.academy-page .vp-overview-capabilities span{color:#cbd6e1;font-size:10px;line-height:1.5;overflow-wrap:anywhere}
+.academy-page .vp-overview-flow{grid-column:1/-1;display:flex;align-items:center;justify-content:center;gap:clamp(5px,1vw,13px);flex-wrap:wrap;padding-top:11px;border-top:1px solid rgba(86,207,225,.1);color:#dbe6ef;font:700 8px/1.7 "JetBrains Mono",monospace;letter-spacing:.07em}
+.academy-page .vp-overview-flow i{color:var(--vp-hb-cyan);font-style:normal}
+@media(max-width:900px){.academy-page .vp-public-overview{grid-template-columns:minmax(0,1fr)}.academy-page .vp-overview-flow{grid-column:auto;justify-content:flex-start}}
+@media(max-width:430px){.academy-page .vp-public-overview{padding:14px;gap:12px}.academy-page .vp-overview-flow{font-size:7px;gap:5px}}
