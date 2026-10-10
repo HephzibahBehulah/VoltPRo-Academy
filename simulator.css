@@ -143,3 +143,5 @@ body.simulator-page.light .status[data-state="error"]{background:#fff0f1;border-
 
 /* Wire inspector engineering note: distinguish display thickness from electrical sizing. */
 .wire-prop-note{display:block;color:var(--amber);font-size:9px;line-height:1.45;margin-top:2px}
+
+/* Wire dropdown implementation in progress. */
