@@ -44,6 +44,10 @@
     "pushbutton-nc": { terminals:[terminal("21","21",-20,0,{number:"21"}),terminal("22","22",20,0,{number:"22"})], paths:[path("nc-contact","21","22","switchable",{stateKey:"pressed",closedWhen:false})] },
     fuse: { terminals:[terminal("1","1",-20,0),terminal("2","2",20,0)], paths:[path("fuse-link","1","2","protective",{stateKey:"intact"})] },
     "circuit-breaker": { terminals:[terminal("1","LINE",-20,0),terminal("2","LOAD",20,0)], paths:[path("breaker-contact","1","2","switchable",{stateKey:"closed"})] },
+    "circuit-breaker-3p": { terminals:[
+      terminal("L1","L1",-24,-12,{number:"1",domain:"ac3",phase:"L1"}), terminal("L2","L2",-24,0,{number:"3",domain:"ac3",phase:"L2"}), terminal("L3","L3",-24,12,{number:"5",domain:"ac3",phase:"L3"}),
+      terminal("T1","T1",24,-12,{number:"2",domain:"ac3",phase:"L1"}), terminal("T2","T2",24,0,{number:"4",domain:"ac3",phase:"L2"}), terminal("T3","T3",24,12,{number:"6",domain:"ac3",phase:"L3"})
+    ], paths:[path("breaker-pole-1","L1","T1","switchable",{stateKey:"closed",phase:"L1"}),path("breaker-pole-2","L2","T2","switchable",{stateKey:"closed",phase:"L2"}),path("breaker-pole-3","L3","T3","switchable",{stateKey:"closed",phase:"L3"})] },
     contactor: { terminals:[
       terminal("A1","A1",-24,-22,{domain:"control",direction:"input"}),terminal("A2","A2",24,-22,{domain:"control",direction:"output"}),
       terminal("L1","L1",-24,-6,{number:"1"}),terminal("T1","T1",24,-6,{number:"2"}),
@@ -76,7 +80,7 @@
 
   function definitionFor(type) {
     const normalized = String(type || "").toLowerCase().replace(/[_ ]+/g,"-");
-    const aliases = { pushbutton:"pushbutton-no", contactor3p:"contactor", motor3phase:"motor", "circuitbreaker":"circuit-breaker", "terminalblock":"terminal-block", "plc-input-module":"plc-input", "plc-output-module":"plc-output", sensor:"sensor", lamp:"lamp", voltmeter:"measurement-instrument", ammeter:"measurement-instrument", multimeter:"measurement-instrument" };
+    const aliases = { pushbutton:"pushbutton-no", contactor3p:"contactor", motor3phase:"motor", "circuitbreaker":"circuit-breaker", mcb3p:"circuit-breaker-3p", "3-pole-mcb":"circuit-breaker-3p", "mcb-3p":"circuit-breaker-3p", "terminalblock":"terminal-block", "plc-input-module":"plc-input", "plc-output-module":"plc-output", sensor:"sensor", lamp:"lamp", voltmeter:"measurement-instrument", ammeter:"measurement-instrument", multimeter:"measurement-instrument" };
     const def = DEFINITIONS[aliases[normalized] || normalized];
     return def ? clone(def) : null;
   }
