@@ -39,6 +39,8 @@ test("AI Tutor knows the canonical ownership map and offers external public look
   assert.match(assistant, /ask,/);
   assert.match(assistant, /vpBotExternal/);
   assert.match(assistant, /CURRENT WORKSPACE/);
+  assert.match(assistant, /loadInternalKnowledge/);
+  assert.match(assistant, /data\/electrical-tool-index\.json/);
 });
 
 test("Academy scripts parse and tutor page uses the shared project-aware assistant", () => {
