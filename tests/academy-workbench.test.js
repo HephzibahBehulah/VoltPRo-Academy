@@ -51,3 +51,26 @@ test("colour console accepts standard HEX lengths but not five-digit HEX", () =>
   assert.match(js, /\[0-9a-f\]\{3\}\|\[0-9a-f\]\{4\}\|\[0-9a-f\]\{6\}\|\[0-9a-f\]\{8\}/i);
   assert.match(js, /Invalid or incomplete HEX \/ RGB/);
 });
+
+test("simulator toolbar is organised into task groups without duplicate workbench shortcuts", () => {
+  const html = read("simulator.html");
+  assert.match(html, /role="toolbar" aria-label="Simulator controls"/);
+  for (const id of ["runBtn", "stopBtn", "undoBtn", "redoBtn", "deleteBtn", "wireBtn", "wireMenuBtn", "paletteBtn", "fitBtn"]) {
+    assert.match(html, new RegExp('id="' + id + '"'));
+  }
+  assert.equal((html.match(/href="academy-workbench\.html"/g) || []).length, 1);
+  assert.doesNotMatch(html, /href="academy-workbench\.html#(faults|challenges|demos)"/);
+  assert.match(html, /href="academy-workbench\.html#projects"/);
+  assert.match(read("simulator.js"), /getBoundingClientRect\(\)/);
+});
+
+test("primary destinations are consistent across the practical and engineering pages", () => {
+  const workbench = read("academy-workbench.html");
+  const engineering = read("engineering.html");
+  for (const page of [workbench, engineering]) {
+    assert.match(page, /aria-label="Primary destinations"/);
+    assert.match(page, /href="index\.html"/);
+    assert.match(page, /href="simulator\.html"/);
+    assert.match(page, /href="engineering\.html"/);
+  }
+});
