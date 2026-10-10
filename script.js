@@ -190,8 +190,8 @@ async function askTutorExpanded(){
  try{
    if(window.VoltProAssistant&&typeof window.VoltProAssistant.ask==="function")result=await window.VoltProAssistant.ask(q,{external});
  }catch(_){}
- if(!result||!result.answer)result={answer:tutorReply(q),sources:[]};
- state.tutorLog[pending]={role:"tutor",text:result.answer,sources:result.sources||[]};
+ if(!result||!result.answer)result={answer:tutorReply(q),sources:[],mode:"offline"};
+ state.tutorLog[pending]={role:"tutor",text:result.answer+(result.mode==="offline"?"\n\nOffline fallback: the remote AI service did not return an answer.":""),sources:result.sources||[]};
  state.tutorLog=state.tutorLog.slice(-12);save();renderTutorLog();
  if(button)button.disabled=false;
  if(e)e.focus();
