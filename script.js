@@ -157,6 +157,7 @@ function expandedTutor(){
  if(Array.isArray(state.tutorLog)&&state.tutorLog.length){renderTutorLog()}
 }
 function useTutorSuggestion(button){const input=document.getElementById("tutorInput");if(input){input.value=button.querySelector("strong").textContent;askTutorExpanded()}}
+function esc(value){return String(value==null?"":value).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;")}
 function renderTutorLog(){
  const log=document.getElementById("chatLog");if(!log)return;
  log.innerHTML=(state.tutorLog||[]).map(function(x){
