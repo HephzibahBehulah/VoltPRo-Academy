@@ -26,3 +26,5 @@
 #vpCircuitDesigner .vp-cd-insert:disabled{opacity:.45;cursor:not-allowed}
 #vpCircuitDesigner footer{margin-top:12px;color:#8498a9;font-size:9px;line-height:1.5}
 @media(max-width:600px){#vpCircuitDesigner{right:10px;bottom:12px}#vpCircuitDesigner .vp-cd-panel{right:0;bottom:52px;max-height:75vh}}
+
+.symbol-style-control{display:inline-flex;align-items:center;gap:6px;font-size:10px;color:var(--muted,#9eafbf);white-space:nowrap}.symbol-style-control select{max-width:145px;border:1px solid var(--border,#33485a);border-radius:6px;background:var(--panel,#111c27);color:var(--text,#e5edf5);padding:6px 7px;font:inherit}
