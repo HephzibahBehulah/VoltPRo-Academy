@@ -7,9 +7,9 @@ const read = p => fs.readFileSync(path.join(__dirname, "..", p), "utf8");
 
 test("million-variant bank is loaded after the existing content expansion and cached", () => {
   const html = read("index.html");
-  assert.match(html, /academy-content-expansion\.js\?v=20261011a"><\/script>\s*<script src="academy-question-bank\.js\?v=20261011b"><\/script>/);
+  assert.match(html, /academy-content-expansion\.js\?v=20261011a"><\/script>\s*<script src="academy-question-bank\.js\?v=20261011c"><\/script>/);
   const worker = read("service-worker.js");
-  assert.match(worker, /voltpro-v25/);
+  assert.match(worker, /voltpro-v26/);
   assert.match(worker, /"\.\/academy-question-bank\.js"/);
 });
 
@@ -48,4 +48,10 @@ test("million-bank script adds no sidebar destinations", () => {
   const nav = html.slice(start, html.indexOf("</nav>", start));
   assert.equal((nav.match(/data-view=/g)||[]).length, 10);
   assert.doesNotMatch(nav, /question-bank/);
+});
+
+test("Exam Practice is connected to the existing navigation and curated exam questions remain available", () => {
+  const app = read("script.js");
+  assert.match(app, /exam:window\.expandedExam\|\|dashboard/);
+  assert.match(app, /window\.examQuestions=examQuestions/);
 });
