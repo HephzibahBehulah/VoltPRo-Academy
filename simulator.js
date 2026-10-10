@@ -83,7 +83,7 @@ function symbol(c){
  if(S.symbolStyle==="terminal-blocks") return '<rect class="symbol device-block" x="-32" y="-30" width="64" height="60" rx="4"/>'+text(d.symbol||d.name.slice(0,2));
  if(S.symbolStyle==="simplified") return '<rect class="symbol" x="-20" y="-14" width="40" height="28" rx="3"/>'+text(d.symbol||d.name.slice(0,1));
  if(c.type==="battery"||c.type==="acsource") return line(-55,0,-25,0)+line(25,0,55,0)+circle(25)+text("+",-4)+text("−",13);
- if(c.type==="resistor") return line(-55,0,-30,0)+'<rect class="symbol" x="-30" y="-10" width="60" height="20"/>'+line(30,0,55,0);
+ if(c.type==="resistor") return line(-55,0,-34,0)+path("M-34 0 L-24 -9 L-14 9 L-4 -9 L6 9 L16 -9 L26 9 L34 0")+line(34,0,55,0);
  if(c.type==="lamp") return line(-55,0,-23,0)+circle(23)+path("M-15 -15 L15 15 M15 -15 L-15 15")+line(23,0,55,0);
  if(c.type==="led") return line(-55,0,-14,0)+path("M-14 -17 L16 0 L-14 17 Z")+path("M16 -19 V19")+line(16,0,55,0)+path("M-2 -23 L8 -33 M4 -31 L8 -33 L8 -27 M10 -16 L20 -26 M16 -24 L20 -26 L20 -20");
  if(c.type==="diode"||c.type==="zener") return line(-55,0,-14,0)+path("M-14 -17 L16 0 L-14 17 Z")+path(c.type==="zener"?"M16 -18 L16 18 L23 12 M16 -18 L9 -12":"M16 -19 V19")+line(16,0,55,0);
