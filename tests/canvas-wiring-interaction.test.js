@@ -70,7 +70,7 @@ test('wire inspector exposes AWG and metric cross-section with synchronized appr
   assert.ok(source.includes('data-wire-prop="size"'));
   assert.ok(source.includes('Drawing thickness only. It does not calculate current capacity or electrical safety.'));
   const html = fs.readFileSync(path.join(__dirname, '..', 'simulator.html'), 'utf8');
-  assert.ok(html.includes('simulator.js?v=20261010l'));
+  assert.ok(html.includes('simulator.js?v=20261010m'));
   assert.ok(html.includes('simulator.css?v=20261010f'));
 });
 
@@ -78,6 +78,11 @@ test('wire inspector exposes AWG and metric cross-section with synchronized appr
 test('toolbar wire menu exists', () => {
  const html = fs.readFileSync(path.join(__dirname, '..', 'simulator.html'), 'utf8');
  assert.ok(html.includes('id="wireMenu" class="wire-menu" hidden'));
+ assert.ok(html.includes('id="wireBtn" type="button" aria-pressed="false"'));
+ assert.ok(html.includes('id="wireMenuBtn" type="button" aria-haspopup="true"'));
  assert.ok(source.includes('function setWireMenu(open)'));
  assert.ok(source.includes('...S.wireStyle'));
+ assert.match(source, /earlyWireButton\.addEventListener\("click",e=>\{e\.preventDefault\(\);e\.stopPropagation\(\);toggleWireDrawing\(\)\}\)/);
+ assert.match(source, /earlyWireMenuButton\.addEventListener\("click",e=>\{e\.preventDefault\(\);e\.stopPropagation\(\);setWireMenu\(earlyWireMenu\.hidden\)\}\)/);
+ assert.ok(source.includes('startWireBtn.onclick=toggleWireDrawing;'));
 });

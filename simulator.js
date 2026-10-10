@@ -39,15 +39,17 @@ window.S=S; window.defs=defs;
 const $=q=>document.querySelector(q), $$=q=>[...document.querySelectorAll(q)];
 // Bind the Wire dropdown immediately, before the rest of the simulator initializes.
 // This keeps the settings menu clickable even if a later optional control fails to initialize.
-const earlyWireButton=$("#wireBtn"),earlyWireMenu=$("#wireMenu"),earlyWireTool=document.querySelector(".wire-tool");
+const earlyWireButton=$("#wireBtn"),earlyWireMenuButton=$("#wireMenuBtn"),earlyWireMenu=$("#wireMenu"),earlyWireTool=document.querySelector(".wire-tool");
+function toggleWireDrawing(){if(wiring){if(wiring.active)wiring.cancel();else wiring.begin()}else{S.wiringMode=!S.wiringMode;S.wireStart=null;renderCanvas()}setWireMenu(false);syncWireMenu()}
 if(earlyWireButton&&earlyWireMenu){
- earlyWireButton.addEventListener("click",e=>{e.preventDefault();e.stopPropagation();const open=earlyWireMenu.hidden;earlyWireMenu.hidden=!open;earlyWireButton.setAttribute("aria-expanded",String(open));if(open&&S.wireStyle){const c=$("#wireColor"),t=$("#wireCableType"),z=$("#wireSize"),g=$("#wireGauge");if(c)c.value=S.wireStyle.color;if(t)t.value=S.wireStyle.cableType;if(z)z.value=S.wireStyle.size;if(g)g.value=S.wireStyle.gauge;}});
- document.addEventListener("click",e=>{if(earlyWireTool&&!earlyWireTool.contains(e.target)){earlyWireMenu.hidden=true;earlyWireButton.setAttribute("aria-expanded","false");}});
+ earlyWireButton.addEventListener("click",e=>{e.preventDefault();e.stopPropagation();toggleWireDrawing()});
+ if(earlyWireMenuButton)earlyWireMenuButton.addEventListener("click",e=>{e.preventDefault();e.stopPropagation();setWireMenu(earlyWireMenu.hidden)});
+ document.addEventListener("click",e=>{if(earlyWireTool&&!earlyWireTool.contains(e.target))setWireMenu(false)});
 }
 const svg=$("#canvas"), comps=$("#components"), wires=$("#wires"), labels=$("#labels"), selg=$("#selection"), wrap=$("#canvasWrap");
 const wiring=window.VoltProWiring?new window.VoltProWiring.Controller({
  getWires:()=>S.wires,nextId:()=>"W"+uid(),
- onState:s=>{S.wiringMode=s.active;S.wireStart=s.start;S.wirePointer=s.pointer;if(svg)svg.style.cursor=s.active?"crosshair":"default";const b=$("#wireBtn");if(b)b.classList.toggle("active",s.active);renderCanvas()},
+ onState:s=>{S.wiringMode=s.active;S.wireStart=s.start;S.wirePointer=s.pointer;if(svg)svg.style.cursor=s.active?"crosshair":"default";const b=$("#wireBtn");if(b){b.classList.toggle("active",s.active);b.setAttribute("aria-pressed",String(s.active))}renderCanvas()},
  onStart:(ref,pos)=>{S.selected=ref.split(":")[0];S.wirePointer=pos||null;log("WIRE START "+ref+" · select a destination terminal or press Escape");renderCanvas()},
  onPreview:(start,p)=>{S.wirePointer=p;if(!wirePreviewFrame)wirePreviewFrame=requestAnimationFrame(()=>{wirePreviewFrame=0;renderWires()})},
  onCommit:w=>{saveHistory();S.wires.push(window.VoltProWiring.normalizeWire({...w,...S.wireStyle,bends:w.bends||[],junctions:w.junctions||[]},S.wires.length));render();log("WIRE "+w.id+" CONNECTED "+w.a+" → "+w.b)},
@@ -214,13 +216,13 @@ window.addEventListener("pointerup",e=>{if(wireBending){wireBending=null;render(
 $("#componentSearch").oninput=e=>{search=e.target.value;renderPalette()};$("#runBtn").onclick=run;$("#stopBtn").onclick=stop;$("#newBtn").onclick=()=>{if(confirm("Start a new project?")){saveHistory();S.components=[];S.wires=[];S.selected=null;render();}};$("#saveBtn").onclick=()=>{localStorage.setItem("voltpro-project",serialize());toast("Project saved locally")};$("#loadBtn").onclick=()=>$("#fileInput").click();$("#fileInput").onchange=e=>{const f=e.target.files[0];if(f)f.text().then(loadProject).catch(x=>alert(x.message))};$("#exportBtn").onclick=()=>download("voltpro-project.voltpro",serialize(),"application/json");$("#deleteBtn").onclick=()=>{if(S.selectedWireId){deleteWire(S.selectedWireId);return}if(S.selected)$("#removeBtn").click()};
 const wireMenu=$("#wireMenu"),wireTool=document.querySelector(".wire-tool"),wireColor=$("#wireColor"),wireCableType=$("#wireCableType"),wireSize=$("#wireSize"),wireGauge=$("#wireGauge"),startWireBtn=$("#startWireBtn");
 function syncWireMenu(){if(!wireMenu)return;wireColor.value=S.wireStyle.color;wireCableType.value=S.wireStyle.cableType;wireSize.value=S.wireStyle.size;wireGauge.value=S.wireStyle.gauge;startWireBtn.textContent=wiring?.active?"Cancel wire drawing":"Start drawing wires"}
-function setWireMenu(open){if(!wireMenu)return;wireMenu.hidden=!open;$("#wireBtn").setAttribute("aria-expanded",String(open));if(open)syncWireMenu()}
+function setWireMenu(open){if(!wireMenu)return;wireMenu.hidden=!open;const b=$("#wireMenuBtn");if(b)b.setAttribute("aria-expanded",String(open));if(open)syncWireMenu()}
 // The early listener above is the single source of truth for opening/closing the menu.
 wireColor.oninput=()=>{S.wireStyle.color=wireColor.value};
 wireCableType.onchange=()=>{S.wireStyle.cableType=wireCableType.value;const colors={standard:"#65d8ff",flexible:"#ffbd69",control:"#b99cff","protective-earth":"#61df9a",neutral:"#8aa8ff"};S.wireStyle.color=colors[wireCableType.value]||S.wireStyle.color;syncWireMenu()};
 wireSize.onchange=()=>{S.wireStyle.size=wireSize.value;S.wireStyle.gauge=String(nearestAwg(wireSize.value));syncWireMenu()};
 wireGauge.onchange=()=>{S.wireStyle.gauge=wireGauge.value;S.wireStyle.size=nearestMetricSize(wireGauge.value);syncWireMenu()};
-startWireBtn.onclick=()=>{if(wiring){if(wiring.active)wiring.cancel();else wiring.begin()}else{S.wiringMode=!S.wiringMode;S.wireStart=null;renderCanvas()}setWireMenu(false);syncWireMenu()};
+startWireBtn.onclick=toggleWireDrawing;
 // Outside clicks are handled by the early dropdown listener above.$("#undoBtn").onclick=()=>{if(S.history.length){S.future.push(JSON.stringify({components:S.components,wires:S.wires}));restore(S.history.pop())}};$("#redoBtn").onclick=()=>{if(S.future.length){S.history.push(JSON.stringify({components:S.components,wires:S.wires}));restore(S.future.pop())}};$("#fitBtn").onclick=()=>{S.zoom=1;S.pan={x:0,y:0};render()};$("#zoomIn").onclick=()=>{S.zoom=Math.min(2.5,S.zoom*1.15);render()};$("#zoomOut").onclick=()=>{S.zoom=Math.max(.35,S.zoom/1.15);render()};
 $$("[data-meter]").forEach(b=>b.onclick=()=>{S.meter=b.dataset.meter;const r=solve();$("#meterReadout").textContent=S.meter==="voltage"?r.voltage.toFixed(2)+" V":S.meter==="current"?r.current.toFixed(3)+" A":S.meter==="resistance"?(r.current?(r.voltage/r.current).toFixed(1):"∞")+" Ω":(r.current?"PASS":"OPEN")});
 $$(".mode").forEach(b=>b.onclick=()=>{$$(".mode").forEach(x=>x.classList.remove("active"));b.classList.add("active");S.mode=b.dataset.mode;$("#engineInfo").textContent=b.dataset.mode==="micro"?"Microcontroller workspace · local educational engine":b.dataset.mode==="panel"?"Panel planning workspace · local educational engine":"DC educational engine · local-only"});
