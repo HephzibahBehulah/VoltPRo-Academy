@@ -26,7 +26,7 @@ test("Reference Library owns definitions, formulas and guidance—not a duplicat
   const script = read("script.js");
   const reference = script.slice(script.indexOf("function expandedReference(){"), script.indexOf("function expandedTools(){"));
   assert.match(reference, /Formula Library/);
-  assert.match(reference, /Standards &amp; Guidance/);
+  assert.match(reference, /Standards & Guidance/);
   assert.match(reference, /href="engineering\.html"/);
   assert.match(reference, /href="academy-workbench\.html"/);
   assert.doesNotMatch(reference, /calculatorHTML\(\)|Ohm Calculator/);
