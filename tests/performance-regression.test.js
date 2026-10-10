@@ -67,7 +67,7 @@ test("viewport zoom and pan are applied to the rendered layers", () => {
 
 test("terminal clicks use pointer input and avoid rebuilding the full palette on every render", () => {
   const source = fs.readFileSync(path.join(root, "simulator.js"), "utf8");
-  assert.ok(source.includes('p.onpointerdown=e=>{e.stopPropagation();e.preventDefault();handlePin(p.dataset.pin)}'));
+  assert.ok(source.includes('p.onpointerdown=e=>{e.stopPropagation();e.preventDefault();dragWire={start:p.dataset.pin,pointerId:e.pointerId,startX:e.clientX,startY:e.clientY,moved:false};handlePin(p.dataset.pin)}'));
   assert.ok(source.includes("paletteRenderKey"));
   assert.ok(source.includes("if(key!==paletteRenderKey)renderPalette()"));
 });
@@ -142,7 +142,7 @@ test("arrow keys move the selected component on the grid and preserve text-field
 test("clicking a terminal starts wiring automatically and the next terminal completes it", () => {
   const source = fs.readFileSync(path.join(root, "simulator.js"), "utf8");
   assert.ok(source.includes("if(!wiring.active)wiring.begin();wiring.selectTerminal(ref,p)"));
-  assert.ok(source.includes('p.onpointerdown=e=>{e.stopPropagation();e.preventDefault();handlePin(p.dataset.pin)}'));
+  assert.ok(source.includes('p.onpointerdown=e=>{e.stopPropagation();e.preventDefault();dragWire={start:p.dataset.pin,pointerId:e.pointerId,startX:e.clientX,startY:e.clientY,moved:false};handlePin(p.dataset.pin)}'));
 });
 
 test("component selection keeps the canvas element stable during pointer-down", () => {
