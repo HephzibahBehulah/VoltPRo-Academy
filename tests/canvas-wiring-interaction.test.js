@@ -37,3 +37,22 @@ test('wire source receives a visual state without disabling its body handler', (
 test('components expose a transparent hit target so symbol strokes cannot pass clicks through to the blank canvas', () => {
   assert.match(source, /class="component-hit" x="-64" y="-30" width="128" height="64" fill="transparent" pointer-events="all"/);
 });
+
+
+test('Run and Stop expose distinct accessible visual states and report simulation errors as stopped', () => {
+  assert.ok(source.includes('function syncRunControls(state=S.running?"running":"stopped")'));
+  assert.ok(source.includes('runButton.classList.toggle("is-running",current==="running")'));
+  assert.ok(source.includes('stopButton.classList.toggle("is-stopped",current==="stopped"||current==="error")'));
+  assert.ok(source.includes('status.dataset.state=current'));
+  assert.ok(source.includes('syncRunControls("error");return}'));
+  assert.ok(source.includes('function stop(){S.running=false;renderCanvas();syncRunControls()}'));
+  const html = fs.readFileSync(path.join(__dirname, '..', 'simulator.html'), 'utf8');
+  assert.ok(html.includes('id="simStatus" role="status" aria-live="polite" data-state="stopped"'));
+  assert.ok(html.includes('id="runBtn" class="primary" aria-label="Run simulation" aria-pressed="false"'));
+  assert.ok(html.includes('id="stopBtn" aria-label="Stop simulation" aria-pressed="true"'));
+  const css = fs.readFileSync(path.join(__dirname, '..', 'simulator.css'), 'utf8');
+  assert.ok(css.includes('#runBtn.is-running'));
+  assert.ok(css.includes('#stopBtn.is-stopped'));
+  assert.ok(css.includes('.status[data-state="running"] .status-dot'));
+  assert.ok(css.includes('.status[data-state="error"]'));
+});

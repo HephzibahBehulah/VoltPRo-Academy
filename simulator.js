@@ -95,7 +95,22 @@ function symbol(c){
  if(c.type==="multimeter"||c.type==="oscilloscope") return line(-55,0,-25,0)+circle(25)+text(c.type==="multimeter"?"V/A":"OSC")+line(25,0,55,0);
  return line(-55,0,-34,0)+'<rect class="body" x="-34" y="-21" width="68" height="42" rx="7"/>'+text(d.symbol)+line(34,0,55,0);
 }
-function render(){const key=[cat,search,window.VoltProRegistry?.count||0].join("|");if(key!==paletteRenderKey)renderPalette();renderCanvas();renderInspector();$("#componentCount").textContent=window.VoltProRegistry?.count||Object.keys(defs).length;$("#simStatus").textContent=S.running?"RUNNING":"READY";$("#zoomLabel").textContent=Math.round(S.zoom*100)+"%"}
+function syncRunControls(state=S.running?"running":"stopped"){
+ const runButton=$("#runBtn"),stopButton=$("#stopBtn"),status=$("#simStatus");
+ if(!runButton||!stopButton||!status)return;
+ const current=state==="error"?"error":(S.running?"running":"stopped");
+ runButton.classList.toggle("is-running",current==="running");
+ stopButton.classList.toggle("is-stopped",current==="stopped"||current==="error");
+ runButton.setAttribute("aria-pressed",String(current==="running"));
+ stopButton.setAttribute("aria-pressed",String(current==="stopped"||current==="error"));
+ runButton.setAttribute("aria-label",current==="running"?"Simulation is running":"Run simulation");
+ stopButton.setAttribute("aria-label",current==="running"?"Stop running simulation":"Simulation is stopped");
+ status.dataset.state=current;
+ const label=status.querySelector(".status-label");
+ if(label)label.textContent=current==="running"?"RUNNING":current==="error"?"ERROR · STOPPED":"STOPPED";
+ else status.textContent=current==="running"?"RUNNING":current==="error"?"ERROR · STOPPED":"STOPPED";
+}
+function render(){const key=[cat,search,window.VoltProRegistry?.count||0].join("|");if(key!==paletteRenderKey)renderPalette();renderCanvas();renderInspector();$("#componentCount").textContent=window.VoltProRegistry?.count||Object.keys(defs).length;syncRunControls();$("#zoomLabel").textContent=Math.round(S.zoom*100)+"%"}
 function renderPalette(){const entries=paletteEntries();paletteRenderKey=[cat,search,window.VoltProRegistry?.count||0].join("|");const cats=["All",...new Set(entries.map(([,d])=>d.cat))];const tabs=$("#catTabs");tabs.innerHTML=cats.map(x=>'<button class="'+(cat===x?"active":"")+'" data-cat="'+esc(x)+'">'+esc(x)+'</button>').join("");$$("[data-cat]").forEach(b=>b.onclick=()=>{cat=b.dataset.cat;renderPalette()});
  const list=entries.filter(([k,d])=>(cat==="All"||d.cat===cat)&&(d.name+" "+k).toLowerCase().includes(search.toLowerCase()));
  $("#paletteList").innerHTML=list.map(([k,d])=>{const media=window.VoltProMedia?.get?.(d.name)||null;const visual=media?.url?'<img class="palette-thumb" loading="lazy" src="'+esc(media.url)+'" alt="" referrerpolicy="no-referrer">':'<span class="sym">'+esc(d.symbol||"◇")+'</span>';return '<div class="palette-item" draggable="true" data-type="'+k+'">'+visual+'<span><b>'+esc(d.name)+'</b><small>'+esc(d.cat)+(d.registryId?" · catalog":"")+'</small></span></div>'}).join("");
@@ -139,7 +154,7 @@ function solve(){const connectedWires=electricalWires();const src=S.components.f
  let series=0;for(const x of R)series+=x.r;const current=series>0?V/series:0;return {voltage:V,current,loads:R.map(x=>({id:x.c.id,name:compDef(x.c.type).name,current:current,resistance:x.r}))}
 }
 function run(){
- S.running=true;
+ S.running=true;syncRunControls();
  const project={components:S.components.map(c=>({...c,pins:Array.from({length:compDef(c.type).pins},(_,i)=>c.id+":"+i)})),wires:electricalWires()};
  let r;
  if(window.VoltProEngine){
@@ -148,14 +163,14 @@ function run(){
    r={dc:solve()};
  }
  const dc=r.dc||r;
- if(!dc.ok){$("#meterReadout").textContent="--";$("#console").textContent="RUN ERROR\\n"+(dc.error||"Unable to solve circuit.");$("#calcPanel").textContent="Check source, connections and component values.";renderCanvas();return}
+ if(!dc.ok){S.running=false;$("#meterReadout").textContent="--";$("#console").textContent="RUN ERROR\\n"+(dc.error||"Unable to solve circuit.");$("#calcPanel").textContent="Check source, connections and component values.";renderCanvas();syncRunControls("error");return}
  const amps=Number(dc.totalCurrent)||0;
  $("#meterReadout").textContent=amps.toFixed(4)+" A";
  $("#console").textContent="VOLTPro Engine v3\\nAnalysis: "+(dc.analysis||"DC operating point")+"\\nSource: "+(dc.sourceVoltage||0)+" V\\nTotal current: "+amps.toFixed(4)+" A\\nTotal power: "+(Number(dc.totalPower)||0).toFixed(4)+" W\\nNodes: "+(dc.nodes||0)+"\\n";
  (dc.branches||[]).forEach(x=>$("#console").textContent+=x.name+" · "+(Number(x.voltage)||0).toFixed(3)+" V · "+(Number(x.current)||0).toFixed(4)+" A · "+(Number(x.power)||0).toFixed(4)+" W\\n");
  $("#calcPanel").innerHTML="<b>DC operating point</b><br>Current: "+amps.toFixed(4)+" A<br>Power: "+(Number(dc.totalPower)||0).toFixed(4)+" W<br><small>Engine v3 · educational analysis</small>";
- renderCanvas();$("#simStatus").textContent="RUNNING";log("Engine v3 analysis complete.");
-}function stop(){S.running=false;$("#simStatus").textContent="READY";renderCanvas()}
+ renderCanvas();syncRunControls();log("Engine v3 analysis complete.");
+}function stop(){S.running=false;renderCanvas();syncRunControls()}
 function renderInspector(){
  const body=$("#inspectorBody"),wire=S.wires.find(w=>w.id===S.selectedWireId);
  if(wire){
