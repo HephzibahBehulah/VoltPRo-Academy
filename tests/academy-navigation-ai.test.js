@@ -37,7 +37,8 @@ test("AI Tutor knows the canonical ownership map and offers external public look
   assert.match(assistant, /siteContext: PROJECT_CONTEXT/);
   assert.match(assistant, /window\.VoltProAssistant\s*=\s*\{/);
   assert.match(assistant, /ask,/);
-  assert.match(assistant, /vpBotExternal/);\n  assert.match(assistant, /CURRENT WORKSPACE/);
+  assert.match(assistant, /vpBotExternal/);
+  assert.match(assistant, /CURRENT WORKSPACE/);
 });
 
 test("Academy scripts parse and tutor page uses the shared project-aware assistant", () => {
