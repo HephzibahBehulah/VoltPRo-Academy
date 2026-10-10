@@ -143,3 +143,21 @@ test("terminal identities and topology survive canonical project reload", () => 
   assert.deepEqual(reloaded.findConnectedNets("R1:2"),["R1:2","R2:1"]);
   assert.equal(reloaded.resolveTerminal("R1:2").id,"R1:2");
 });
+
+test("three-phase source, contactor and control terminals preserve domains and phase identity", () => {
+  const p=project([
+    device("PS1","threephase"),device("QF1","circuit-breaker-3p"),
+    device("KM1","contactor"),device("M1","motor"),
+    device("CS1","controlsource"),device("PB1","pushbutton-no")
+  ]);
+  const engine=T.build(p);
+  assert.equal(engine.resolveTerminal("PS1:L1").domain,"ac3");
+  assert.equal(engine.resolveTerminal("QF1:T2").phase,"L2");
+  assert.equal(engine.resolveTerminal("KM1:L3").phase,"L3");
+  assert.equal(engine.resolveTerminal("M1:W1").phase,"L3");
+  assert.equal(engine.resolveTerminal("CS1:PLUS").domain,"control");
+  assert.equal(engine.resolveTerminal("PB1:13").domain,"control");
+  const mismatch=T.compatibility(engine.resolveTerminal("PS1:L1"),engine.resolveTerminal("QF1:L2"));
+  assert.equal(mismatch.valid,false);
+  assert.ok(mismatch.errors.some(e=>e.code==="PHASE_MISMATCH"));
+});
