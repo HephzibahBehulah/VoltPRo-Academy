@@ -93,6 +93,6 @@ test('toolbar wire menu exists', () => {
  assert.match(source, /if\(wireSize\)wireSize\.addEventListener\("change"/);
  assert.match(source, /if\(wireGauge\)wireGauge\.addEventListener\("change"/);
  assert.match(source, /const b=\$\("#startWireBtn"\);if\(b\)\{b\.classList\.toggle\("active",s\.active\);b\.setAttribute\("aria-pressed",String\(s\.active\)\)\}/);
- assert.match(source, /\["#wireBtn","#wireMenuBtn"\]\.forEach\(q=>\{const b=\$\(q\);if\(b\)b\.setAttribute\("aria-expanded",String\(open\)\)\}\)/);
+ assert.match(source, /\["#wireBtn","#wireMenuBtn"\]\.forEach\(q=>\{const b=\$\(q\);if\(b\)b\.setAttribute\("aria-expanded",String\(isOpen\)\)\}\)/);
  assert.match(workflow, /if\(was\)this\.callbacks\.onCancel\?\.\(\)/);
 });
