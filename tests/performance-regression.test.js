@@ -61,7 +61,8 @@ test("viewport zoom and pan are applied to the rendered layers", () => {
   const source = fs.readFileSync(path.join(root, "simulator.js"), "utf8");
   assert.ok(source.includes("function applyViewport()"));
   assert.ok(source.includes('setAttribute("transform",t)'));
-  assert.ok(source.includes('const p=svg.createSVGPoint()'));\n  assert.ok(source.includes('p.matrixTransform(m.inverse())'));
+  assert.ok(source.includes('const p=svg.createSVGPoint()'));
+  assert.ok(source.includes('p.matrixTransform(m.inverse())'));
 });
 
 test("terminal clicks use pointer input and avoid rebuilding the full palette on every render", () => {
