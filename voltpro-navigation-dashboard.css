@@ -84,3 +84,17 @@
 .academy-page .launch-card:focus-visible{outline:2px solid var(--vp-hb-cyan);outline-offset:3px}
 @media(max-width:1100px){.academy-page .launch-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:520px){.academy-page .launch-grid{grid-template-columns:minmax(0,1fr);gap:8px}.academy-page .launch-card{padding:13px}}
+
+/* Parent-brand lockup: make the owner and product relationship clear at first glance. */
+.academy-page .brand-lockup{display:flex;flex-direction:column;align-items:flex-start;gap:10px;padding:7px 8px 17px;text-decoration:none;border-bottom:1px solid rgba(86,207,225,.16);margin-bottom:13px}
+.academy-page .brand-hb-logo{display:block;width:min(100%,168px);height:auto;max-height:49px;object-fit:contain;object-position:left center;filter:drop-shadow(0 0 10px rgba(86,207,225,.08))}
+.academy-page .brand-divider{display:block;width:100%;height:1px;background:linear-gradient(90deg,rgba(86,207,225,.34),rgba(167,139,250,.14),transparent)}
+.academy-page .brand-product{display:grid;gap:4px;min-width:0}
+.academy-page .brand-product .eyebrow{font-size:8px;line-height:1.5;letter-spacing:.1em;overflow-wrap:anywhere}
+.academy-page .brand-product strong{color:var(--vp-hb-text);font-size:21px;line-height:1.1;letter-spacing:-.04em}
+.academy-page .brand-product strong em{color:var(--vp-hb-cyan);font-style:normal}
+.academy-page .brand-product small{color:var(--vp-hb-muted);font-size:10px;line-height:1.5}
+.academy-page .topbar-byline{margin-left:9px;padding-left:10px;border-left:1px solid var(--vp-hb-line);color:var(--vp-hb-cyan);font:8px/1.5 "JetBrains Mono",monospace;letter-spacing:.08em;white-space:nowrap}
+.academy-page .brand-lockup:focus-visible{outline:2px solid var(--vp-hb-cyan);outline-offset:3px;border-radius:8px}
+@media(max-width:1050px){.academy-page .topbar-byline{display:none}}
+@media(max-width:760px){.academy-page .brand-hb-logo{width:156px}.academy-page .brand-lockup{padding-bottom:14px}}
