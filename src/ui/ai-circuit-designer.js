@@ -22,7 +22,17 @@ const boot=()=>{
   addText(preview,"p",draft.description);
   addText(preview,"h4","Components ("+draft.components.length+")");
   const list=document.createElement("ul");
-  draft.components.forEach(c=>{const name=window.defs?.[c.type]?.name||c.type;addText(list,"li",c.id+" — "+name)});
+  draft.components.forEach(c=>{
+   const item=document.createElement("li");item.className="vp-cd-component";
+   const name=window.defs?.[c.type]?.name||c.type;addText(item,"span",c.id+" — "+name,"vp-cd-component-name");
+   if(window.VoltProDeviceFace?.face){
+    const terminals=window.VoltProTerminalGraph?.definitionFor?.(c.type)?.terminals||[];
+    const face=document.createElement("div");face.className="vp-cd-device-face";
+    face.innerHTML=window.VoltProDeviceFace.face({id:c.id,type:c.type,terminals,dimensions:c.dimensions||null});
+    item.appendChild(face);
+   }
+   list.appendChild(item);
+  });
   preview.appendChild(list);
   addText(preview,"h4","Terminal-to-terminal wires ("+draft.wires.length+")");
   const wires=document.createElement("ul");
