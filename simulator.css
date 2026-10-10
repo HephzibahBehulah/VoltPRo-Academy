@@ -140,3 +140,6 @@ body.simulator-page.light .console,body.simulator-page.light .calc-panel,body.si
 body.simulator-page.light .status{background:#edf3f8;border-color:#b7c8d8;color:#9d2936}
 body.simulator-page.light .status[data-state="running"]{background:#e1f8ec;border-color:#4aaf7c;color:#146c40}
 body.simulator-page.light .status[data-state="error"]{background:#fff0f1;border-color:#d96a78;color:#9d2936}
+
+/* Wire inspector engineering note: distinguish display thickness from electrical sizing. */
+.wire-prop-note{display:block;color:var(--amber);font-size:9px;line-height:1.45;margin-top:2px}
