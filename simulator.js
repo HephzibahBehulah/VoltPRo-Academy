@@ -1,6 +1,6 @@
 (()=>{"use strict";
 const C={voltage:12,current:0,resistance:1000};
-const S={version:1,mode:"schematic",components:[],wires:[],selected:null,selectedWireId:null,wireStart:null,wirePointer:null,wiringMode:false,running:false,zoom:1,pan:{x:0,y:0},grid:20,history:[],future:[],meter:"voltage",theme:"dark"};
+const S={version:1,mode:"schematic",components:[],wires:[],selected:null,selectedWireId:null,wireStart:null,wirePointer:null,wiringMode:false,running:false,zoom:1,pan:{x:0,y:0},grid:20,history:[],future:[],meter:"voltage",theme:"dark",wireStyle:{color:"#65d8ff",cableType:"standard",size:"1.5",gauge:"16",width:2.5}};
 const defs={
  battery:{cat:"Power",name:"DC Source",symbol:"V",pins:2,props:{voltage:12},unit:"V",res:0},
  resistor:{cat:"Passive",name:"Resistor",symbol:"R",pins:2,props:{resistance:1000},unit:"Ω"},
@@ -43,7 +43,7 @@ const wiring=window.VoltProWiring?new window.VoltProWiring.Controller({
  onState:s=>{S.wiringMode=s.active;S.wireStart=s.start;S.wirePointer=s.pointer;if(svg)svg.style.cursor=s.active?"crosshair":"default";const b=$("#wireBtn");if(b)b.classList.toggle("active",s.active);renderCanvas()},
  onStart:(ref,pos)=>{S.selected=ref.split(":")[0];S.wirePointer=pos||null;log("WIRE START "+ref+" · select a destination terminal or press Escape");renderCanvas()},
  onPreview:(start,p)=>{S.wirePointer=p;if(!wirePreviewFrame)wirePreviewFrame=requestAnimationFrame(()=>{wirePreviewFrame=0;renderWires()})},
- onCommit:w=>{saveHistory();S.wires.push(window.VoltProWiring.normalizeWire(w,S.wires.length));render();log("WIRE "+w.id+" CONNECTED "+w.a+" → "+w.b)},
+ onCommit:w=>{saveHistory();S.wires.push(window.VoltProWiring.normalizeWire({...w,...S.wireStyle,bends:w.bends||[],junctions:w.junctions||[]},S.wires.length));render();log("WIRE "+w.id+" CONNECTED "+w.a+" → "+w.b)},
  onError:(message,detail)=>{log("WIRE ERROR ["+detail.code+"]: "+message);toast("Wire not created: "+message)},
  onCancel:()=>{S.wirePointer=null;S.wireStart=null;log("Wiring cancelled.")},
  onTerminalSelect:ref=>{S.selected=ref.split(":")[0];S.selectedWireId=null;renderCanvas();renderInspector()},
@@ -67,7 +67,7 @@ function log(m){$("#console").textContent+=("\n"+m);$("#console").scrollTop=$("#
 function saveHistory(){S.history.push(JSON.stringify({components:S.components,wires:S.wires}));if(S.history.length>30)S.history.shift();S.future=[]}
 function restore(s){const x=JSON.parse(s);S.components=x.components;S.wires=x.wires;S.selected=null;S.selectedWireId=null;if(wiring)wiring.cancel();render()}
 function compDef(t){return defs[t]||window.VoltProRegistry?.definition?.(t)||defs.resistor}
-function paletteEntries(){const base=Object.entries(defs);const reg=(window.VoltProRegistry?.search?.("")||[]).map(r=>[r.id,compDef(r.id)]);const seen=new Set();return [...base,...reg].filter(([k])=>{if(seen.has(k))return false;seen.add(k);return true})}
+function paletteEntries(){const base=Object.entries(defs);const reg=(window.VoltProRegistry?.search?.("")||[]).map(r=>[r.id,compDef(r.id)]);const seen=new Set();return [...base,...reg].filter(([k,d])=>{if(String(d.cat||"").toLowerCase()==="wires"||/^wires-/.test(k))return false;if(seen.has(k))return false;seen.add(k);return true})}
 function addComponent(type,x,y){saveHistory();const d=compDef(type);const c={id:uid(),type,x:snap(x),y:snap(y),rotation:0,registryId:d.registryId||null,props:JSON.parse(JSON.stringify(d.props||{})),pins:[]};S.components.push(c);S.selected=c.id;render();log("PLACED "+d.name+" "+c.id)}
 function posFromEvent(e){const p=svg.createSVGPoint();p.x=e.clientX;p.y=e.clientY;const m=comps.getScreenCTM();if(!m)return{x:0,y:0};const q=p.matrixTransform(m.inverse());return{x:q.x,y:q.y}}
 function pinLocalPos(c,i){const n=compDef(c.type).pins;if(n===1)return{x:38,y:0};if(n===2)return{x:i?55:-55,y:0};if(n===3)return{x:-55+i*55,y:42};return{x:-55+(i%2)*110,y:i<2?-34:34}}function pinPos(c,i){const p=pinLocalPos(c,i),a=(Number(c.rotation)||0)*Math.PI/180,co=Math.cos(a),si=Math.sin(a);return{x:c.x+p.x*co-p.y*si,y:c.y+p.x*si+p.y*co}}
