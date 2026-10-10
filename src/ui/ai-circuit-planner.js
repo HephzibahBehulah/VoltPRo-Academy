@@ -76,7 +76,6 @@
   function plan(prompt,previous){
     const q=String(prompt||"").toLowerCase().replace(/[–—]/g,"-").trim();
     if(!q)return {recognized:false,error:"Enter a circuit description first.",components:[],wires:[],warnings:[]};
-    if(previous&&/\badd\b.*\bswitch\b/.test(q)&&previous.template==="battery-resistor-lamp")return plan("battery switched lamp circuit");
     if(previous&&previous.recognized){
       const updated=clone(previous);let changed=false;
       const voltageMatch=q.match(/\\b(\\d+(?:\\.\\d+)?)\\s*v\\b/);
