@@ -23,12 +23,12 @@ const families=[
 function fmt(n){return Number.isFinite(n)?(Math.round((n+Number.EPSILON)*100)/100).toFixed(2):"0.00";}
 function values(n,f){return {a:1+((n*37+f*11)%999),b:1+((n*73+f*17)%97),c:1+((n*19+f*7)%23)};}
 function generatedQuestion(kind,f,n){
- const p=values(n,f),d=families[f].make(n,p.a,p.b,p.c),v=Number(fmt(d.v)),step=Math.max(1,Math.abs(v)*0.25);
+ const variant=kind==="exam"?(n*37+11)%VARIANTS_PER_TOPIC:n,p=values(variant,f),d=families[f].make(variant,p.a,p.b,p.c),v=Number(fmt(d.v)),step=Math.max(1,Math.abs(v)*0.25);
  let raw=[v,v+step,v+step*2,Math.max(0,v-step)].map(x=>Number(fmt(x)));
  if(new Set(raw).size<4){raw=[v,v+1,v+2,v+3].map(x=>Number(fmt(x)));}
- const correct=(n+f)%4,options=[];
+ const correct=(variant+f)%4,options=[];
  for(let j=0;j<4;j++)options.push("≈ "+fmt(raw[(j-correct+4)%4])+" "+families[f].unit);
- return {id:"vpxg-"+(kind==="exam"?"ex":"kc")+"-"+f+"-"+n,topic:families[f].topic,level:families[f].level,q:d.q,a:options,c:correct,explanation:d.why};
+ return {id:"vpxg-"+(kind==="exam"?"ex":"kc")+"-"+f+"-"+n,topic:families[f].topic,level:families[f].level,q:kind==="exam"?"Assessment scenario: "+d.q+" Select the best calculated result.":d.q,a:options,c:correct,explanation:d.why};
 }
 const curated={quiz:()=>window.quizzes||[],exam:()=>window.examQuestions||[]};
 const filters={quiz:{page:0,topic:"All topics",level:"All levels",search:""},exam:{page:0,topic:"All topics",level:"All levels",search:""}};
