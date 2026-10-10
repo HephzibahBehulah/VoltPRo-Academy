@@ -79,3 +79,12 @@ test("primary destinations are consistent across the practical and engineering p
   assert.ok(workbench.includes('href="engineering.html"'));
   assert.ok(engineering.includes('href="academy-workbench.html"'));
 });
+
+test("engineering tools routes to the existing specialist workspaces", () => {
+  const html = read("engineering.html");
+  for (const target of ["simulator.html", "academy-workbench.html#color-led", "academy-workbench.html#wire-lab", "academy-workbench.html#faults", "academy-workbench.html#challenges", "academy-workbench.html#demos", "academy-workbench.html#tutorials", "academy-workbench.html#tool-index"]) {
+    assert.ok(html.includes('href="' + target + '"'), "missing specialist destination: " + target);
+  }
+  assert.match(html, /id="specialist-tools-title"/);
+  assert.match(read("academy-workbench.html"), /href="engineering.html"><span>02 \/ CALCULATE/);
+});
