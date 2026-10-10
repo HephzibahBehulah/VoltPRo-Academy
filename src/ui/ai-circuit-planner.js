@@ -78,8 +78,8 @@
     if(!q)return {recognized:false,error:"Enter a circuit description first.",components:[],wires:[],warnings:[]};
     let key=null;
     if(/motor starter|starter circuit|contactor.*motor|motor.*contactor/.test(q))key="three-phase-motor-starter";
-    else if((/three[- ]phase|3[- ]phase|400\s*v/.test(q))&&/(breaker|mcb|protection|motor/.test(q))&&/motor/.test(q))key="three-phase-motor-starter";
-    else if((/three[- ]phase|3[- ]phase|400\s*v/.test(q))&&/(breaker|mcb/.test(q))key="three-phase-breaker";
+    else if((/three[- ]phase|3[- ]phase|400\s*v/.test(q))&&/(breaker|mcb|protection|motor)/.test(q))&&/motor/.test(q))key="three-phase-motor-starter";
+    else if((/three[- ]phase|3[- ]phase|400\s*v/.test(q))&&/(breaker|mcb)/.test(q))key="three-phase-breaker";
     else if(/\bled\b/.test(q)&&/(battery|resistor|circuit|light|power|build|make|create|design)/.test(q))key="battery-led-resistor";
     else if(/switch|pushbutton/.test(q)&&/(lamp|light|battery|circuit|build|make|create|design)/.test(q))key="battery-switch-lamp";
     else if(/battery|resistor|lamp|light|simple dc|series circuit/.test(q))key="battery-resistor-lamp";
