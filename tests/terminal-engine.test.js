@@ -62,7 +62,7 @@ test("three-pole circuit breaker exposes six phase-matched terminals and three i
   for(const id of ["L1","L2","L3","T1","T2","T3"]) assert.ok(engine.resolveTerminal("Q1:"+id), "missing terminal "+id);
   const paths=engine.internalPaths("Q1");
   assert.deepEqual(paths.map(x=>x.id),["breaker-pole-1","breaker-pole-2","breaker-pole-3"]);
-  assert.deepEqual(paths.map(x=>[x.from,x.to,x.phase]),[["L1","T1","L1"],["L2","T2","L2"],["L3","T3","L3"]]);
+  assert.deepEqual(paths.map(x=>[x.from,x.to,x.phase]),[["Q1:L1","Q1:T1","L1"],["Q1:L2","Q1:T2","L2"],["Q1:L3","Q1:T3","L3"]]);
   assert.equal(T.build(project([device("Q2","mcb-3p")])).terminalsForDevice("Q2").length,6);
 });
 
