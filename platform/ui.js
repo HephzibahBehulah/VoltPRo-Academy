@@ -6,7 +6,7 @@ function panel(title,body){
   x.innerHTML="<b>"+title+"</b><button id=vpClose style='float:right'>×</button><div style='margin-top:12px'>"+body+"</div>";
   $("#vpClose").onclick=()=>x.remove();
 }
-function project(){return window.VoltProProject?.normalize({components:window.S?.components||[],wires:window.S?.wires||[],panel:window.VoltProPanel?.create?.(window.S?.panel||{})})||{components:[],wires:[],panel:window.S?.panel||null}}
+function project(){const components=window.S?.components||[],wires=window.S?.wires||[],panel=window.VoltProPanel?.create?.(window.S?.panel||{});const normalized=window.VoltProProject?.normalize({components,wires,panel})||{};return {...normalized,components,wires,panel}}
 function mount(){
   const bar=document.querySelector(".toolbar"); if(!bar)return;
   const items=[["Engineering","engineering"],["Documentation","docs"],["BOM","bom"],["Fault Lab","fault"],["Challenges","challenge"],["Tutorials","tutorial"],["MCU Lab","mcu"],["Accessibility","a11y"],["Panel Designer","panel"],["Component Info","info"],["Demo Projects","demo"]];
