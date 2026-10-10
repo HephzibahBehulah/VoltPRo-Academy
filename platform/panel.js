@@ -30,9 +30,9 @@ function addRail(panel,spec={}){const id=String(spec.id||"R"+(panel.rails.length
 function validate(panel){
  const errors=[],warnings=[],ids=new Set();
  for(const r of panel.rails||[]){if(!r.id||ids.has(r.id))errors.push("Rail IDs must be unique.");ids.add(r.id);if(!Number.isFinite(Number(r.length))||Number(r.length)<1)errors.push((r.id||"Rail")+" has an invalid length.")}
- const occupied=new Map();
+ const occupied=new Map(),itemIds=new Set();
  for(const raw of panel.items||[]){
-  const x=normalizeItem(raw),rail=(panel.rails||[]).find(r=>r.id===x.railId);
+  const x=normalizeItem(raw);if(itemIds.has(x.id))errors.push("Duplicate placement ID: "+x.id+".");itemIds.add(x.id);const rail=(panel.rails||[]).find(r=>r.id===x.railId);
   if(!x.id)errors.push("Every placement needs an ID.");
   if(!rail){errors.push(x.label+" references missing rail "+x.railId+".");continue}
   if(x.position<0||x.position+x.width>Number(rail.length||18)*MODULE)errors.push(x.label+" exceeds "+rail.label+".");
