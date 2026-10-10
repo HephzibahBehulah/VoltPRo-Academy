@@ -16,6 +16,7 @@ jobs:
           node --check script.js
           node --check simulator.js
           node --check engineering.js
+          node --check voltpro-assistant.js
           node --check engine/voltpro-engine.js
           node -e "const x=JSON.parse(require('fs').readFileSync('pwa.webmanifest','utf8')); if(!x.name||!x.start_url) process.exit(1)"
       - name: Validate required frontend files
@@ -29,11 +30,17 @@ jobs:
           test -s engineering.html
           test -s engineering.css
           test -s engineering.js
+          test -s voltpro-assistant.js
+          test -s voltpro-hb-theme.css
           test -s pwa.webmanifest
           test -s service-worker.js
           grep -q 'simulator.js' simulator.html
           grep -q 'simulator.css' simulator.html
           grep -q 'voltpro-engine.js' simulator.html
+          grep -q 'voltpro-hb-theme.css' index.html
+          grep -q 'voltpro-assistant.js' index.html
+          grep -q 'voltpro-assistant.js' simulator.html
+          grep -q 'voltpro-assistant.js' engineering.html
       - name: Validate component registry
         run: node -e "const x=JSON.parse(require('fs').readFileSync('components.json','utf8')); if(x.format!=='voltpro-components'||!Array.isArray(x.library)||x.library.length<100) process.exit(1); console.log('registry entries:',x.library.length)"
       - name: Run regression tests
