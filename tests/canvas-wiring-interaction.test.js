@@ -33,3 +33,7 @@ test('wire source receives a visual state without disabling its body handler', (
   assert.match(css, /\.component\.wire-source/);
   assert.match(css, /cursor:grab!important/);
 });
+
+test('components expose a transparent hit target so symbol strokes cannot pass clicks through to the blank canvas', () => {
+  assert.match(source, /class="component-hit" x="-64" y="-30" width="128" height="64" fill="transparent" pointer-events="all"/);
+});
