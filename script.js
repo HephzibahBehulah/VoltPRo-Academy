@@ -37,7 +37,6 @@ var labs=[
 ];
 const legacyLabIds={lab1:"ohm",lab2:"safety",lab3:"fault-open",lab4:"inspection"};
 state.labDone=[...new Set((state.labDone||[]).map(function(id){return legacyLabIds[id]||id}))];
-var terms=
 var terms=[
 ["L1 / L2 / L3","Außenleiter eines Drehstromsystems."],["N","Neutralleiter. Funktion und Situation müssen anhand des Systems bewertet werden."],["PE","Schutzleiter als Bestandteil der Schutzmaßnahme gegen elektrischen Schlag."],["LS-Schalter","Leitungsschutzschalter zum Schutz von Stromkreisen insbesondere vor Überlast und Kurzschluss."],["RCD / FI","Fehlerstrom-Schutzeinrichtung, die einen Differenzstrom erkennt und abschalten kann."],["Schuko","Umgangssprachliche Bezeichnung für ein Stecksystem mit Schutzkontakt."],["Durchgangsprüfung","Prüfung, ob zwischen zwei Messpunkten eine leitende Verbindung besteht."],["Inbetriebnahme","Kontrollierter Prozess zur Prüfung und Übergabe einer Anlage oder eines Anlagenteils."],["VDE","Fachverband und Bezeichnung für ein umfangreiches Normen- und Regelwerk im Elektrotechnikbereich."],["NYM-J","Typische Mantelleitung für feste Installationen; Auswahl und Verwendung müssen zur Anwendung passen."]
 ];
