@@ -6,8 +6,8 @@ const root = path.resolve(__dirname, "..");
 
 test("simulator drag updates are frame-throttled and do not rebuild component DOM", () => {
   const source = fs.readFileSync(path.join(root, "simulator.js"), "utf8");
-  const start = source.indexOf('svg.addEventListener("mousemove"');
-  const end = source.indexOf('window.addEventListener("mouseup"', start);
+  const start = source.indexOf('svg.addEventListener("pointermove"');
+  const end = source.indexOf('window.addEventListener("pointerup"', start);
   assert.ok(start >= 0 && end > start, "drag handlers should be present");
   const handler = source.slice(start, end);
   assert.ok(handler.includes("requestAnimationFrame"));
@@ -61,7 +61,7 @@ test("viewport zoom and pan are applied to the rendered layers", () => {
   const source = fs.readFileSync(path.join(root, "simulator.js"), "utf8");
   assert.ok(source.includes("function applyViewport()"));
   assert.ok(source.includes('setAttribute("transform",t)'));
-  assert.ok(source.includes('(e.clientX-r.left-S.pan.x)/S.zoom'));
+  assert.ok(source.includes('const p=svg.createSVGPoint()'));\n  assert.ok(source.includes('p.matrixTransform(m.inverse())'));
 });
 
 test("terminal clicks use pointer input and avoid rebuilding the full palette on every render", () => {
