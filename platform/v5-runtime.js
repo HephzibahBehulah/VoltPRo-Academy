@@ -24,5 +24,5 @@ function adapt(legacy){
  return {format:'voltpro',version:5,workspace:legacy.mode||'schematic',metadata:{name:'VoltPRo runtime project'},settings:{grid:legacy.grid||20,units:'SI',symbolStandard:'IEC'},devices,wires,nets:[],simulation:{mode:'dc',running:false,time:0},faults:[]};
 }
 function analyze(legacy){const project=adapt(legacy);const tg=window.VoltProTerminalGraph?.build(project);const nr=tg&&window.VoltProNetResolver?.resolve(project,tg);const behaviour=(project.devices||[]).map(d=>window.VoltProDeviceModels?.evaluate(d,{})||{ok:false,status:'unavailable',deviceId:d.id});return {project,topology:{valid:Boolean(tg?.valid),errors:tg?.errors||[],nets:nr?.nets||[],netErrors:nr?.errors||[]},behaviour}}
-window.VoltPRoV5Runtime={adapt,analyze};
+window.VoltProV5Runtime={adapt,analyze};
 })();
