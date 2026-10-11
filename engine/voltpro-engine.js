@@ -46,7 +46,7 @@ function build(project,options={}){
   const a=p[0],b=p[1];
   if(["resistor","lamp","heater","buzzer"].includes(ty))addBranch(x,a,b,"resistor",{R:Math.max(EPS,value(x,["resistance","resistance_ohm","value"],1000))});
   else if(ty==="switch"||["fuse","breaker","mcb","mccb","rcd","rcbo","relay","contactor","emergency_stop"].includes(ty)){
-   const closed=x.props?.closed!==false && x.props?.state!=="open";addBranch(x,a,b,closed?"resistor":"open",{R:closed?Math.max(EPS,value(x,["onResistance"],1e-6)):1e30});
+   const closed=x.props?.closed!==false && x.props?.closed!==0 && x.props?.closed!=="0" && x.props?.state!=="open";addBranch(x,a,b,closed?"resistor":"open",{R:closed?Math.max(EPS,value(x,["onResistance"],1e-6)):1e30});
   } else if(["capacitor","c"].includes(ty))addBranch(x,a,b,"capacitor",{C:Math.max(EPS,value(x,["capacitance","value"],1e-6))});
   else if(["inductor","l"].includes(ty))addBranch(x,a,b,"inductor",{L:Math.max(EPS,value(x,["inductance","value"],1e-3))});
   else if(["diode","zener","led"].includes(ty))addBranch(x,a,b,"diode",{vf:Math.max(0,value(x,["forward","forwardVoltage","vf"],ty==="led"?2:0.7)),rd:Math.max(1e-6,value(x,["resistance","dynamicResistance"],10)),reverse:Math.max(1e-9,value(x,["reverseLeakage"],1e-9))});
