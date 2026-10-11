@@ -1,0 +1,12 @@
+const test=require("node:test");
+const assert=require("node:assert/strict");
+const fs=require("node:fs");
+const path=require("node:path");
+const vm=require("node:vm");
+const root=path.join(__dirname,"..");
+const read=p=>fs.readFileSync(path.join(root,p),"utf8");
+test("realistic device visual script is valid JavaScript",()=>{try{new vm.Script(read("src/ui/realistic-devices.js"),{filename:"src/ui/realistic-devices.js"})}catch(e){throw new Error(e.stack)}});
+test("device visual catalogue prefers a matching product photo and retains an illustration fallback",()=>{const s=read("src/ui/realistic-devices.js");assert.ok(s.includes("window.VoltProMedia?.get?.(name||type)"));assert.ok(s.includes("function svg(type,name,ref)"));assert.ok(s.includes("onerror="));assert.ok(s.includes("illustrated device view"))});
+test("physical panel view uses the existing simulator component IDs and panel validator",()=>{const s=read("src/ui/realistic-devices.js");assert.ok(s.includes("componentId:c.id"));assert.ok(s.includes("window.VoltProPanel?.validate?.(p)"));assert.ok(s.includes("PHYSICAL PANEL DESIGNER"));assert.ok(s.includes("DIN rail"));assert.ok(s.includes("NOT FOR CONSTRUCTION"))});
+test("simulator exposes only the state hooks needed by the panel view",()=>{const s=read("simulator.js");assert.ok(s.includes("window.VoltProSimulator={state:S,addComponent:"));const html=read("simulator.html");assert.ok(html.indexOf('src="simulator.js?v=20261010w" defer')<html.indexOf('src="src/ui/realistic-devices.js?v=20261011a" defer'))});
+test("offline asset list includes the new visual module and stylesheet",()=>{const s=read("service-worker.js");assert.ok(s.includes('"./src/ui/realistic-devices.js"'));assert.ok(s.includes('"./src/ui/realistic-devices.css"'))});

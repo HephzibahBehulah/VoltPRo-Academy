@@ -1,6 +1,7 @@
 (()=>{"use strict";
 const C={voltage:12,current:0,resistance:1000};
 const S={version:1,mode:"schematic",components:[],wires:[],selected:null,selectedWireId:null,wireStart:null,wirePointer:null,wiringMode:false,running:false,zoom:1,pan:{x:0,y:0},grid:20,history:[],future:[],meter:"voltage",theme:"dark",symbolStyle:localStorage.getItem("voltpro-symbol-style")||"iec",wireStyle:{color:"#65d8ff",cableType:"standard",size:"1.5",gauge:"16",width:2.5}};
+window.VoltProSimulator={state:S,addComponent:(type,x,y)=>addComponent(type,x,y),render:()=>render()};
 const defs={
  battery:{cat:"Power",name:"DC Source",symbol:"V",pins:2,props:{voltage:12},unit:"V",res:0},
  resistor:{cat:"Passive",name:"Resistor",symbol:"R",pins:2,props:{resistance:1000},unit:"Ω"},
