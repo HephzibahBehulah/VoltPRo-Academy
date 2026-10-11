@@ -1,6 +1,7 @@
 (()=>{"use strict";
 const C={voltage:12,current:0,resistance:1000};
 const S={version:1,mode:"schematic",components:[],wires:[],selected:null,selectedWireId:null,wireStart:null,wirePointer:null,wiringMode:false,running:false,zoom:1,pan:{x:0,y:0},grid:20,history:[],future:[],meter:"voltage",theme:"dark",symbolStyle:localStorage.getItem("voltpro-symbol-style")||"iec",wireStyle:{color:"#65d8ff",cableType:"standard",size:"1.5",gauge:"16",width:2.5}};
+window.S=S;
 window.VoltProSimulator={state:S,addComponent:(type,x,y)=>addComponent(type,x,y),render:()=>render()};
 const defs={
  battery:{cat:"Power",name:"DC Source",symbol:"V",pins:2,props:{voltage:12},unit:"V",res:0},
@@ -210,9 +211,15 @@ function demoLogic(){saveHistory();S.components=[];S.wires=[];const add=(type,x,
 function exportSVG(){const clone=svg.cloneNode(true);clone.querySelectorAll("#gridRect").forEach(x=>x.remove());clone.setAttribute("xmlns","http://www.w3.org/2000/svg");const data=new XMLSerializer().serializeToString(clone);download("voltpro-schematic.svg",data,"image/svg+xml")}
 function serialize(){return JSON.stringify({format:"voltpro",version:2,metadata:{name:"VoltPRo project",created:new Date().toISOString()},mode:S.mode,components:S.components,wires:S.wires,wireStyle:{...S.wireStyle},panel:window.VoltProPanel?.create?.(S.panel||{}),simulation:{running:false}},null,2)}
 function download(name,data,type){const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([data],{type}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),500)}
-function loadProject(data){
- const x=JSON.parse(data);if(x.format!=="voltpro")throw Error("Not a .voltpro project");
- S.components=Array.isArray(x.components)?x.components:[];
+async function loadProject(data){
+ await window.VoltProRegistry?.ready;
+ const input=typeof data==="string"?JSON.parse(data):data;
+ const x=window.VoltProProject?.toLegacy?window.VoltProProject.toLegacy(input):input;
+ if(!x||x.format!=="voltpro")throw Error("Not a supported .voltpro project");
+ const components=Array.isArray(x.components)?x.components:[];
+ const ids=new Set();
+ for(const c of components){if(!c.id||ids.has(String(c.id)))throw Error("Project contains a missing or duplicate component ID: "+String(c.id||"(empty)"));ids.add(String(c.id))}
+ S.components=components.map(c=>({...c,x:Number(c.x??c.position?.x??0),y:Number(c.y??c.position?.y??0),rotation:Number(c.rotation||0),props:structuredClone(c.props||c.parameters||{}),pins:Array.isArray(c.pins)?c.pins:[]}));
  S.wires=Array.isArray(x.wires)?x.wires.map((w,i)=>window.VoltProWiring?window.VoltProWiring.normalizeWire(w,i):w):[];
  if(x.wireStyle&&typeof x.wireStyle==="object"){
   const style=x.wireStyle;
@@ -222,7 +229,12 @@ function loadProject(data){
   if(Object.prototype.hasOwnProperty.call(AWG_MM2,String(style.gauge)))S.wireStyle.gauge=String(style.gauge);
   if(Number.isFinite(Number(style.width)))S.wireStyle.width=Math.max(1,Math.min(10,Number(style.width)));
  }
- S.mode=x.mode||"schematic";S.panel=window.VoltProPanel?.create?.(x.panel||{});S.selected=null;S.selectedWireId=null;syncWireMenu();render();
+ S.mode=["schematic","panel","plc","micro","reference"].includes(x.mode)?x.mode:"schematic";
+ S.panel=window.VoltProPanel?.create?.(x.panel||{});
+ S.selected=null;S.selectedWireId=null;
+ $$(".mode").forEach(b=>{const active=b.dataset.mode===S.mode;b.classList.toggle("active",active)});
+ syncWireMenu();render();window.VoltProRealisticDevices?.update?.();
+ log("PROJECT LOADED · "+S.components.length+" devices · "+S.wires.length+" wires");
 }
 svg.addEventListener("dragover",e=>e.preventDefault());svg.addEventListener("drop",e=>{e.preventDefault();const t=e.dataTransfer.getData("text/plain");if(t){if(wiring?.active)wiring.cancel();const p=posFromEvent(e);addComponent(t,p.x,p.y)}});svg.addEventListener("contextmenu",e=>{e.preventDefault();if(wiring?.active)wiring.cancel();});svg.addEventListener("click",e=>{if(e.target===svg||e.target.id==="gridRect"){if(wiring?.active)wiring.cancel();S.selected=null;S.selectedWireId=null;renderInspector();renderCanvas();}});svg.addEventListener("pointermove",e=>{const p=posFromEvent(e);if(dragWire&&dragWire.pointerId===e.pointerId&&Math.hypot(e.clientX-dragWire.startX,e.clientY-dragWire.startY)>5)dragWire.moved=true;if(wiring&&wiring.active&&wiring.start)wiring.pointerMove(p);if(wireBending){const wire=S.wires.find(w=>w.id===wireBending.id);if(wire){wire.bends=wire.bends||[];wire.bends[wireBending.index]={x:snap(p.x),y:snap(p.y)};renderWires()}return}if(!dragging||dragging.pointerId!==e.pointerId)return;const c=S.components.find(x=>x.id===dragging.id);if(!c)return;const dx=p.x-dragging.start.x,dy=p.y-dragging.start.y;if(Math.abs(dx)+Math.abs(dy)>1)dragging.moved=true;c.x=snap(dragging.orig.x+dx);c.y=snap(dragging.orig.y+dy);if(dragFrame)return;dragFrame=requestAnimationFrame(()=>{dragFrame=0;if(!dragging)return;const current=S.components.find(x=>x.id===dragging.id);if(!current)return;const el=comps.querySelector('[data-id="'+current.id+'"]');if(el)el.setAttribute("transform","translate("+current.x+","+current.y+") rotate("+current.rotation+")");renderWires();});});
 window.addEventListener("pointerup",e=>{if(dragWire&&dragWire.pointerId===e.pointerId){const gesture=dragWire;dragWire=null;if(gesture.moved&&wiring?.active&&wiring.start){const target=document.elementFromPoint(e.clientX,e.clientY)?.closest?.("[data-pin]");if(target&&target.dataset.pin!==gesture.start)handlePin(target.dataset.pin);else if(!target)wiring.cancel()}}if(wireBending){wireBending=null;render();return}if(dragging&&dragging.pointerId===e.pointerId){if(dragFrame){cancelAnimationFrame(dragFrame);dragFrame=0}dragging=null;render()}});window.addEventListener("pointercancel",e=>{if(dragWire&&dragWire.pointerId===e.pointerId){dragWire=null;if(wiring?.active)wiring.cancel()}if(dragging&&dragging.pointerId===e.pointerId){dragging=null;render()}});svg.addEventListener("wheel",e=>{e.preventDefault();S.zoom=Math.max(.35,Math.min(2.5,S.zoom*(e.deltaY<0?1.1:.9)));render()},{passive:false});
