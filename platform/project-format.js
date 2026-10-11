@@ -7,7 +7,7 @@ function legacyTerminals(d){
 }
 function migrateDevice(d,index){
  const id=d.id||"D"+String(index+1).padStart(3,"0");
- return {id,type:d.type||d.model||"unknown",version:d.version||"1.0.0",ref:d.ref||id,position:{x:Number(d.position?.x||0),y:Number(d.position?.y||0)},rotation:Number(d.rotation||0),terminals:legacyTerminals(d),parameters:structuredClone(d.parameters||d.props||{}),state:structuredClone(d.state||{}),model:d.model||d.simulation?.model||null};
+ return {id,type:d.type||d.model||"unknown",version:d.version||"1.0.0",ref:d.ref||id,position:{x:Number(d.position?.x??d.x??0),y:Number(d.position?.y??d.y??0)},rotation:Number(d.rotation||0),terminals:legacyTerminals(d),parameters:structuredClone(d.parameters||d.props||{}),state:structuredClone(d.state||{}),model:d.model||d.simulation?.model||null};
 }
 function normalize(raw={}){
  const now=new Date().toISOString();
@@ -20,5 +20,26 @@ function migrate(p){
  const raw=typeof p==="string"?JSON.parse(p):p;if(!raw||typeof raw!=="object")throw Error("Invalid .voltpro project");
  const old=Number(raw.version||1),x=normalize(raw);if(old<CURRENT){x.metadata.migratedFrom=old;x.metadata.migratedAt=new Date().toISOString()}return x;
 }
-window.VoltProProject={CURRENT,normalize,encode,decode,migrate};
+function toLegacy(input){
+ const envelope=typeof input==="string"?JSON.parse(input):input;
+ if(!envelope||typeof envelope!=="object")throw Error("Invalid .voltpro project");
+ const raw=envelope.format==="voltpro-export"?envelope.project:envelope;
+ if(!raw||raw.format!=="voltpro")throw Error("Unsupported VoltPRo project format");
+ const p=migrate(raw),devices=p.devices||[],byId=new Map(devices.map(d=>[String(d.id),d]));
+ const components=devices.map(d=>({id:d.id,type:d.type||d.model||"unknown",registryId:d.registryId||null,x:Number(d.position?.x??0),y:Number(d.position?.y??0),rotation:Number(d.rotation||0),props:structuredClone(d.parameters||{}),pins:structuredClone(d.terminals||[])}));
+ function endpoint(value){
+  if(typeof value!=="string"||!value.includes(":"))throw Error("Invalid wire endpoint: "+String(value));
+  const cut=value.lastIndexOf(":"),id=value.slice(0,cut),terminal=value.slice(cut+1),d=byId.get(id);
+  if(!d)throw Error("Wire references missing device: "+id);
+  const terms=Array.isArray(d.terminals)?d.terminals:[];
+  let index=terms.findIndex(t=>String(t.id)===terminal||String(t.label)===terminal||(t.number!=null&&String(t.number)===terminal));
+  if(index<0&&/^\\d+$/.test(terminal)&&Number(terminal)<terms.length)index=Number(terminal);
+  if(index<0)throw Error("Unknown terminal "+terminal+" on device "+id);
+  return id+":"+index;
+ }
+ const wires=(p.wires||[]).map((w,i)=>({...w,id:w.id||"W"+String(i+1).padStart(3,"0"),a:endpoint(w.from||w.a),b:endpoint(w.to||w.b)}));
+ const workspace=typeof p.workspace==="string"?p.workspace:(p.workspace?.mode||"schematic");
+ return {format:"voltpro",version:2,mode:raw.mode||workspace,components,wires,wireStyle:structuredClone(raw.wireStyle||{}),panel:structuredClone(p.panel||{rails:[],items:[],width:600,height:400}),metadata:structuredClone(p.metadata||{})};
+}
+window.VoltProProject={CURRENT,normalize,encode,decode,migrate,toLegacy};
 })();
