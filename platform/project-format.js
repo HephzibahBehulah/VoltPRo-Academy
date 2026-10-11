@@ -33,7 +33,7 @@ function toLegacy(input){
   if(!d)throw Error("Wire references missing device: "+id);
   const terms=Array.isArray(d.terminals)?d.terminals:[];
   let index=terms.findIndex(t=>String(t.id)===terminal||String(t.label)===terminal||(t.number!=null&&String(t.number)===terminal));
-  if(index<0&&/^\\d+$/.test(terminal)&&Number(terminal)<terms.length)index=Number(terminal);
+  if(index<0&&/^\d+$/.test(terminal)&&Number(terminal)<terms.length)index=Number(terminal);
   if(index<0)throw Error("Unknown terminal "+terminal+" on device "+id);
   return id+":"+index;
  }
