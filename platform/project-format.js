@@ -3,7 +3,8 @@ const CURRENT=5;
 function legacyTerminals(d){
  if(Array.isArray(d.terminals)&&d.terminals.length)return d.terminals.map((t,i)=>({id:t.id||String(i),label:t.label||t.id||String(i),type:t.type||"electrical",number:t.number??null,domain:t.domain||"dc"}));
  if(Array.isArray(d.pins)&&d.pins.length)return d.pins.map((p,i)=>{const id=typeof p==="string"?String(p).split(":").pop():p.id||String(i);return {id,label:typeof p==="string"?id:(p.label||id),type:typeof p==="string"?"electrical":(p.type||"electrical"),number:typeof p==="string"?null:(p.number??null),domain:typeof p==="string"?"dc":(p.domain||"dc")};});
- return [{id:"0",label:"1",type:"electrical",number:"1",domain:"dc"},{id:"1",label:"2",type:"electrical",number:"2",domain:"dc"}];
+ const count=Math.max(2,Number(window.defs?.[d.type]?.pins||window.VoltProRegistry?.definition?.(d.type)?.pins||2));
+ return Array.from({length:count},(_,i)=>({id:String(i),label:String(i+1),type:"electrical",number:String(i+1),domain:"dc"}));
 }
 function migrateDevice(d,index){
  const id=d.id||"D"+String(index+1).padStart(3,"0");
